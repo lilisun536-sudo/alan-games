@@ -1,0 +1,214 @@
+<!-- 20260701_游戏_记忆翻牌_v1 -->
+<!-- 放仓库根目录,与 index.html / games.html 同级 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#7A4FD0">
+<title>记忆翻牌 · Memory Match</title>
+<style>
+  :root{
+    --ink:#1B2A4A; --paper:#FFFFFF; --game:#7A4FD0; --game-dark:#6A3FC0;
+    --sun:#FFC233; --go:#4CAF6D; --no:#FF8A7A;
+    --shadow:0 6px 0 rgba(27,42,74,.12); --radius:26px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;color:var(--ink);
+    background:linear-gradient(180deg,#EDE7FB 0%,#F4F0FF 45%,#FFF9EC 100%);
+    min-height:100vh;-webkit-user-select:none;user-select:none;
+  }
+  a{color:inherit;text-decoration:none;}
+
+  /* 顶栏 */
+  .topbar{display:flex;align-items:center;gap:12px;padding:14px 20px;background:var(--game);color:#fff;font-size:23px;font-weight:800;letter-spacing:.5px;}
+  .topbar .home-btn{color:#fff;background:rgba(255,255,255,.20);border:none;padding:8px 16px;border-radius:14px;font-size:18px;font-weight:800;white-space:nowrap;text-decoration:none;cursor:pointer;}
+  .topbar .home-btn:active{transform:translateY(1px);}
+  .topbar .logo{font-size:26px;line-height:1;}
+  .topbar .room{flex:1;line-height:1.1;}
+  .topbar .room small{display:block;font-size:14px;font-weight:600;opacity:.85;letter-spacing:0;margin-top:2px;}
+  .topbar .best{background:rgba(255,255,255,.18);padding:8px 14px;border-radius:14px;font-size:18px;white-space:nowrap;font-weight:800;}
+
+  .wrap{max-width:600px;margin:0 auto;padding:18px 16px 48px;}
+
+  .hint{text-align:center;font-size:17px;font-weight:700;color:var(--game);opacity:.85;margin:2px 0 14px;}
+
+  /* 控制条 */
+  .controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;margin:0 4px 18px;}
+  .seg{display:flex;background:#fff;border:3px solid var(--game);border-radius:14px;overflow:hidden;}
+  .seg button{border:none;background:transparent;padding:8px 15px;font-size:16px;font-weight:800;color:var(--game);cursor:pointer;font-family:inherit;}
+  .seg button.on{background:var(--game);color:#fff;}
+  .pill{background:#fff;border:3px solid rgba(27,42,74,.12);border-radius:14px;padding:8px 14px;font-size:16px;font-weight:800;white-space:nowrap;}
+  .restart{background:var(--sun);border:none;border-radius:14px;padding:9px 16px;font-size:16px;font-weight:800;cursor:pointer;color:#5A4300;font-family:inherit;}
+  .restart:active{transform:translateY(1px);}
+
+  /* 棋盘 */
+  .board{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:480px;margin:0 auto;}
+  .card{aspect-ratio:1;border:none;background:transparent;padding:0;cursor:pointer;perspective:800px;font-family:inherit;}
+  .card:focus-visible{outline:4px solid var(--sun);outline-offset:3px;border-radius:20px;}
+  .card-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .4s;}
+  .card.flipped .card-inner,.card.matched .card-inner{transform:rotateY(180deg);}
+  .card-face{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;border-radius:18px;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:var(--shadow);}
+  .card-front{background:var(--game);color:#fff;font-size:clamp(30px,10vw,46px);font-weight:800;border:4px solid var(--game-dark);}
+  .card-back{background:#fff;border:4px solid var(--game);transform:rotateY(180deg);font-size:clamp(34px,12vw,58px);}
+  .card.matched .card-back{background:#EAF8EE;border-color:var(--go);}
+  @media(prefers-reduced-motion:reduce){.card-inner{transition:none;}}
+
+  /* 胜利 */
+  .overlay{position:fixed;inset:0;background:rgba(27,42,74,.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:100;}
+  .win{background:#fff;border-radius:28px;padding:30px 26px;max-width:420px;width:100%;text-align:center;box-shadow:0 10px 0 rgba(27,42,74,.18);border:6px solid var(--game);}
+  .win .stars{font-size:56px;letter-spacing:6px;line-height:1;animation:pop .5s;}
+  .win h2{margin:14px 0 4px;font-size:30px;}
+  .win .sub{font-size:19px;opacity:.6;}
+  .win .stat{font-size:19px;opacity:.8;margin:10px 0 0;}
+  .win .best-line{margin-top:10px;font-size:17px;font-weight:800;color:#B07A00;background:#FFF3CF;border-radius:14px;padding:8px 14px;display:inline-block;}
+  .win .best-line.newrec{color:#2F7A47;background:#EAF8EE;}
+  .win .btns{display:flex;gap:12px;justify-content:center;margin-top:22px;flex-wrap:wrap;}
+  .win .btn-again{font-size:19px;font-weight:800;border:none;border-radius:16px;padding:12px 22px;cursor:pointer;background:var(--go);color:#fff;box-shadow:0 5px 0 #2F7A47;font-family:inherit;}
+  .win .btn-again:active{transform:translateY(3px);box-shadow:none;}
+  .win .btn-back{font-size:19px;font-weight:800;border-radius:16px;padding:12px 22px;background:#fff;color:var(--ink);border:4px solid var(--game);text-decoration:none;}
+
+  @keyframes pop{0%{transform:scale(.5)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important}}
+  @media(max-width:720px){ .topbar{font-size:19px}.topbar .room small{font-size:12px} }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <a class="home-btn" href="games.html">← 返回</a>
+    <span class="logo">🧠</span>
+    <span class="room">记忆翻牌<small>Memory Match</small></span>
+    <span class="best" id="bestPill">🏆 —</span>
+  </div>
+
+  <div class="wrap">
+    <div class="hint">翻开两张一样的卡片配对 · Match the pairs!</div>
+    <div class="controls">
+      <div class="seg">
+        <button id="seg6" class="on">6 对</button>
+        <button id="seg8">8 对</button>
+      </div>
+      <span class="pill" id="moves">👣 0 步</span>
+      <span class="pill" id="time">⏱️ 0:00</span>
+      <button class="restart" id="restart">🔄 重玩</button>
+    </div>
+    <div class="board" id="board"></div>
+  </div>
+
+<script>
+/* 记忆翻牌 —— 零依赖。进度键前缀 alan_game_memory_(与课件隔离) */
+var EMOJIS=['🐶','🐱','🐰','🦊','🐻','🐼','🐸','🦁','🐷','🐵','🐔','🦄','🐢','🐙','🦋','🐝'];
+var pairs=6, deck=[], first=-1, second=-1, lock=false, moves=0, matched=0, started=false, t0=0, timer=null, finishSec=0;
+
+function $(id){ return document.getElementById(id); }
+function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+function fmt(s){ var m=Math.floor(s/60), ss=s%60; return m+':'+(ss<10?'0':'')+ss; }
+
+/* ---- 最佳记录(localStorage,全 try/catch)---- */
+function getBest(){ try{ var o=JSON.parse(localStorage.getItem('alan_game_memory_best')); return (o&&typeof o==='object')?o:{}; }catch(e){ return {}; } }
+function setBest(o){ try{ localStorage.setItem('alan_game_memory_best', JSON.stringify(o)); }catch(e){} }
+function updateBestPill(){
+  var b=getBest()[String(pairs)];
+  var el=$('bestPill'); if(el) el.textContent = b ? ('🏆 '+b.moves+' 步') : '🏆 —';
+}
+
+/* ---- 计时 ---- */
+function startTimer(){ t0=Date.now(); timer=setInterval(function(){ updateTime(elapsed()); },500); }
+function stopTimer(){ if(timer){ clearInterval(timer); timer=null; } }
+function elapsed(){ return t0 ? Math.floor((Date.now()-t0)/1000) : 0; }
+function updateTime(s){ var el=$('time'); if(el) el.textContent='⏱️ '+fmt(s); }
+function updateMoves(){ var el=$('moves'); if(el) el.textContent='👣 '+moves+' 步'; }
+
+/* ---- 新一局 ---- */
+function newGame(p){
+  pairs=p;
+  var pool=shuffle(EMOJIS.slice()).slice(0,pairs);
+  deck=shuffle(pool.concat(pool).map(function(e){ return {emoji:e, matched:false}; }));
+  first=-1; second=-1; lock=false; moves=0; matched=0; started=false; finishSec=0;
+  stopTimer(); t0=0;
+  updateMoves(); updateTime(0); updateBestPill();
+  $('seg6').classList.toggle('on', pairs===6);
+  $('seg8').classList.toggle('on', pairs===8);
+  var ov=$('overlay'); if(ov) ov.parentNode.removeChild(ov);
+  renderBoard();
+}
+function renderBoard(){
+  var b=$('board'); b.innerHTML='';
+  deck.forEach(function(c,i){
+    var card=document.createElement('button');
+    card.className='card'; card.setAttribute('data-i',i); card.setAttribute('aria-label','卡片');
+    card.innerHTML='<div class="card-inner"><div class="card-face card-front">?</div><div class="card-face card-back">'+c.emoji+'</div></div>';
+    card.addEventListener('click', function(){ onClick(i); });
+    b.appendChild(card);
+  });
+}
+function cardEl(i){ return $('board').querySelector('.card[data-i="'+i+'"]'); }
+
+/* ---- 点击逻辑 ---- */
+function onClick(i){
+  if(lock) return;
+  if(deck[i].matched) return;
+  if(i===first) return;
+  if(!started){ started=true; startTimer(); }
+  var el=cardEl(i); if(el) el.classList.add('flipped');
+  if(first===-1){ first=i; return; }
+  second=i; moves++; updateMoves(); lock=true;
+  if(deck[first].emoji===deck[second].emoji){
+    deck[first].matched=true; deck[second].matched=true;
+    var a=cardEl(first), b2=cardEl(second);
+    setTimeout(function(){ if(a) a.classList.add('matched'); if(b2) b2.classList.add('matched'); }, 240);
+    matched++; first=-1; second=-1; lock=false;
+    if(matched===pairs){ stopTimer(); finishSec=elapsed(); setTimeout(win, 520); }
+  } else {
+    var f=first, s=second;
+    setTimeout(function(){
+      var a=cardEl(f), b2=cardEl(s);
+      if(a) a.classList.remove('flipped');
+      if(b2) b2.classList.remove('flipped');
+      first=-1; second=-1; lock=false;
+    }, 850);
+  }
+}
+
+/* ---- 星级 ---- */
+function starsFor(p, mv){
+  if(mv<=Math.ceil(p*1.4)) return 3;
+  if(mv<=Math.ceil(p*2))   return 2;
+  return 1;
+}
+
+/* ---- 胜利 ---- */
+function win(){
+  var st=starsFor(pairs, moves);
+  var all=getBest(), key=String(pairs), prev=all[key], isNew=false;
+  if(!prev || moves<prev.moves || (moves===prev.moves && finishSec<prev.sec)){
+    all[key]={moves:moves, sec:finishSec}; setBest(all); isNew=true; prev=all[key];
+  }
+  updateBestPill();
+  var bestTxt = isNew ? '🎉 新纪录！New best!' : ('最好 Best: '+prev.moves+' 步 · '+fmt(prev.sec));
+  var ov=document.createElement('div'); ov.className='overlay'; ov.id='overlay';
+  ov.innerHTML =
+    '<div class="win">'+
+      '<div class="stars">'+ ('⭐'.repeat(st)+'☆'.repeat(3-st)) +'</div>'+
+      '<h2>太棒了！<div class="sub">You did it!</div></h2>'+
+      '<div class="stat">用了 '+moves+' 步 · '+fmt(finishSec)+'</div>'+
+      '<div class="best-line'+(isNew?' newrec':'')+'">'+bestTxt+'</div>'+
+      '<div class="btns">'+
+        '<button class="btn-again" id="again">🔄 再玩一次</button>'+
+        '<a class="btn-back" href="games.html">← 返回游戏</a>'+
+      '</div>'+
+    '</div>';
+  document.body.appendChild(ov);
+  var ag=$('again'); if(ag) ag.addEventListener('click', function(){ newGame(pairs); });
+}
+
+/* ---- 初始化 ---- */
+$('seg6').addEventListener('click', function(){ newGame(6); });
+$('seg8').addEventListener('click', function(){ newGame(8); });
+$('restart').addEventListener('click', function(){ newGame(pairs); });
+newGame(6);
+</script>
+</body>
+</html>
