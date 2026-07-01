@@ -1,0 +1,2214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>艾伦的登山大冒险 · 学前衔接课件 v5</title>
+<style>
+:root{
+  --ink:#1B2A4A; --sky:#EAF5FF; --paper:#FFFFFF;
+  --accent:#2563B8; --sun:#FFC233; --go:#4CAF6D; --no:#FF8A7A;
+  --shadow:0 6px 0 rgba(27,42,74,.12);
+  --radius:26px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;
+  color:var(--ink);
+  background:linear-gradient(180deg,#D9EEFF 0%,#F2FAFF 45%,#FFF9EC 100%);
+  min-height:100vh; user-select:none;
+}
+button{font-family:inherit;color:inherit;cursor:pointer;touch-action:manipulation;}
+
+/* ---------- 顶栏 ---------- */
+.topbar{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 22px;background:var(--accent);color:#fff;
+  font-size:24px;font-weight:700;
+}
+.topbar a{color:#fff;text-decoration:none;background:rgba(255,255,255,.18);
+  padding:8px 16px;border-radius:14px;font-size:20px;white-space:nowrap;}
+.topbar a:focus-visible,button:focus-visible{outline:4px solid var(--sun);outline-offset:2px;}
+#mod-title{flex:1;text-align:center;letter-spacing:1px;}
+#topstars{background:rgba(255,255,255,.18);padding:8px 16px;border-radius:14px;font-size:20px;white-space:nowrap;}
+
+#stage{max-width:1060px;margin:0 auto;padding:20px 18px 60px;}
+
+/* ---------- 选关菜单 ---------- */
+.menu-head{display:flex;align-items:center;gap:18px;margin:8px 4px 18px;}
+.mascot{font-size:72px;line-height:1;filter:drop-shadow(0 4px 0 rgba(27,42,74,.15));}
+.menu-titles h1{margin:0;font-size:36px;}
+.menu-titles .sub{margin:4px 0 0;font-size:22px;opacity:.75;}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;}
+.lesson-card{
+  display:flex;flex-direction:column;align-items:flex-start;gap:6px;
+  background:var(--paper);border:4px solid var(--accent);border-radius:var(--radius);
+  padding:20px 22px;box-shadow:var(--shadow);text-align:left;transition:transform .12s;
+}
+.lesson-card:active{transform:scale(.97);}
+.lc-icon{font-size:52px;line-height:1;}
+.lc-name{font-size:28px;font-weight:800;}
+.lc-sub{font-size:19px;opacity:.7;}
+.lc-stars{font-size:20px;color:#B07A00;background:#FFF3CF;border-radius:12px;padding:4px 12px;margin-top:4px;}
+
+/* ---------- 关卡内 ---------- */
+.play-bar{display:flex;align-items:center;gap:14px;margin:6px 0 14px;}
+.quit-btn{font-size:20px;border:3px solid var(--accent);background:#fff;border-radius:14px;padding:8px 16px;font-weight:700;}
+.dots{flex:1;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+.dot{width:16px;height:16px;border-radius:50%;background:#fff;border:3px solid var(--accent);opacity:.45;}
+.dot.done{background:var(--accent);opacity:1;}
+.dot.now{background:var(--sun);border-color:#C9920A;opacity:1;transform:scale(1.25);}
+.run-stars{font-size:22px;font-weight:800;color:#B07A00;background:#FFF3CF;border-radius:12px;padding:6px 14px;}
+
+.screen{
+  background:var(--paper);border-radius:var(--radius);box-shadow:var(--shadow);
+  border:4px solid rgba(27,42,74,.08);
+  padding:28px 26px 34px;display:flex;flex-direction:column;align-items:center;gap:18px;
+  min-height:430px;justify-content:center;position:relative;
+}
+.eyebrow{font-size:20px;font-weight:700;color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,#fff);
+  padding:6px 18px;border-radius:999px;}
+.teach-card{display:flex;flex-direction:column;align-items:center;gap:12px;}
+.t-emoji{font-size:96px;line-height:1.15;text-align:center;}
+.t-emoji.big{font-size:120px;}
+.t-big{font-size:120px;font-weight:800;line-height:1.1;text-align:center;}
+.t-big.hanzi{font-family:"KaiTi","STKaiti","Microsoft YaHei",serif;font-size:140px;font-weight:400;}
+.t-big.letter{font-family:"Comic Sans MS","Segoe UI",sans-serif;font-size:130px;color:var(--accent);}
+.t-big.phrase{font-family:"Comic Sans MS","Segoe UI",sans-serif;font-size:46px;color:var(--accent);max-width:760px;}
+.t-pinyin{font-size:40px;color:#7A4FD0;font-weight:700;letter-spacing:2px;}
+.t-cap{font-size:28px;text-align:center;max-width:740px;line-height:1.5;}
+.speak-btn{
+  font-size:26px;font-weight:800;color:#fff;background:var(--accent);
+  border:none;border-radius:18px;padding:14px 28px;box-shadow:var(--shadow);
+}
+.speak-btn.big{font-size:30px;padding:18px 34px;}
+.speak-btn:active{transform:translateY(3px);}
+
+.q-title{font-size:32px;font-weight:800;text-align:center;line-height:1.4;max-width:860px;}
+
+.opt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;width:100%;max-width:880px;}
+.opt{
+  min-height:120px;background:#fff;border:5px solid var(--accent);border-radius:24px;
+  font-size:40px;font-weight:800;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  box-shadow:var(--shadow);padding:14px;transition:transform .12s;
+}
+.opt:active{transform:scale(.96);}
+.opt .o-emoji{font-size:64px;line-height:1.1;}
+.opt .o-label{line-height:1.25;}
+.opt-grid.hanzi .opt .o-label{font-family:"KaiTi","STKaiti",serif;font-size:64px;font-weight:400;}
+.opt-grid.letter .opt .o-label{font-family:"Comic Sans MS","Segoe UI",sans-serif;font-size:64px;color:var(--accent);}
+.opt-grid.word .opt .o-label{font-family:"Comic Sans MS","Segoe UI",sans-serif;font-size:34px;color:var(--accent);}
+.opt-grid.bigmoji .opt .o-emoji{font-size:80px;}
+.opt.right{border-color:var(--go);background:#EAF8EE;animation:pop .35s;}
+.opt.wrong{border-color:var(--no);background:#FFEFEC;animation:shake .45s;}
+.opt.dim{opacity:.35;}
+
+.match-wrap{display:flex;gap:34px;width:100%;max-width:820px;justify-content:center;}
+.match-col{display:flex;flex-direction:column;gap:14px;flex:1;max-width:340px;}
+.m-item{
+  min-height:92px;font-size:40px;font-weight:800;background:#fff;
+  border:5px solid var(--accent);border-radius:22px;box-shadow:var(--shadow);
+  display:flex;align-items:center;justify-content:center;padding:8px 14px;
+  font-family:"Comic Sans MS","KaiTi","Microsoft YaHei",sans-serif;
+}
+.m-item.sel{border-color:var(--sun);background:#FFF6DC;transform:scale(1.05);}
+.m-item.locked{border-color:var(--go);background:#EAF8EE;opacity:.85;}
+.m-item.wrong{animation:shake .45s;border-color:var(--no);}
+
+.order-line{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;min-height:84px;
+  background:#F2F7FF;border:3px dashed var(--accent);border-radius:18px;padding:12px;width:100%;max-width:880px;}
+.order-pool{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;max-width:880px;}
+.chip{
+  font-size:30px;font-weight:800;background:#fff;border:4px solid var(--accent);
+  border-radius:18px;padding:14px 20px;box-shadow:var(--shadow);
+}
+.chip.big{font-size:34px;padding:18px 24px;}
+.chip.placed{background:#EAF8EE;border-color:var(--go);box-shadow:none;animation:pop .3s;}
+.chip.used{opacity:.25;pointer-events:none;}
+.chip.wrong{animation:shake .45s;border-color:var(--no);}
+.chip.gone{opacity:0;transform:translateY(-60px) scale(.4);transition:all .4s;}
+
+.sort-target{font-size:110px;line-height:1.1;}
+.sort-target.pop{animation:pop .3s;}
+.sort-count{font-size:26px;font-weight:800;color:var(--go);}
+.sort-hint{font-size:24px;color:#B3573F;min-height:32px;font-weight:700;}
+
+.blend-row{display:flex;gap:16px;}
+.blend-tile{
+  font-family:"Comic Sans MS","KaiTi",sans-serif;font-size:72px;font-weight:800;color:var(--accent);
+  background:#fff;border:5px solid var(--accent);border-radius:22px;width:120px;height:130px;
+  box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;
+}
+.blend-tile.pop{animation:pop .3s;}
+
+.next-btn{
+  font-size:30px;font-weight:800;color:#fff;background:var(--go);
+  border:none;border-radius:20px;padding:18px 42px;box-shadow:0 6px 0 #2F7A47;margin-top:6px;
+}
+.next-btn:active{transform:translateY(4px);box-shadow:none;}
+.next-btn.ghost{background:#fff;color:var(--ink);border:4px solid var(--accent);box-shadow:var(--shadow);}
+
+.finish .finish-stars{font-size:60px;letter-spacing:6px;}
+.btn-row{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;}
+
+.star-fly{
+  position:fixed;font-size:64px;pointer-events:none;z-index:50;
+  animation:flyup 1s ease-out forwards;
+}
+@keyframes flyup{0%{transform:translateY(0) scale(.6);opacity:0}25%{opacity:1}100%{transform:translateY(-180px) scale(1.4);opacity:0}}
+@keyframes pop{0%{transform:scale(.7)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-12px)}50%{transform:translateX(10px)}75%{transform:translateX(-6px)}}
+
+@media (max-width:720px){
+  .t-big{font-size:88px}.t-big.hanzi{font-size:104px}.t-big.letter{font-size:96px}
+  .q-title{font-size:26px}.opt{font-size:32px;min-height:104px}
+  .match-wrap{gap:16px}.m-item{font-size:32px;min-height:80px}
+  .topbar{font-size:19px}#mod-title{font-size:19px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+
+/* ---- 一体版主页样式 ---- */
+.topbar .home-btn{
+  color:#fff;background:rgba(255,255,255,.18);border:none;
+  padding:8px 16px;border-radius:14px;font-size:20px;font-weight:700;white-space:nowrap;
+}
+.hub-hero{position:relative;border-radius:30px;overflow:hidden;box-shadow:0 8px 0 rgba(27,42,74,.12);margin-top:6px;}
+.hub-hero svg{display:block;width:100%;height:auto;}
+.hub-hero .hero-text{position:absolute;top:7%;left:5%;right:5%;}
+.hub-hero h1{margin:0;font-size:42px;line-height:1.2;text-shadow:0 2px 0 #fff;}
+.hub-hero p{margin:8px 0 0;font-size:23px;font-weight:700;color:#37527E;text-shadow:0 1px 0 #fff;}
+.hub-hero .badge{display:inline-block;margin-top:12px;background:#fff;border:4px solid #2563B8;border-radius:999px;
+  padding:8px 20px;font-size:21px;font-weight:800;}
+.hub-total{display:flex;align-items:center;justify-content:center;margin:20px 0 6px;
+  font-size:28px;font-weight:800;color:#8A6100;}
+.hub-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:20px;margin-top:12px;}
+@media(max-width:960px){.hub-grid{grid-template-columns:1fr;}}
+.camp{display:flex;align-items:center;gap:18px;text-align:left;
+  background:#fff;border-radius:26px;padding:20px 22px;box-shadow:0 6px 0 rgba(27,42,74,.12);
+  border:5px solid var(--c,#2563B8);transition:transform .12s;font-family:inherit;}
+.camp:active{transform:scale(.97);}
+.camp .ico{font-size:58px;line-height:1;}
+.camp .tt{flex:1;}
+.camp .tt b{display:block;font-size:27px;color:var(--ink);}
+.camp .tt span{display:block;font-size:18px;opacity:.7;margin-top:2px;color:var(--ink);}
+.camp .stars{font-size:20px;font-weight:800;color:#B07A00;background:#FFF3CF;border-radius:14px;padding:8px 14px;white-space:nowrap;}
+.hub-tip{margin-top:24px;background:#fff;border-radius:22px;padding:18px 22px;font-size:21px;line-height:1.6;
+  border:4px dashed #2563B8;box-shadow:0 6px 0 rgba(27,42,74,.08);color:var(--ink);}
+.hub-tip b{color:#2563B8;}
+@media(max-width:720px){.hub-hero h1{font-size:26px}.hub-hero p{font-size:16px}.hub-hero .badge{font-size:16px;padding:6px 14px}}
+
+/* ---- 学习报告导出 ---- */
+.export-btn{
+  display:block;margin:22px auto 0;font-size:24px;font-weight:800;color:#fff;
+  background:#2563B8;border:none;border-radius:18px;padding:16px 30px;
+  box-shadow:0 6px 0 #173E7E;font-family:inherit;
+}
+.export-btn:active{transform:translateY(4px);box-shadow:none;}
+.rep-modal{position:fixed;inset:0;background:rgba(27,42,74,.55);z-index:100;
+  display:flex;align-items:center;justify-content:center;padding:20px;}
+.rep-box{background:#fff;border-radius:24px;padding:24px;max-width:720px;width:100%;
+  display:flex;flex-direction:column;gap:12px;box-shadow:0 10px 0 rgba(0,0,0,.18);}
+.rep-title{font-size:24px;font-weight:800;}
+.rep-sub{font-size:18px;line-height:1.5;opacity:.85;}
+.rep-text{width:100%;height:200px;font-size:14px;font-family:Consolas,monospace;
+  border:3px solid #B9C9DE;border-radius:14px;padding:10px;resize:vertical;}
+
+/* ===== v4 新屏型样式 ===== */
+
+/* 发现层 */
+.eyebrow.challenge{background:#FFE4D6;color:#C2410C;}
+.disc-stage{
+  width:100%;max-width:760px;min-height:230px;background:#F7FBFF;border:4px solid var(--accent);
+  border-radius:24px;display:flex;align-items:center;justify-content:center;gap:10px;
+  font-size:96px;position:relative;overflow:hidden;padding:20px;
+}
+.disc-row{display:flex;align-items:center;gap:8px;font-family:"Comic Sans MS","KaiTi",sans-serif;font-weight:800;color:var(--accent);}
+.disc-letter{font-size:90px;}
+.disc-plus{font-size:54px;color:#999;}
+/* Magic e 滑入 */
+.magic-e{display:inline-block;opacity:0;transform:translateX(60px);}
+.anim.go .magic-e{animation:slideIn 1.1s ease-out forwards;}
+@keyframes slideIn{0%{opacity:0;transform:translateX(80px) scale(.5)}60%{opacity:1;transform:translateX(0) scale(1.3)}100%{opacity:1;transform:translateX(0) scale(1)}}
+.morph{display:inline-block;}
+.anim.go .morph{animation:morphPop 1.1s ease-out;}
+@keyframes morphPop{0%,55%{color:var(--accent)}70%{color:#E2574C;transform:scale(1.3)}100%{transform:scale(1)}}
+/* 通用滑入元素 */
+.anim .fade-step{opacity:0;}
+.anim.go .fade-step{animation:fadeStep .6s ease-out forwards;}
+.anim.go .fade-step.d1{animation-delay:.2s}.anim.go .fade-step.d2{animation-delay:.6s}.anim.go .fade-step.d3{animation-delay:1s}
+@keyframes fadeStep{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.arrow-grow{display:inline-block;}
+.anim.go .arrow-grow{animation:grow .5s ease-out .3s both;}
+@keyframes grow{from{transform:scale(0)}to{transform:scale(1)}}
+
+/* 描红 */
+.trace-wrap{position:relative;width:320px;height:320px;}
+.trace-guide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:240px;color:#DCE6F2;pointer-events:none;z-index:0;}
+.trace-guide.hanzi{font-family:"KaiTi","STKaiti",serif;}
+.trace-guide.letter{font-family:"Comic Sans MS",sans-serif;font-size:220px;}
+.trace-guide.shake{animation:shake .45s;}
+.trace-canvas{position:absolute;inset:0;z-index:1;border:4px dashed var(--accent);border-radius:20px;background:transparent;touch-action:none;cursor:crosshair;}
+
+/* 录音 */
+.rec-btn{font-size:30px;font-weight:800;color:#fff;background:#E2574C;border:none;border-radius:22px;
+  padding:20px 40px;box-shadow:0 6px 0 #A8392F;font-family:inherit;}
+.rec-btn.rec{background:#C2410C;animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.rec-status{font-size:22px;font-weight:700;color:#555;min-height:30px;text-align:center;}
+
+/* 绘本 */
+.book-screen{background:linear-gradient(180deg,#FFFDF5,#FFF4E0);}
+.book-page{width:100%;max-width:680px;min-height:300px;background:#fff;border:5px solid #F0B850;
+  border-radius:24px;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:18px;padding:28px;}
+.book-page.flip{animation:flipIn .5s ease-out;}
+@keyframes flipIn{from{opacity:0;transform:rotateY(-12deg) translateX(20px)}to{opacity:1;transform:none}}
+.book-emoji{font-size:110px;line-height:1.1;text-align:center;}
+.book-text{font-family:"Comic Sans MS","KaiTi","Microsoft YaHei",sans-serif;font-size:38px;font-weight:800;
+  color:#5A3A12;text-align:center;line-height:1.4;}
+.book-cap{font-size:24px;color:#8A6100;text-align:center;min-height:30px;}
+.book-nav{display:flex;align-items:center;gap:24px;}
+.book-arrow{font-size:28px;font-weight:800;color:#fff;background:#F0B850;border:none;border-radius:16px;
+  padding:12px 24px;box-shadow:0 5px 0 #C28A20;font-family:inherit;min-width:80px;}
+.book-arrow:disabled{opacity:.35;}
+.book-pginfo{font-size:22px;font-weight:800;color:#8A6100;}
+
+@media(max-width:720px){
+  .disc-stage{font-size:64px;min-height:180px}
+  .trace-wrap,.trace-canvas{width:260px;height:260px}.trace-guide{font-size:190px}
+  .book-emoji{font-size:84px}.book-text{font-size:28px}
+}
+
+/* 描红按钮(与 next-btn 同款,但不触发 showNext 的去重) */
+.trace-btn{font-size:28px;font-weight:800;color:#fff;background:var(--go);border:none;border-radius:18px;
+  padding:16px 32px;box-shadow:0 6px 0 #2F7A47;font-family:inherit;}
+.trace-btn:active{transform:translateY(4px);box-shadow:none;}
+.trace-btn.ghost{background:#fff;color:var(--ink);border:4px solid var(--accent);box-shadow:var(--shadow);}
+.trace-btn:disabled{opacity:.7;}
+
+</style>
+</head>
+<body>
+<header class="topbar">
+  <button class="home-btn" id="home-btn">⛺ 主页</button>
+  <span id="mod-title">⛰️ 艾伦的登山大冒险</span>
+  <span id="topstars">⭐ 0</span>
+</header>
+<main id="stage"></main>
+<script>
+'use strict';
+/* ===== 艾伦学前衔接课件 · 共享引擎 v1 ===== */
+
+/* ---------- 进度存储(localStorage,失败时退回内存) ---------- */
+const MEM = {};
+function sget(k){ try{ const v = localStorage.getItem(k); return v == null ? (k in MEM ? MEM[k] : null) : v; }catch(e){ return k in MEM ? MEM[k] : null; } }
+function sset(k,v){ MEM[k] = String(v); try{ localStorage.setItem(k, String(v)); }catch(e){} }
+
+/* ---------- 语音朗读 ---------- */
+let VOICES = [];
+function refreshVoices(){ try{ VOICES = window.speechSynthesis.getVoices() || []; }catch(e){ VOICES = []; } }
+if ('speechSynthesis' in window){ refreshVoices(); window.speechSynthesis.onvoiceschanged = refreshVoices; }
+function speak(text, lang, queue){
+  if (!('speechSynthesis' in window)) return;
+  try{
+    if (!queue) window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang; u.rate = lang.indexOf('zh') === 0 ? 0.85 : 0.78; u.pitch = 1.05;
+    const lc = lang.toLowerCase();
+    const v = VOICES.find(x => x.lang && x.lang.replace('_','-').toLowerCase().indexOf(lc) === 0)
+           || VOICES.find(x => x.lang && x.lang.toLowerCase().indexOf(lc.slice(0,2)) === 0);
+    if (v) u.voice = v;
+    window.speechSynthesis.speak(u);
+  }catch(e){}
+}
+function hush(){ try{ window.speechSynthesis.cancel(); }catch(e){} }
+
+/* ---------- 音效 ---------- */
+let AC = null;
+function fx(ok){
+  try{
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    if (AC.state === 'suspended') AC.resume();
+    const t = AC.currentTime;
+    const notes = ok ? [[523,0],[659,.12],[784,.24]] : [[233,0],[208,.18]];
+    notes.forEach(p => {
+      const o = AC.createOscillator(), g = AC.createGain();
+      o.type = 'sine'; o.frequency.value = p[0];
+      g.gain.setValueAtTime(.0001, t+p[1]);
+      g.gain.exponentialRampToValueAtTime(.2, t+p[1]+.02);
+      g.gain.exponentialRampToValueAtTime(.0001, t+p[1]+(ok?.25:.3));
+      o.connect(g); g.connect(AC.destination);
+      o.start(t+p[1]); o.stop(t+p[1]+.5);
+    });
+  }catch(e){}
+}
+
+/* ---------- 工具 ---------- */
+function shuffle(a){ a = a.slice(); for (let i=a.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); const tmp=a[i]; a[i]=a[j]; a[j]=tmp; } return a; }
+function el(tag, cls, html){ const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+
+/* ---------- 状态 ---------- */
+let M = null, LI = 0, SI = 0, runStars = 0, scMist = [];
+const STARRY = { quiz:1, match:1, order:1, sort:1, blend:1, trace:1, rec:1, book:1, challenge:2 };
+function starKey(li){ return 'alan_v3_' + M.id + '_' + li; }
+function getRec(li){
+  const raw = sget(starKey(li));
+  if (raw){ try{ const r = JSON.parse(raw); if (r && typeof r === 'object') return r; }catch(e){} }
+  return { s:0, m:0, p:0, e:0 };
+}
+function lessonMax(les){ return les.screens.reduce((n,s)=> n + (STARRY[s.t]?1:0), 0); }
+function moduleStars(){ let t=0; M.lessons.forEach((l,i)=>{ t += (getRec(i).s||0); }); return t; }
+function updateTopStars(){ const e=document.getElementById('topstars'); if(e) e.textContent = '⭐ ' + moduleStars(); }
+
+/* ---------- 选关菜单 ---------- */
+function renderMenu(){
+  hush();
+  const stage = document.getElementById('stage'); stage.innerHTML = '';
+  const hd = el('div','menu-head');
+  hd.appendChild(el('div','mascot', M.mascot || '🦝'));
+  const tt = el('div','menu-titles');
+  tt.appendChild(el('h1','', M.title));
+  tt.appendChild(el('p','sub', M.subtitle || ''));
+  hd.appendChild(tt);
+  stage.appendChild(hd);
+  const grid = el('div','menu-grid');
+  M.lessons.forEach((les,i)=>{
+    const got = (getRec(i).s||0), max = lessonMax(les);
+    const c = el('button','lesson-card');
+    c.innerHTML = '<span class="lc-icon">'+les.icon+'</span>'
+      + '<span class="lc-name">'+les.title+'</span>'
+      + '<span class="lc-sub">'+(les.subtitle||'')+'</span>'
+      + '<span class="lc-stars">'+(got>0 ? '⭐ '+got+' / '+max : '☆ '+max+' 颗星等你拿')+'</span>';
+    c.onclick = ()=> startLesson(i);
+    grid.appendChild(c);
+  });
+  stage.appendChild(grid);
+  updateTopStars();
+}
+
+function startLesson(i){ LI = i; SI = 0; runStars = 0; scMist = []; renderScreen(); }
+
+/* ---------- 关卡屏幕外壳 ---------- */
+function screenShell(){
+  hush();
+  const stage = document.getElementById('stage'); stage.innerHTML = '';
+  const les = M.lessons[LI];
+  const bar = el('div','play-bar');
+  const back = el('button','quit-btn','⬅ 选关'); back.onclick = renderMenu; bar.appendChild(back);
+  const dots = el('div','dots');
+  les.screens.forEach((s,i)=> dots.appendChild(el('span','dot'+(i<SI?' done':(i===SI?' now':'')))));
+  bar.appendChild(dots);
+  const rs = el('div','run-stars'); rs.id='run-stars'; rs.textContent = '⭐ ' + runStars; bar.appendChild(rs);
+  stage.appendChild(bar);
+  const scr = el('div','screen'); stage.appendChild(scr);
+  return scr;
+}
+function showNext(scr,label){
+  if (scr.querySelector('.next-btn')) return;
+  const b = el('button','next-btn', label || '下一个 ➜');
+  b.onclick = ()=>{ SI++; renderScreen(); };
+  scr.appendChild(b);
+}
+function giveStar(){
+  runStars++;
+  const rs = document.getElementById('run-stars'); if (rs) rs.textContent = '⭐ ' + runStars;
+  const s = el('div','star-fly','⭐');
+  s.style.left = (window.innerWidth/2 - 32 + (Math.random()*120-60)) + 'px';
+  s.style.top  = (window.innerHeight/2) + 'px';
+  document.body.appendChild(s);
+  setTimeout(()=> s.remove(), 1100);
+}
+
+/* ---------- 屏型:教学卡 ---------- */
+function rCard(scr,s){
+  if (s.top) scr.appendChild(el('div','eyebrow', s.top));
+  const card = el('div','teach-card');
+  if (s.emoji) card.appendChild(el('div','t-emoji', s.emoji));
+  if (s.big != null) card.appendChild(el('div','t-big '+(s.bigClass||''), s.big));
+  if (s.pinyin) card.appendChild(el('div','t-pinyin', s.pinyin));
+  if (s.caption) card.appendChild(el('div','t-cap', s.caption));
+  const doSpeak = ()=>{ if (s.say) speak(s.say.text, s.say.lang); if (s.say2) speak(s.say2.text, s.say2.lang, true); };
+  const sb = el('button','speak-btn','🔊 再听一次'); sb.onclick = doSpeak; card.appendChild(sb);
+  scr.appendChild(card);
+  setTimeout(doSpeak, 450);
+  showNext(scr,'下一个 ➜');
+}
+
+/* ---------- 屏型:点选答题 ---------- */
+function rQuiz(scr,s){
+  scr.appendChild(el('div','q-title', s.q));
+  if (s.say){
+    const rb = el('button','speak-btn big','🔊 听一听');
+    const ds = ()=> speak(s.say.text, s.say.lang);
+    rb.onclick = ds; scr.appendChild(rb); setTimeout(ds, 500);
+  }
+  const grid = el('div','opt-grid'+(s.optClass?' '+s.optClass:''));
+  let solved = false;
+  shuffle(s.options).forEach(o=>{
+    const b = el('button','opt');
+    b.innerHTML = (o.emoji?'<span class="o-emoji">'+o.emoji+'</span>':'') + (o.label?'<span class="o-label">'+o.label+'</span>':'');
+    b.onclick = ()=>{
+      if (solved) return;
+      if (o.ok){
+        solved = true; b.classList.add('right'); fx(true);
+        giveStar(); if (s._double) giveStar();
+        grid.querySelectorAll('.opt').forEach(x=>{ if (x!==b) x.classList.add('dim'); });
+        if (s.sayAfter) setTimeout(()=> speak(s.sayAfter.text, s.sayAfter.lang), 350);
+        showNext(scr,'下一题 ➜');
+      } else {
+        scMist[SI] = (scMist[SI]||0) + 1;
+        b.classList.add('wrong'); fx(false);
+        setTimeout(()=> b.classList.remove('wrong'), 500);
+      }
+    };
+    grid.appendChild(b);
+  });
+  scr.appendChild(grid);
+}
+
+/* ---------- 屏型:配对 ---------- */
+function rMatch(scr,s){
+  scr.appendChild(el('div','q-title', s.q || '配一配:先点左边,再点它的好朋友!'));
+  const wrap = el('div','match-wrap');
+  const L = el('div','match-col'), R = el('div','match-col');
+  let sel = null, locked = 0, mistakes = 0;
+  shuffle(s.pairs.map((p,i)=>({v:p[0],i}))).forEach(o=>{
+    const b = el('button','m-item', o.v); b.dataset.i = o.i;
+    b.onclick = ()=>{
+      if (b.classList.contains('locked')) return;
+      L.querySelectorAll('.m-item').forEach(x=>x.classList.remove('sel'));
+      b.classList.add('sel'); sel = b;
+    };
+    L.appendChild(b);
+  });
+  shuffle(s.pairs.map((p,i)=>({v:p[1],i}))).forEach(o=>{
+    const b = el('button','m-item', o.v); b.dataset.i = o.i;
+    b.onclick = ()=>{
+      if (b.classList.contains('locked') || !sel) return;
+      if (sel.dataset.i === b.dataset.i){
+        sel.classList.add('locked'); sel.classList.remove('sel'); b.classList.add('locked');
+        fx(true); sel = null; locked++;
+        if (locked === s.pairs.length){ giveStar(); showNext(scr,'下一题 ➜'); }
+      } else {
+        mistakes++; scMist[SI] = (scMist[SI]||0) + 1;
+        b.classList.add('wrong'); fx(false);
+        setTimeout(()=> b.classList.remove('wrong'), 500);
+      }
+    };
+    R.appendChild(b);
+  });
+  wrap.appendChild(L); wrap.appendChild(R); scr.appendChild(wrap);
+}
+
+/* ---------- 屏型:排顺序 ---------- */
+function rOrder(scr,s){
+  scr.appendChild(el('div','q-title', s.q));
+  const line = el('div','order-line');
+  const pool = el('div','order-pool');
+  let idx = 0;
+  shuffle(s.items.map((v,i)=>({v,i}))).forEach(o=>{
+    const b = el('button','chip', o.v);
+    b.onclick = ()=>{
+      if (b.classList.contains('used')) return;
+      if (o.i === idx){
+        b.classList.add('used');
+        line.appendChild(el('div','chip placed', o.v));
+        fx(true); idx++;
+        if (idx === s.items.length){ giveStar(); showNext(scr,'下一题 ➜'); }
+      } else {
+        scMist[SI] = (scMist[SI]||0) + 1;
+        b.classList.add('wrong'); fx(false);
+        setTimeout(()=> b.classList.remove('wrong'), 500);
+      }
+    };
+    pool.appendChild(b);
+  });
+  scr.appendChild(line); scr.appendChild(pool);
+}
+
+/* ---------- 屏型:分拣(装书包) ---------- */
+function rSort(scr,s){
+  scr.appendChild(el('div','q-title', s.q));
+  const target = el('div','sort-target', s.target || '🎒');
+  const count = el('div','sort-count','0 / ' + s.items.filter(i=>i.good).length);
+  const pool = el('div','order-pool');
+  const hint = el('div','sort-hint','');
+  const goods = s.items.filter(i=>i.good).length; let got = 0;
+  shuffle(s.items).forEach(it=>{
+    const b = el('button','chip big', it.label);
+    b.onclick = ()=>{
+      if (b.classList.contains('gone')) return;
+      if (it.good){
+        b.classList.add('gone'); fx(true); got++;
+        count.textContent = got + ' / ' + goods;
+        target.classList.add('pop'); setTimeout(()=> target.classList.remove('pop'), 320);
+        if (it.say) speak(it.say.text, it.say.lang);
+        if (got === goods){ hint.textContent = '书包整理好啦!'; hint.style.color = '#2F7A47'; giveStar(); showNext(scr,'下一题 ➜'); }
+      } else {
+        scMist[SI] = (scMist[SI]||0) + 1;
+        b.classList.add('wrong'); fx(false);
+        hint.textContent = it.hint || '这个不用带哦!';
+        setTimeout(()=>{ b.classList.remove('wrong'); }, 500);
+      }
+    };
+    pool.appendChild(b);
+  });
+  scr.appendChild(target); scr.appendChild(count); scr.appendChild(pool); scr.appendChild(hint);
+}
+
+/* ---------- 屏型:拼读 ---------- */
+function rBlend(scr,s){
+  scr.appendChild(el('div','q-title', s.q || '点一点,再把它们拼起来!'));
+  if (s.emoji) scr.appendChild(el('div','t-emoji', s.emoji));
+  const row = el('div','blend-row');
+  s.parts.forEach(p=>{
+    const txt = (typeof p === 'string') ? p : p.p;
+    const sy  = (typeof p === 'string') ? {text:txt, lang:(s.lang||'en-US')} : p.say;
+    const b = el('button','blend-tile', txt);
+    b.onclick = ()=>{ b.classList.add('pop'); setTimeout(()=>b.classList.remove('pop'),300); speak(sy.text, sy.lang); };
+    row.appendChild(b);
+  });
+  scr.appendChild(row);
+  let done = false;
+  const btn = el('button','speak-btn big','🔊 拼起来:' + s.word);
+  btn.onclick = ()=>{
+    if (s.saySlow) speak(s.saySlow.text, s.saySlow.lang);
+    speak(s.say.text, s.say.lang, !!s.saySlow);
+    if (!done){ done = true; giveStar(); showNext(scr,'下一题 ➜'); }
+  };
+  scr.appendChild(btn);
+  if (s.caption) scr.appendChild(el('div','t-cap', s.caption));
+}
+
+/* ---------- 结算 ---------- */
+function rFinish(){
+  hush();
+  const les = M.lessons[LI];
+  const max = lessonMax(les);
+  const prev = getRec(LI);
+  const errs = []; for (let i=0;i<les.screens.length;i++) errs.push(scMist[i]||0);
+  const rec = {
+    s: Math.max(runStars, prev.s||0), m: max, p: (prev.p||0)+1,
+    e: errs.reduce(function(a,b){return a+b;},0), sc: errs,
+    d: new Date().toISOString().slice(0,10)
+  };
+  sset(starKey(LI), JSON.stringify(rec));
+  const stage = document.getElementById('stage'); stage.innerHTML = '';
+  const scr = el('div','screen finish');
+  scr.appendChild(el('div','t-emoji big','🎉'));
+  scr.appendChild(el('div','q-title','太棒了!完成「' + les.title + '」'));
+  scr.appendChild(el('div','finish-stars', '⭐'.repeat(Math.max(runStars,1))));
+  scr.appendChild(el('div','t-cap','这一关收获 ' + runStars + ' / ' + max + ' 颗星'));
+  const row = el('div','btn-row');
+  const again = el('button','next-btn ghost','再玩一次 🔁'); again.onclick = ()=> startLesson(LI);
+  const menu  = el('button','next-btn','回到选关 ⛺'); menu.onclick = renderMenu;
+  row.appendChild(again); row.appendChild(menu);
+  scr.appendChild(row);
+  stage.appendChild(scr);
+  for (let i=0;i<6;i++){
+    setTimeout(()=>{
+      const st = el('div','star-fly','⭐');
+      st.style.left = (10 + Math.random()*80) + 'vw';
+      st.style.top = '70vh';
+      document.body.appendChild(st);
+      setTimeout(()=> st.remove(), 1100);
+    }, i*150);
+  }
+  setTimeout(()=> speak('太棒了!','zh-CN'), 400);
+  updateTopStars();
+}
+
+/* ---------- 调度 ---------- */
+function renderScreen(){
+  const les = M.lessons[LI];
+  if (SI >= les.screens.length){ rFinish(); return; }
+  const scr = screenShell();
+  const s = les.screens[SI];
+  const R = { card:rCard, quiz:rQuiz, match:rMatch, order:rOrder, sort:rSort, blend:rBlend };
+  (R[s.t] || rCard)(scr, s);
+}
+
+/* ---------- 启动 ---------- */
+function boot(mod){
+  M = mod;
+  document.title = mod.title + ' · 艾伦学前衔接课件';
+  const tb = document.getElementById('mod-title'); if (tb) tb.textContent = mod.icon + ' ' + mod.title;
+  if (mod.accent) document.documentElement.style.setProperty('--accent', mod.accent);
+  renderMenu();
+}
+
+
+'use strict';
+/* ===== v4 引擎扩展:新屏型 + 挑战层 + 升级版 key ===== */
+
+/* 覆盖 key 前缀为 v4 */
+function starKey(li){ return 'alan_v4_' + M.id + '_' + li; }
+
+/* ---------- 屏型:发现层(动画演示新知) ---------- */
+function rDiscover(scr, s){
+  scr.appendChild(el('div','eyebrow', s.top || '✨ 看一看:新本领!'));
+  if (s.title) scr.appendChild(el('div','q-title', s.title));
+  const stageBox = el('div','disc-stage');
+  stageBox.innerHTML = s.scene || '';
+  scr.appendChild(stageBox);
+  if (s.caption) scr.appendChild(el('div','t-cap', s.caption));
+
+  // 动画:点击播放按钮触发 CSS class
+  const play = el('button','speak-btn big','▶️ 再看一次');
+  const run = ()=>{
+    const anim = stageBox.querySelector('.anim');
+    if (anim){ anim.classList.remove('go'); void anim.offsetWidth; anim.classList.add('go'); }
+    if (s.say) speak(s.say.text, s.say.lang);
+    if (s.say2) setTimeout(()=> speak(s.say2.text, s.say2.lang, true), 900);
+  };
+  play.onclick = run;
+  scr.appendChild(play);
+  setTimeout(run, 500);
+  showNext(scr, '我学会了 ➜');
+}
+
+/* ---------- 屏型:描红(Canvas 笔顺书写) ---------- */
+function rTrace(scr, s){
+  scr.appendChild(el('div','q-title', s.q || ('描一描:' + s.char)));
+  if (s.say){ const sb = el('button','speak-btn','🔊 听读音'); sb.onclick = ()=> speak(s.say.text, s.say.lang); scr.appendChild(sb); }
+  const wrap = el('div','trace-wrap');
+  const guide = el('div','trace-guide '+(s.cls||''), s.char);
+  const cvs = document.createElement('canvas');
+  cvs.className = 'trace-canvas'; cvs.width = 320; cvs.height = 320;
+  wrap.appendChild(guide); wrap.appendChild(cvs);
+  scr.appendChild(wrap);
+
+  const ctx = cvs.getContext ? cvs.getContext('2d') : null;
+  if (!ctx){
+    // 降级:无 Canvas 支持时,看影子比划,直接可完成
+    const tip = el('div','t-cap','用手指在大字上比划几遍,然后点「写好了」!');
+    scr.appendChild(tip);
+    const done0 = el('button','trace-btn','✅ 写好了');
+    done0.onclick = ()=>{ fx(true); giveStar(); done0.disabled = true; done0.textContent='⭐ 真棒!'; showNext(scr,'下一个 ➜'); };
+    scr.appendChild(done0);
+    return;
+  }
+  ctx.lineWidth = 18; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#E2574C';
+  let drawing = false, painted = 0;
+  function pos(e){
+    const r = cvs.getBoundingClientRect();
+    const t = e.touches ? e.touches[0] : e;
+    return { x:(t.clientX - r.left)*(cvs.width/r.width), y:(t.clientY - r.top)*(cvs.height/r.height) };
+  }
+  function start(e){ drawing = true; const p = pos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); e.preventDefault(); }
+  function move(e){ if(!drawing) return; const p = pos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); painted++; e.preventDefault(); }
+  function end(){ drawing = false; }
+  cvs.addEventListener('mousedown',start); cvs.addEventListener('mousemove',move);
+  window.addEventListener('mouseup',end);
+  cvs.addEventListener('touchstart',start,{passive:false}); cvs.addEventListener('touchmove',move,{passive:false});
+  cvs.addEventListener('touchend',end);
+
+  const row = el('div','btn-row');
+  const clr = el('button','trace-btn ghost','🧽 擦掉重写'); clr.onclick = ()=>{ ctx.clearRect(0,0,cvs.width,cvs.height); painted=0; };
+  const done = el('button','trace-btn','✅ 写好了'); 
+  done.onclick = ()=>{
+    if (painted < 8){ guide.classList.add('shake'); setTimeout(()=>guide.classList.remove('shake'),500); return; }
+    fx(true); giveStar();
+    done.disabled = true; done.textContent = '⭐ 真棒!';
+    showNext(scr, '下一个 ➜');
+  };
+  row.appendChild(clr); row.appendChild(done);
+  scr.appendChild(row);
+}
+
+/* ---------- 屏型:录音跟读 ---------- */
+function rSpeak(scr, s){
+  scr.appendChild(el('div','eyebrow','🎤 跟读小明星'));
+  scr.appendChild(el('div','t-big phrase', s.text));
+  if (s.zh) scr.appendChild(el('div','t-cap', s.zh));
+
+  const listen = el('button','speak-btn big','🔊 听老师读'); 
+  listen.onclick = ()=> speak(s.say.text, s.say.lang);
+  scr.appendChild(listen);
+  setTimeout(()=> speak(s.say.text, s.say.lang), 500);
+
+  const recBtn = el('button','rec-btn','🎙️ 按住说话');
+  const status = el('div','rec-status','先听老师读,再按住下面的按钮大声说!');
+  const play = el('button','speak-btn','▶️ 再听一次我的声音'); play.style.display = 'none';
+
+  let stream = null, recorder = null, chunks = [], audioUrl = null;
+  let holding = false, busy = false, gifted = false;
+  const unsupported = !(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder);
+
+  function gift(){ if (!gifted){ gifted = true; fx(true); giveStar(); showNext(scr, '下一个 ➜'); } }
+  function idle(){ recBtn.classList.remove('rec'); recBtn.textContent = '🎙️ 按住说话'; }
+  function readAloudFallback(msg){
+    status.textContent = msg || '麦克风没能打开,跟着老师大声读一遍也很棒!';
+    recBtn.classList.remove('rec'); recBtn.textContent = '🗣️ 我读好了';
+    recBtn.onclick = ()=>{ recBtn.disabled = true; recBtn.textContent = '⭐ 真棒!'; gift(); };
+  }
+
+  // 设备不支持录音:点一下当作读完,照常得星
+  if (unsupported){
+    scr.appendChild(recBtn); scr.appendChild(status);
+    readAloudFallback('这台设备不支持录音,跟着老师大声读一遍也很棒!');
+    return;
+  }
+
+  async function beginHold(){
+    if (busy || gifted) return;        // 正在录/正在请求,忽略重复按下
+    busy = true; holding = true;
+    recBtn.classList.add('rec'); recBtn.textContent = '🔴 松开结束';
+    status.textContent = stream ? '正在录音…大声说!' : '请点「允许」打开麦克风…';
+
+    let s;
+    try {
+      // 麦克风流只在第一次请求(弹一次授权),之后本屏复用,不再请求
+      if (!stream) stream = await navigator.mediaDevices.getUserMedia({ audio:true });
+      s = stream;
+    } catch(err){
+      busy = false; holding = false;
+      readAloudFallback('麦克风没能打开(可能被拒绝了),跟着老师大声读一遍也很棒!');
+      return;
+    }
+
+    // 若在等授权期间用户已松手(通常是松开去点了授权弹窗):本次不录,提示再按
+    if (!holding){
+      busy = false; idle();
+      status.textContent = '✅ 麦克风已开启!现在按住按钮就能直接录音啦。';
+      return;
+    }
+
+    try {
+      chunks = [];
+      recorder = new MediaRecorder(s);
+      recorder.ondataavailable = e=>{ if (e.data && e.data.size) chunks.push(e.data); };
+      recorder.onstop = ()=>{
+        busy = false;
+        if (chunks.length){
+          if (audioUrl) URL.revokeObjectURL(audioUrl);
+          audioUrl = URL.createObjectURL(new Blob(chunks, { type:'audio/webm' }));
+          status.textContent = '🎧 听听你自己的声音!';
+          play.style.display = 'inline-block';
+          try { const a = new Audio(audioUrl); a.play().catch(()=>{}); } catch(_){}   // 松开自动回放一次
+        } else {
+          status.textContent = '再按住按钮,多说一会儿试试!';
+        }
+        gift();
+      };
+      recorder.start();
+      status.textContent = '正在录音…大声说!';
+    } catch(err){
+      busy = false; holding = false;
+      readAloudFallback();
+    }
+  }
+
+  function endHold(){
+    if (!holding) return;
+    holding = false;
+    recBtn.classList.remove('rec'); recBtn.textContent = '🎙️ 再说一次';
+    if (recorder && recorder.state === 'recording'){
+      recorder.stop();            // → onstop:生成回放 + 得星
+    } else {
+      busy = false;               // 还在授权、尚未开始录就松手了,释放占用
+    }
+  }
+
+  // 触屏(平板主力):touchstart 里 preventDefault 同时阻止浏览器合成多余的鼠标事件
+  recBtn.addEventListener('touchstart', e=>{ e.preventDefault(); beginHold(); }, { passive:false });
+  recBtn.addEventListener('touchend',   e=>{ e.preventDefault(); endHold();   }, { passive:false });
+  // 鼠标:mouseup 与 mouseleave 双保险,移出按钮再松开也能正常停止
+  recBtn.addEventListener('mousedown', e=>{ e.preventDefault(); beginHold(); });
+  recBtn.addEventListener('mouseup',   endHold);
+  recBtn.addEventListener('mouseleave', endHold);
+
+  scr.appendChild(recBtn); scr.appendChild(status);
+  play.onclick = ()=>{ if (audioUrl){ try { new Audio(audioUrl).play(); } catch(_){} } };
+  scr.appendChild(play);
+}
+
+/* ---------- 屏型:迷你绘本(点读 + 翻页) ---------- */
+function rBook(scr, s){
+  let pg = 0;
+  scr.classList.add('book-screen');
+  const page = el('div','book-page');
+  const cap = el('div','book-cap');
+  const navRow = el('div','book-nav');
+  const prev = el('button','book-arrow','◀');
+  const pginfo = el('div','book-pginfo','');
+  const next = el('button','book-arrow','▶');
+  navRow.appendChild(prev); navRow.appendChild(pginfo); navRow.appendChild(next);
+  scr.appendChild(page); scr.appendChild(cap); scr.appendChild(navRow);
+
+  const sb = el('button','speak-btn big','🔊 读这一页'); scr.appendChild(sb);
+
+  function show(){
+    const p = s.pages[pg];
+    page.innerHTML = '<div class="book-emoji">' + p.art + '</div><div class="book-text">' + p.text + '</div>';
+    cap.textContent = p.zh || '';
+    pginfo.textContent = (pg+1) + ' / ' + s.pages.length;
+    prev.disabled = pg === 0;
+    page.classList.remove('flip'); void page.offsetWidth; page.classList.add('flip');
+    sb.onclick = ()=> speak(p.say.text, p.say.lang);
+    setTimeout(()=> speak(p.say.text, p.say.lang), 350);
+    if (pg === s.pages.length - 1){ next.textContent = '✅ 读完啦'; }
+    else next.textContent = '▶';
+  }
+  prev.onclick = ()=>{ if (pg>0){ pg--; show(); } };
+  let finished = false;
+  next.onclick = ()=>{
+    if (pg < s.pages.length - 1){ pg++; show(); }
+    else if (!finished){ finished = true; fx(true); giveStar(); showNext(scr, '回答问题 ➜'); }
+  };
+  show();
+}
+
+/* ---------- 挑战层包装:难题答对给双星 ---------- */
+function rChallenge(scr, s){
+  scr.appendChild(el('div','eyebrow challenge','🏔️ 挑战题 · 答对得 ⭐⭐'));
+  // 复用 quiz 渲染,但答对加倍
+  const fakeS = Object.assign({}, s, {_double:true});
+  rQuiz(scr, fakeS);
+}
+
+/* ---------- 扩展调度表 ---------- */
+(function(){
+  const extra = { discover:rDiscover, trace:rTrace, rec:rSpeak, book:rBook, challenge:rChallenge };
+  const _render = renderScreen;
+  renderScreen = function(){
+    const les = M.lessons[LI];
+    if (SI >= les.screens.length){ rFinish(); return; }
+    const s = les.screens[SI];
+    if (extra[s.t]){ const scr = screenShell(); extra[s.t](scr, s); return; }
+    _render();
+  };
+})();
+
+/* 挑战题双星:改写 giveStar 调用点 —— 用全局开关 */
+const _giveStar = giveStar;
+giveStar = function(){ _giveStar(); };
+
+
+/* ---- 数据简写 ---- */
+const zh = t => ({text:t, lang:'zh-CN'});
+const en = t => ({text:t, lang:'en-US'});
+const card = o => Object.assign({t:'card'}, o);
+const quiz = (q, options, extra) => Object.assign({t:'quiz', q, options}, extra || {});
+const O = (label, ok, emoji) => ({label, ok:!!ok, emoji});
+const E = (emoji, ok) => ({emoji, ok:!!ok});
+const match = (pairs, q) => ({t:'match', pairs, q});
+
+
+const M2 = {
+  id:'m2', icon:'🏮', accent:'#E2574C', mascot:'🦝',
+  title:'中文识字拼音', subtitle:'拼音全程 · 段落阅读 · 写字 · 绘本',
+  lessons:[
+  { icon:'🐉', title:'后鼻音大闯关', subtitle:'ang eng ing ong(补回来啦)', screens:[
+    {t:'discover', top:'✨ 新本领:后鼻音', title:'鼻音长长的,从鼻子哼出来!',
+      scene:'<div class="anim go"><span class="disc-letter morph">a</span><span class="disc-plus">+</span><span class="disc-letter">ng</span><span class="disc-plus fade-step d1">=</span><span class="disc-letter fade-step d2" style="color:#E2574C">ang</span></div>',
+      caption:'a 和 ng 做朋友 → ang!像「羊 yáng」「糖 táng」。试着捏住鼻子读,会变音哦!', say:zh('昂'), say2:zh('小羊的羊,白糖的糖')},
+    card({top:'认一认', big:'ang', bigClass:'letter', emoji:'🐑', caption:'「羊 yáng」「帮 bāng」', say:zh('昂'), say2:zh('小羊')}),
+    card({top:'认一认', big:'eng', bigClass:'letter', emoji:'💡', caption:'「灯 dēng」「风 fēng」', say:zh('鞥'), say2:zh('电灯')}),
+    card({top:'认一认', big:'ing', bigClass:'letter', emoji:'⭐', caption:'「星 xīng」「明 míng」', say:zh('英'), say2:zh('星星')}),
+    card({top:'认一认', big:'ong', bigClass:'letter', emoji:'🐉', caption:'「龙 lóng」「红 hóng」', say:zh('翁'), say2:zh('飞龙')}),
+    quiz('听一听,「星」里藏着哪个韵母?', [O('ing',1),O('in'),O('eng'),O('ang')], {say:zh('星'), optClass:'letter'}),
+    quiz('听一听,「龙」里藏着哪个韵母?', [O('ong',1),O('ang'),O('eng'),O('ou')], {say:zh('龙'), optClass:'letter'}),
+    quiz('听一听,「灯」里藏着哪个韵母?', [O('eng',1),O('en'),O('ang'),O('ing')], {say:zh('灯'), optClass:'letter'}),
+    match([['ang','🐑 羊'],['ing','⭐ 星'],['ong','🐉 龙'],['eng','💡 灯']], '后鼻音找朋友!'),
+    {t:'challenge', q:'🏔️ 难题:前鼻音还是后鼻音?「风 fēng」是——', options:[O('eng 后鼻音',1),O('en 前鼻音',0),O('ang',0)], say:zh('风'), optClass:'letter', sayAfter:zh('风,后鼻音 eng')}
+  ]},
+  { icon:'👅', title:'平翘舌大挑战', subtitle:'z c s ↔ zh ch sh(你的难点)', screens:[
+    {t:'discover', top:'✨ 听清楚:舌头的位置', title:'平舌 vs 翘舌,舌头不一样!',
+      scene:'<div class="anim go"><div class="disc-row fade-step d1">z c s <span style="font-size:40px">→ 舌头平平 👅</span></div><div class="disc-row fade-step d2" style="margin-left:30px">zh ch sh <span style="font-size:40px">→ 舌头翘起 ⬆️👅</span></div></div>',
+      caption:'「四 sì」舌头是平的,「十 shí」舌头要翘起来。仔细听它们的不同!', say:zh('四,十'), say2:zh('字,知')},
+    card({top:'平舌音', big:'zi ci si', bigClass:'letter', emoji:'4️⃣', caption:'字 zì、词 cí、四 sì — 舌头平平', say:zh('字,词,四')}),
+    card({top:'翘舌音', big:'zhi chi shi', bigClass:'letter', emoji:'🔟', caption:'知 zhī、吃 chī、十 shí — 舌头翘起', say:zh('知,吃,十')}),
+    quiz('听一听:这是平舌还是翘舌?「十」', [O('shi 翘舌',1),O('si 平舌',0)], {say:zh('十'), optClass:'letter', sayAfter:zh('十,翘舌 shi')}),
+    quiz('听一听:「四」是哪个?', [O('si',1),O('shi'),O('xi'),O('ci')], {say:zh('四'), optClass:'letter'}),
+    quiz('听一听:「吃」是哪个?', [O('chi',1),O('ci'),O('qi'),O('zhi')], {say:zh('吃'), optClass:'letter'}),
+    quiz('听一听:「字」是哪个?', [O('zi',1),O('zhi'),O('ji'),O('ci')], {say:zh('字'), optClass:'letter'}),
+    quiz('听一听:「师」(老师的师)是哪个?', [O('shi',1),O('si'),O('xi'),O('chi')], {say:zh('师'), optClass:'letter'}),
+    {t:'challenge', q:'🏔️ 难题:「老师吃了四个柿子」里,哪个字是平舌音?', options:[O('四 sì',1,'4️⃣'),O('师 shī',0),O('柿 shì',0),O('吃 chī',0)], say:zh('老师吃了四个柿子'), optClass:'hanzi', sayAfter:zh('四,平舌音')}
+  ]},
+  { icon:'✍️', title:'写字小书法家', subtitle:'描一描,写汉字(手指书写)', screens:[
+    {t:'discover', top:'✨ 我会写字了', title:'用手指在格子里描出汉字!',
+      scene:'<div class="anim go"><span class="disc-letter" style="font-family:KaiTi;color:#DCE6F2">一</span><span class="arrow-grow disc-plus">✏️</span><span class="disc-letter fade-step d2" style="font-family:KaiTi;color:#E2574C">一</span></div>',
+      caption:'灰色的字是影子,用手指(或鼠标)在上面描出红色的字!写满就有星星。', say:zh('我们来写字')},
+    {t:'trace', char:'一', cls:'hanzi', q:'描一描:「一」(横,从左到右)', say:zh('一')},
+    {t:'trace', char:'二', cls:'hanzi', q:'描一描:「二」(两横)', say:zh('二')},
+    {t:'trace', char:'三', cls:'hanzi', q:'描一描:「三」(三横)', say:zh('三')},
+    {t:'trace', char:'十', cls:'hanzi', q:'描一描:「十」(先横后竖)', say:zh('十')},
+    {t:'trace', char:'上', cls:'hanzi', q:'描一描:「上」', say:zh('上')},
+    {t:'trace', char:'口', cls:'hanzi', q:'描一描:「口」(先两边后封口)', say:zh('口')},
+    {t:'trace', char:'日', cls:'hanzi', q:'描一描:「日」', say:zh('日')}
+  ]},
+  { icon:'📚', title:'段落阅读(一)', subtitle:'读一小段,回答问题', screens:[
+    card({top:'先读一遍', big:'小马要上学', bigClass:'hanzi', emoji:'🐴🎒', caption:'故事题目', say:zh('小马要上学')}),
+    card({top:'读句子', big:'小马起得很早。', bigClass:'hanzi', emoji:'🌅', caption:'xiǎo mǎ qǐ de hěn zǎo', say:zh('小马起得很早')}),
+    card({top:'读句子', big:'他吃了早饭。', bigClass:'hanzi', emoji:'🥣', caption:'tā chī le zǎo fàn', say:zh('他吃了早饭')}),
+    card({top:'读句子', big:'妈妈送他去学校。', bigClass:'hanzi', emoji:'👩🏫', caption:'mā ma sòng tā qù xué xiào', say:zh('妈妈送他去学校')}),
+    quiz('读懂了吗?小马起得——', [O('很早',1,'🌅'),O('很晚',0,'🌙'),O('不起床',0,'🛌')], {optClass:'hanzi', sayAfter:zh('小马起得很早')}),
+    quiz('谁送小马去学校?', [O('妈妈',1,'👩'),O('爸爸',0,'👨'),O('哥哥',0,'👦')], {optClass:'hanzi', sayAfter:zh('妈妈送他去学校')}),
+    {t:'challenge', q:'🏔️ 难题:小马去学校之前,先做了什么?', options:[O('吃早饭',1,'🥣'),O('睡觉',0,'😴'),O('看电视',0,'📺'),O('踢球',0,'⚽')], optClass:'hanzi', sayAfter:zh('他先吃了早饭,再去学校')}
+  ]},
+  { icon:'🌳', title:'段落阅读(二)', subtitle:'公园里的故事', screens:[
+    card({top:'先读一遍', big:'公园里', bigClass:'hanzi', emoji:'🌳🌸', caption:'故事题目', say:zh('公园里')}),
+    card({top:'读句子', big:'公园里有大树。', bigClass:'hanzi', emoji:'🌳', caption:'gōng yuán lǐ yǒu dà shù', say:zh('公园里有大树')}),
+    card({top:'读句子', big:'树上有三只小鸟。', bigClass:'hanzi', emoji:'🐦🐦🐦', caption:'shù shàng yǒu sān zhī xiǎo niǎo', say:zh('树上有三只小鸟')}),
+    card({top:'读句子', big:'小鸟在唱歌。', bigClass:'hanzi', emoji:'🎵', caption:'xiǎo niǎo zài chàng gē', say:zh('小鸟在唱歌')}),
+    quiz('树上有几只小鸟?', [O('三只',1,'🐦🐦🐦'),O('一只',0,'🐦'),O('五只',0)], {optClass:'hanzi', sayAfter:zh('三只小鸟')}),
+    quiz('小鸟在做什么?', [O('唱歌',1,'🎵'),O('睡觉',0,'😴'),O('吃饭',0,'🥣')], {optClass:'hanzi', sayAfter:zh('小鸟在唱歌')}),
+    {t:'challenge', q:'🏔️ 难题:小鸟在哪里唱歌?', options:[O('树上',1,'🌳'),O('水里',0,'💧'),O('家里',0,'🏠'),O('天上',0,'☁️')], optClass:'hanzi', sayAfter:zh('小鸟在树上唱歌')}
+  ]},
+  { icon:'🔤', title:'我会组词', subtitle:'一个字,组成不同的词', screens:[
+    {t:'discover', top:'✨ 新本领:组词', title:'一个字,可以和不同的字做朋友!',
+      scene:'<div class="anim go"><span class="disc-letter" style="font-family:KaiTi;font-size:70px">上</span><div style="display:inline-flex;flex-direction:column;gap:6px;font-size:34px;font-family:KaiTi"><span class="fade-step d1">上学 📚</span><span class="fade-step d2">上山 ⛰️</span><span class="fade-step d3">上车 🚌</span></div></div>',
+      caption:'「上」可以组成:上学、上山、上车!一个字会变出好多词。', say:zh('上学,上山,上车')},
+    quiz('「水」可以组成哪个词?', [O('水牛 🐮',1),O('火牛',0),O('天牛',0)], {optClass:'hanzi', sayAfter:zh('水牛')}),
+    quiz('「火」可以组成哪个词?', [O('火车 🚂',1),O('水车',0),O('风车',0)], {optClass:'hanzi', sayAfter:zh('火车')}),
+    quiz('「大」的反义词是?', [O('小',1,'🐭'),O('多',0),O('高',0)], {optClass:'hanzi', sayAfter:zh('小,大的反义词')}),
+    match([['上','学 📚'],['火','车 🚂'],['小','鸟 🐦']], '组词配对!(上学、火车、小鸟)'),
+    {t:'challenge', q:'🏔️ 难题:哪个词表示「用眼睛看」?', options:[O('看见 👀',1),O('听见',0,'👂'),O('闻到',0,'👃'),O('摸到',0,'✋')], sayAfter:zh('看见,用眼睛看')}
+  ]},
+  { icon:'📖', title:'迷你绘本:小猫钓鱼', subtitle:'自己读一本小书!', screens:[
+    {t:'book', pages:[
+      {art:'🐱🎣', text:'小猫去钓鱼。', zh:'xiǎo māo qù diào yú', say:zh('小猫去钓鱼')},
+      {art:'🦋', text:'一只蝴蝶飞来了。', zh:'yì zhī hú dié fēi lái le', say:zh('一只蝴蝶飞来了')},
+      {art:'🐱🦋', text:'小猫去捉蝴蝶。', zh:'xiǎo māo qù zhuō hú dié', say:zh('小猫去捉蝴蝶')},
+      {art:'🐟❌', text:'一条鱼也没钓到。', zh:'yì tiáo yú yě méi diào dào', say:zh('一条鱼也没钓到')},
+      {art:'🐱💡', text:'小猫明白了:要专心!', zh:'yào zhuān xīn', say:zh('小猫明白了,要专心')}
+    ]},
+    quiz('小猫为什么没钓到鱼?', [O('去捉蝴蝶了',1,'🦋'),O('鱼太小',0,'🐟'),O('下雨了',0,'🌧️')], {optClass:'hanzi', sayAfter:zh('因为小猫去捉蝴蝶,不专心')}),
+    quiz('这个故事告诉我们要——', [O('专心',1,'💡'),O('睡觉',0,'😴'),O('生气',0,'😠')], {optClass:'hanzi', sayAfter:zh('做事要专心')}),
+    {t:'challenge', q:'🏔️ 难题:如果小猫专心钓鱼,会怎么样?', options:[O('能钓到鱼 🐟',1),O('还是钓不到',0),O('蝴蝶会飞走',0),O('天黑了',0)], sayAfter:zh('专心就能钓到鱼')}
+  ]},
+  { icon:'🎼', title:'声调魔法师', subtitle:'同样的音,声调不同意思不同', screens:[
+    {t:'discover', top:'✨ 声调真神奇', title:'一样的 ma,四个声调四个意思!',
+      scene:'<div class="anim go" style="font-family:KaiTi;font-size:46px"><span class="fade-step d1">mā妈👩</span><span class="fade-step d1">má麻🌾</span><span class="fade-step d2">mǎ马🐴</span><span class="fade-step d3">mà骂😠</span></div>',
+      caption:'声调像唱歌一样,音调一变,字就变了!', say:zh('妈,麻,马,骂')},
+    quiz('听一听,这是第几声?「马 mǎ」', [O('第三声 ˇ',1),O('第一声 ˉ',0),O('第四声 ˋ',0)], {say:zh('马'), sayAfter:zh('马,第三声')}),
+    quiz('听一听,「妈」是第几声?', [O('第一声 ˉ',1),O('第二声 ˊ',0),O('第三声 ˇ',0)], {say:zh('妈'), sayAfter:zh('妈,第一声')}),
+    quiz('听一听,是哪个字?', [O('马',1,'🐴'),O('妈',0,'👩'),O('麻',0,'🌾')], {say:zh('马'), optClass:'hanzi'}),
+    {t:'challenge', q:'🏔️ 难题:「我爱我的妈妈」里,「妈」是第几声?', options:[O('第一声 ˉ',1),O('第三声 ˇ',0),O('第四声 ˋ',0),O('第二声 ˊ',0)], say:zh('我爱我的妈妈'), sayAfter:zh('妈,第一声')}
+  ]},
+  { icon:'🧩', title:'识字总复习', subtitle:'学过的字,都记得吗?', screens:[
+    quiz('听一听,是哪个字?', [O('山',1,'⛰️'),O('出',0),O('水',0,'💧'),O('火',0,'🔥')], {say:zh('大山的山'), optClass:'hanzi'}),
+    quiz('听一听,是哪个字?', [O('看',1,'👀'),O('着',0),O('有',0),O('眼',0)], {say:zh('看书的看'), optClass:'hanzi'}),
+    quiz('「上学」的「学」,选对的!', [O('学',1,'📚'),O('字',0),O('子',0),O('写',0)], {say:zh('上学'), optClass:'hanzi'}),
+    match([['日','☀️'],['月','🌙'],['星','⭐'],['山','⛰️']], '汉字找图画!'),
+    quiz('哪个词是「早上起床」的意思?', [O('起床 🛏️',1),O('睡觉',0),O('吃饭',0)], {optClass:'hanzi', sayAfter:zh('起床')}),
+    {t:'challenge', q:'🏔️ 难题:「他在公园里看小鸟」,小鸟在哪里?', options:[O('公园里',1,'🌳'),O('家里',0,'🏠'),O('学校',0,'🏫'),O('水里',0,'💧')], say:zh('他在公园里看小鸟'), optClass:'hanzi', sayAfter:zh('在公园里')}
+  ]},
+  { icon:'✏️', title:'写字进阶', subtitle:'多写几个新字', screens:[
+    {t:'trace', char:'人', cls:'hanzi', q:'描一描:「人」(先撇后捺)', say:zh('人')},
+    {t:'trace', char:'大', cls:'hanzi', q:'描一描:「大」', say:zh('大')},
+    {t:'trace', char:'小', cls:'hanzi', q:'描一描:「小」', say:zh('小')},
+    {t:'trace', char:'山', cls:'hanzi', q:'描一描:「山」', say:zh('山')},
+    {t:'trace', char:'火', cls:'hanzi', q:'描一描:「火」', say:zh('火')},
+    {t:'trace', char:'水', cls:'hanzi', q:'描一描:「水」', say:zh('水')}
+  ]}
+]};
+
+
+const M3 = {
+  id:'m3', icon:'🔤', accent:'#7A4FD0', mascot:'🦝',
+  title:'英文阅读进阶', subtitle:'Word families · Long vowels · 录音 · 绘本',
+  lessons:[
+  { icon:'👪', title:'Word Families 词族', subtitle:'-ake -ight -all 一串一串学', screens:[
+    {t:'discover', top:'✨ New trick: Word families', title:'换个开头,变出一串新词!',
+      scene:'<div class="anim go" style="font-family:Comic Sans MS;font-size:40px;color:#7A4FD0"><div class="fade-step d1">c + ake → cake 🎂</div><div class="fade-step d2">l + ake → lake 🏞️</div><div class="fade-step d3">sn + ake → snake 🐍</div></div>',
+      caption:'-ake 是一家人!只要换开头的字母,就能读出一串新词。', say:en('cake, lake, snake'), say2:en('They are a word family!')},
+    card({top:'-ake family', big:'cake lake snake', bigClass:'phrase', emoji:'🎂🏞️🐍', caption:'结尾都是 -ake', say:en('cake, lake, snake')}),
+    card({top:'-ight family', big:'light night right', bigClass:'phrase', emoji:'💡🌙👉', caption:'-ight 一家(gh 不发音)', say:en('light, night, right')}),
+    card({top:'-all family', big:'ball wall tall', bigClass:'phrase', emoji:'⚽🧱📏', caption:'-all 一家', say:en('ball, wall, tall')}),
+    quiz('Which word is in the -ake family?', [O('cake',1),O('cat'),O('cup'),O('car')], {say:en('Which word rhymes with lake?'), optClass:'word', sayAfter:en('cake')}),
+    quiz('Listen! 听到的是哪个词?', [O('night',1),O('right'),O('light'),O('might')], {say:en('night'), optClass:'word', sayAfter:en('night')}),
+    quiz('Which word means very high? 哪个词是「高」?', [O('tall',1,'📏'),O('ball',0,'⚽'),O('wall',0,'🧱')], {say:en('Which word means very high?'), optClass:'word', sayAfter:en('tall')}),
+    {t:'challenge', q:'🏔️ Challenge: 「The ___ is at night.」(天上的圆月)', options:[O('moon 🌙',1),O('sun ☀️'),O('ball ⚽'),O('cake 🎂')], say:en('The moon is in the sky at night.'), optClass:'word', sayAfter:en('moon')}
+  ]},
+  { icon:'🌈', title:'Long Vowels 长元音', subtitle:'ee · oo · ai 双元音', screens:[
+    {t:'discover', top:'✨ Two vowels, long sound', title:'两个元音在一起,发长长的音!',
+      scene:'<div class="anim go" style="font-family:Comic Sans MS;font-size:44px;color:#7A4FD0"><div class="fade-step d1">ee → see 👀 tree 🌳</div><div class="fade-step d2">oo → moon 🌙 zoo 🦁</div><div class="fade-step d3">ai → rain 🌧️ train 🚂</div></div>',
+      caption:'ee 读「衣——」,oo 读「乌——」,ai 读「诶」。两个字母一个长音!', say:en('see, moon, rain')},
+    card({top:'ee sound', big:'see tree green', bigClass:'phrase', emoji:'👀🌳🟢', caption:'ee 长音「ee」', say:en('see, tree, green')}),
+    card({top:'oo sound', big:'moon zoo food', bigClass:'phrase', emoji:'🌙🦁🍔', caption:'oo 长音「oo」', say:en('moon, zoo, food')}),
+    card({top:'ai sound', big:'rain train tail', bigClass:'phrase', emoji:'🌧️🚂', caption:'ai 长音「ai」', say:en('rain, train, tail')}),
+    quiz('Listen! 听到的是哪个词?', [O('tree',1),O('three'),O('free'),O('true')], {say:en('tree'), optClass:'word', sayAfter:en('tree')}),
+    quiz('Where do animals live? 动物住在哪?', [O('zoo 🦁',1),O('moon 🌙'),O('tree 🌳')], {say:en('Where can you see many animals?'), optClass:'word', sayAfter:en('zoo')}),
+    quiz('Listen! 听到的是哪个词?', [O('train',1),O('rain'),O('tail'),O('main')], {say:en('train'), optClass:'word', sayAfter:en('train')}),
+    {t:'challenge', q:'🏔️ Challenge: 「I see the ___ in the sky.」(晚上的)', options:[O('moon 🌙',1),O('zoo 🦁'),O('tree 🌳'),O('train 🚂')], say:en('I see the moon in the sky.'), optClass:'word', sayAfter:en('moon')}
+  ]},
+  { icon:'🚗', title:'Bossy R 字母 r 的魔法', subtitle:'ar · or · er', screens:[
+    {t:'discover', top:'✨ R is bossy!', title:'字母 r 很霸道,它会改变前面的元音!',
+      scene:'<div class="anim go" style="font-family:Comic Sans MS;font-size:44px;color:#7A4FD0"><div class="fade-step d1">ar → car 🚗 star ⭐</div><div class="fade-step d2">or → corn 🌽 fork 🍴</div><div class="fade-step d3">er → tiger 🐯 sister 👧</div></div>',
+      caption:'ar 读「ar」,or 读「or」,er 读「er」。r 一来,音就变了!', say:en('car, corn, tiger')},
+    card({top:'ar sound', big:'car star park', bigClass:'phrase', emoji:'🚗⭐🏞️', caption:'ar 读「ar」', say:en('car, star, park')}),
+    card({top:'or sound', big:'corn fork short', bigClass:'phrase', emoji:'🌽🍴', caption:'or 读「or」', say:en('corn, fork, short')}),
+    quiz('Listen! 听到的是哪个词?', [O('star',1),O('scar',0),O('car',0),O('far',0)], {say:en('star'), optClass:'word', sayAfter:en('star')}),
+    quiz('What do you eat with? 用什么吃饭?', [O('fork 🍴',1),O('car 🚗'),O('star ⭐')], {say:en('What do you eat food with?'), optClass:'word', sayAfter:en('fork')}),
+    quiz('Listen! 听到的是哪个词?', [O('park',1),O('part'),O('dark'),O('bark')], {say:en('park'), optClass:'word', sayAfter:en('park')}),
+    {t:'challenge', q:'🏔️ Challenge: 「We play in the ___.」(有滑梯草地的地方)', options:[O('park 🏞️',1),O('fork 🍴'),O('corn 🌽'),O('car 🚗')], say:en('We play in the park.'), optClass:'word', sayAfter:en('park')}
+  ]},
+  { icon:'🐰', title:'Two-Syllable Words 多音节', subtitle:'两拍子的长单词!', screens:[
+    {t:'discover', top:'✨ Big words have parts', title:'长单词拆成两拍,就好读了!',
+      scene:'<div class="anim go" style="font-family:Comic Sans MS;font-size:46px;color:#7A4FD0"><div class="fade-step d1">rab + bit = rabbit 🐰</div><div class="fade-step d2">sun + set = sunset 🌅</div><div class="fade-step d3">pen + cil = pencil ✏️</div></div>',
+      caption:'拍拍手!rab-bit,两拍。把长单词拆开,一拍一拍读出来!', say:en('rabbit, sunset, pencil')},
+    {t:'blend', word:'rabbit', emoji:'🐰', parts:['rab','bit'], lang:'en-US', say:en('rabbit'), saySlow:en('rab, bit'), caption:'拍两下:rab-bit!'},
+    {t:'blend', word:'pencil', emoji:'✏️', parts:['pen','cil'], lang:'en-US', say:en('pencil'), saySlow:en('pen, cil'), caption:'拍两下:pen-cil!'},
+    {t:'blend', word:'sunset', emoji:'🌅', parts:['sun','set'], lang:'en-US', say:en('sunset'), saySlow:en('sun, set'), caption:'拍两下:sun-set!'},
+    quiz('How many parts in "rabbit"? 几拍?', [O('2 拍',1),O('1 拍'),O('3 拍')], {say:en('rabbit'), sayAfter:en('rab-bit, two parts')}),
+    quiz('Listen! 听到的是哪个词?', [O('pencil',1,'✏️'),O('pen',0),O('paper',0,'📄')], {say:en('pencil'), optClass:'word', sayAfter:en('pencil')}),
+    {t:'challenge', q:'🏔️ Challenge: 太阳落山叫什么?', options:[O('sunset 🌅',1),O('sunrise 🌄'),O('rabbit 🐰'),O('pencil ✏️')], say:en('When the sun goes down, it is...?'), optClass:'word', sayAfter:en('sunset')}
+  ]},
+  { icon:'🎤', title:'跟读小明星(录音)', subtitle:'说出来,听自己的声音!', screens:[
+    {t:'discover', top:'🎤 New: Record yourself!', title:'按住按钮说英语,再听自己的声音!',
+      scene:'<div class="anim go" style="font-size:90px"><span class="fade-step d1">🎙️</span><span class="arrow-grow">➡️</span><span class="fade-step d2">🎧</span><span class="arrow-grow">➡️</span><span class="fade-step d3">⭐</span></div>',
+      caption:'先听老师读,按住麦克风按钮大声说,松开就能回放你自己的声音!(第一次会问能不能用麦克风,点"允许")', say:en('Listen, then say it! Press and hold to record.')},
+    {t:'rec', text:'I am Alan.', zh:'我是艾伦。', say:en('I am Alan.')},
+    {t:'rec', text:'I can read English!', zh:'我会读英文!', say:en('I can read English!')},
+    {t:'rec', text:'The cat sat on the mat.', zh:'小猫坐在垫子上。', say:en('The cat sat on the mat.')},
+    {t:'rec', text:'I like to play in the park.', zh:'我喜欢在公园玩。', say:en('I like to play in the park.')},
+    {t:'rec', text:'Good morning, everyone!', zh:'大家早上好!', say:en('Good morning, everyone!')}
+  ]},
+  { icon:'👀', title:'Sight Words 高频词3', subtitle:'have come some what when', screens:[
+    card({top:'Look & say', big:'have · come', bigClass:'phrase', emoji:'🤲', caption:'have = 有 / come = 来', say:en('have'), say2:en('come')}),
+    card({top:'Look & say', big:'some · what', bigClass:'phrase', emoji:'❓', caption:'some = 一些 / what = 什么', say:en('some'), say2:en('what')}),
+    card({top:'Look & say', big:'when · who', bigClass:'phrase', emoji:'🕐', caption:'when = 什么时候 / who = 谁', say:en('when'), say2:en('who')}),
+    quiz('Listen! 点出听到的单词', [O('have',1),O('come'),O('some'),O('what')], {say:en('have'), optClass:'word'}),
+    quiz('听句子,填空:「___ is your name?」', [O('What',1),O('When'),O('Who'),O('Have')], {say:en('What is your name?'), optClass:'word', sayAfter:en('What is your name?')}),
+    quiz('听句子,填空:「___ do you go to bed?」(问时间)', [O('When',1),O('What'),O('Who'),O('Some')], {say:en('When do you go to bed?'), optClass:'word', sayAfter:en('When do you go to bed?')}),
+    {t:'challenge', q:'🏔️ Challenge: 「___ is your teacher?」(问人)', options:[O('Who',1),O('What'),O('When'),O('Some')], say:en('Who is your teacher?'), optClass:'word', sayAfter:en('Who is your teacher?')}
+  ]},
+  { icon:'📖', title:'迷你绘本:Sam and the Cat', subtitle:'Read a little book!', screens:[
+    {t:'book', pages:[
+      {art:'👦', text:'This is Sam.', zh:'这是山姆。', say:en('This is Sam.')},
+      {art:'🐱', text:'Sam has a cat.', zh:'山姆有一只猫。', say:en('Sam has a cat.')},
+      {art:'🐱🌳', text:'The cat is in the tree.', zh:'猫在树上。', say:en('The cat is in the tree.')},
+      {art:'👦🙀', text:'"Come down!" said Sam.', zh:'「下来吧!」山姆说。', say:en('Come down, said Sam.')},
+      {art:'🐱❤️', text:'The cat sat with Sam.', zh:'猫和山姆坐在一起。', say:en('The cat sat with Sam.')}
+    ]},
+    quiz('What does Sam have? 山姆有什么?', [O('a cat 🐱',1),O('a dog 🐶'),O('a fish 🐟')], {say:en('What does Sam have?'), optClass:'word', sayAfter:en('Sam has a cat.')}),
+    quiz('Where is the cat? 猫在哪里?', [O('in the tree 🌳',1),O('in the box 📦'),O('on the bed 🛏️')], {say:en('Where is the cat?'), optClass:'word', sayAfter:en('The cat is in the tree.')}),
+    {t:'challenge', q:'🏔️ Challenge: How does Sam feel at the end? 最后山姆心情如何?', options:[O('happy 😊',1),O('sad 😢'),O('angry 😠'),O('scared 😱')], say:en('The cat sat with Sam. They are happy.'), optClass:'word', sayAfter:en('Sam is happy.')}
+  ]},
+  { icon:'🏫', title:'听懂老师·超长句', subtitle:'真实课堂多步指令(你的难点)', screens:[
+    {t:'discover', top:'✨ Multi-step instructions', title:'老师有时一次说好几件事,要全记住!',
+      scene:'<div class="anim go" style="font-size:34px;color:#7A4FD0;font-family:Comic Sans MS"><div class="fade-step d1">1️⃣ Take out your book</div><div class="fade-step d2">2️⃣ Open to page 5</div><div class="fade-step d3">3️⃣ Read quietly</div></div>',
+      caption:'仔细听!老师可能说:"拿出书,翻到第5页,安静读。" 三件事都要做。', say:en('Take out your book, open to page five, and read quietly.')},
+    quiz('老师说了什么?先做哪个?', [E('📘',1),E('✏️'),E('🎒')], {say:en('First, take out your book. Then open it.'), optClass:'bigmoji', sayAfter:zh('先拿出书')}),
+    quiz('老师:"Put away your pencil and come to the carpet." 要去哪?', [E('🟦 地毯',1),E('🚪 门口'),E('🪑 座位')], {say:en('Put away your pencil and come to the carpet.'), optClass:'bigmoji', sayAfter:zh('去地毯那里')}),
+    quiz('老师:"Wash your hands before you eat lunch." 先做什么?', [E('🧼 洗手',1),E('🥪 吃饭'),E('😴 睡觉')], {say:en('Wash your hands before you eat lunch.'), optClass:'bigmoji', sayAfter:zh('先洗手,再吃饭')}),
+    quiz('老师:"Finish your work, then you can play." 什么时候能玩?', [O('做完作业后',1,'✅'),O('马上',0,'🏃'),O('不能玩',0,'❌')], {say:en('Finish your work, then you can play.'), optClass:'word', sayAfter:zh('做完作业才能玩')}),
+    {t:'challenge', q:'🏔️ Challenge: "Line up quietly and walk to the library." 要去图书馆,怎么走?', options:[O('安静排队走 🤫🚶',1),O('大声跑 🗣️🏃'),O('坐着不动 🪑'),O('回家 🏠')], say:en('Line up quietly and walk to the library.'), optClass:'word', sayAfter:zh('安静地排队走过去')}
+  ]},
+  { icon:'✍️', title:'Trace Letters 描字母', subtitle:'写出大写字母!', screens:[
+    {t:'trace', char:'A', cls:'letter', q:'Trace the letter A', say:en('A')},
+    {t:'trace', char:'B', cls:'letter', q:'Trace the letter B', say:en('B')},
+    {t:'trace', char:'C', cls:'letter', q:'Trace the letter C', say:en('C')},
+    {t:'trace', char:'S', cls:'letter', q:'Trace the letter S', say:en('S')},
+    {t:'trace', char:'M', cls:'letter', q:'Trace the letter M', say:en('M')},
+    {t:'trace', char:'T', cls:'letter', q:'Trace the letter T', say:en('T')}
+  ]}
+]};
+
+
+const M4 = {
+  id:'m4', icon:'🔢', accent:'#1F9D8B', mascot:'🦝',
+  title:'数学进阶', subtitle:'两位数 · 时间 · 货币 · 应用题',
+  lessons:[
+  { icon:'🔟', title:'Tens and Ones 十位个位', subtitle:'看懂两位数的秘密', screens:[
+    {t:'discover', top:'✨ New: Place value', title:'两位数 = 几个十 + 几个一!',
+      scene:'<div class="anim go" style="font-size:38px;color:#1F9D8B;font-weight:800"><span class="fade-step d1">23</span><span class="arrow-grow">=</span><span class="fade-step d2">🔟🔟 (2个十)</span><span class="fade-step d3">+ 🟢🟢🟢 (3个一)</span></div>',
+      caption:'23 就是 2 个十(20)加 3 个一(3)。十位告诉你有几个十!', say:en('Twenty-three is two tens and three ones.')},
+    card({top:'看一看', big:'34 = 30 + 4', bigClass:'phrase', emoji:'🔟🔟🔟', caption:'3 个十 + 4 个一', say:en('thirty-four is three tens and four ones')}),
+    quiz('25 里有几个十?', [O('2 个十',1),O('5 个十'),O('25 个十')], {say:en('How many tens in twenty-five?'), sayAfter:en('Two tens.')}),
+    quiz('4 个十 + 2 个一 = ?', [O('42',1),O('24'),O('6'),O('402')], {say:en('Four tens and two ones make...?'), sayAfter:en('forty-two')}),
+    quiz('38 的个位数字是几?', [O('8',1),O('3'),O('38'),O('11')], {say:en('What is the ones digit in thirty-eight?'), sayAfter:en('eight')}),
+    {t:'challenge', q:'🏔️ Challenge: 哪个数最大?', options:[O('47',1),O('38',0),O('29',0),O('43',0)], say:en('Which number is the biggest?'), sayAfter:en('Forty-seven is the biggest.')}
+  ]},
+  { icon:'➕', title:'两位数加法', subtitle:'23 + 14(不进位)', screens:[
+    {t:'discover', top:'✨ Adding two-digit numbers', title:'个位加个位,十位加十位!',
+      scene:'<div class="anim go" style="font-size:40px;color:#1F9D8B;font-weight:800"><div class="fade-step d1">23 + 14</div><div class="fade-step d2">个位:3+4=7</div><div class="fade-step d3">十位:2+1=3 → 37!</div></div>',
+      caption:'先加个位(3+4=7),再加十位(2+1=3),合起来 37!', say:en('Twenty-three plus fourteen equals thirty-seven.')},
+    quiz('23 + 14 = ?', [O('37',1),O('36'),O('38'),O('27')], {say:en('Twenty-three plus fourteen?'), sayAfter:en('thirty-seven')}),
+    quiz('31 + 25 = ?', [O('56',1),O('55'),O('57'),O('46')], {say:en('Thirty-one plus twenty-five?'), sayAfter:en('fifty-six')}),
+    quiz('42 + 16 = ?', [O('58',1),O('57'),O('59'),O('48')], {say:en('Forty-two plus sixteen?'), sayAfter:en('fifty-eight')}),
+    quiz('应用题:Alan 有 20 张卡片,哥哥给他 15 张,一共几张?', [O('35',1),O('25'),O('30'),O('45')], {say:en('Alan has twenty cards. His brother gives him fifteen more. How many in total?'), sayAfter:en('Thirty-five cards.')}),
+    {t:'challenge', q:'🏔️ Challenge: 25 + 13 + 1 = ?', options:[O('39',1),O('38',0),O('40',0),O('29',0)], say:en('Twenty-five plus thirteen plus one?'), sayAfter:en('thirty-nine')}
+  ]},
+  { icon:'➖', title:'两位数减法', subtitle:'38 - 15(不退位)', screens:[
+    {t:'discover', top:'✨ Subtracting two-digit', title:'个位减个位,十位减十位!',
+      scene:'<div class="anim go" style="font-size:40px;color:#1F9D8B;font-weight:800"><div class="fade-step d1">38 - 15</div><div class="fade-step d2">个位:8-5=3</div><div class="fade-step d3">十位:3-1=2 → 23!</div></div>',
+      caption:'个位减个位(8-5=3),十位减十位(3-1=2),答案 23!', say:en('Thirty-eight take away fifteen equals twenty-three.')},
+    quiz('38 - 15 = ?', [O('23',1),O('22'),O('24'),O('33')], {say:en('Thirty-eight take away fifteen?'), sayAfter:en('twenty-three')}),
+    quiz('47 - 23 = ?', [O('24',1),O('25'),O('23'),O('14')], {say:en('Forty-seven take away twenty-three?'), sayAfter:en('twenty-four')}),
+    quiz('应用题:树上有 25 个苹果,摘走 12 个,还剩几个?', [O('13',1),O('12'),O('14'),O('23')], {say:en('There are twenty-five apples. Twelve are picked. How many are left?'), sayAfter:en('Thirteen apples.')}),
+    {t:'challenge', q:'🏔️ Challenge: 50 - 20 - 10 = ?', options:[O('20',1),O('30',0),O('10',0),O('40',0)], say:en('Fifty take away twenty take away ten?'), sayAfter:en('twenty')}
+  ]},
+  { icon:'🕐', title:'Telling Time 认识时间', subtitle:'整点和半点', screens:[
+    {t:'discover', top:'✨ New: Clocks', title:'长针短针,告诉我们几点了!',
+      scene:'<div class="anim go" style="font-size:38px;color:#1F9D8B"><div class="fade-step d1">🕒 短针指 3</div><div class="fade-step d2">长针指 12</div><div class="fade-step d3">= 3 o\'clock 三点整!</div></div>',
+      caption:'短针指数字 = 几点;长针指 12 = 整点。短针 3、长针 12,就是 3 点!', say:en('When the long hand points to twelve, it is o\'clock.')},
+    card({top:'整点', big:"3 o'clock", bigClass:'phrase', emoji:'🕒', caption:'三点整,长针指 12', say:en("three o'clock")}),
+    card({top:'半点', big:'half past 3', bigClass:'phrase', emoji:'🕞', caption:'三点半,长针指 6', say:en('half past three')}),
+    quiz('长针指 12,短针指 6,是几点?', [O("6 o'clock 🕕",1),O("12 o'clock"),O("half past 6")], {say:en('The long hand points to twelve, the short hand to six.'), sayAfter:en("Six o'clock.")}),
+    quiz('几点上学?长针指 12,短针指 8', [O("8 o'clock 🕗",1),O("半点"),O("12 点")], {say:en("What time is school? Eight o'clock!"), sayAfter:en("Eight o'clock.")}),
+    {t:'challenge', q:'🏔️ Challenge: 长针指 6 表示——', options:[O('半点 half past',1),O('整点 o\'clock',0),O('一点 one',0)], say:en('When the long hand points to six, it is half past.'), sayAfter:en('half past')}
+  ]},
+  { icon:'🪙', title:'Money 加拿大硬币', subtitle:'penny nickel dime quarter', screens:[
+    {t:'discover', top:'✨ New: Canadian coins', title:'认识硬币,它们值多少钱!',
+      scene:'<div class="anim go" style="font-size:30px;color:#1F9D8B;font-weight:800"><div class="fade-step d1">🪙 penny = 1¢</div><div class="fade-step d1">🪙 nickel = 5¢</div><div class="fade-step d2">🪙 dime = 10¢</div><div class="fade-step d3">🪙 quarter = 25¢</div></div>',
+      caption:'penny 1分、nickel 5分、dime 10分、quarter 25分。dime 最小但比 nickel 值钱哦!', say:en('A penny is one cent. A nickel is five cents. A dime is ten cents. A quarter is twenty-five cents.')},
+    quiz('A nickel is worth...? nickel 值多少?', [O('5¢',1),O('1¢'),O('10¢'),O('25¢')], {say:en('How much is a nickel?'), sayAfter:en('Five cents.')}),
+    quiz('Which coin is worth the most? 哪个最值钱?', [O('quarter 25¢',1),O('dime 10¢'),O('penny 1¢')], {say:en('Which coin is worth the most?'), sayAfter:en('A quarter, twenty-five cents.')}),
+    quiz('2 dimes = ? 两个 dime 是多少?', [O('20¢',1),O('10¢'),O('2¢'),O('25¢')], {say:en('Two dimes make how many cents?'), sayAfter:en('Twenty cents.')}),
+    {t:'challenge', q:'🏔️ Challenge: 1 dime + 1 nickel = ? 加起来多少?', options:[O('15¢',1),O('10¢',0),O('5¢',0),O('25¢',0)], say:en('A dime plus a nickel is how many cents?'), sayAfter:en('Fifteen cents.')}
+  ]},
+  { icon:'🥇', title:'Ordinal Numbers 第几名', subtitle:'1st 2nd 3rd 序数', screens:[
+    {t:'discover', top:'✨ New: Order words', title:'谁是第一?谁是第二?',
+      scene:'<div class="anim go" style="font-size:40px;color:#1F9D8B;font-weight:800"><span class="fade-step d1">🥇 1st</span><span class="fade-step d2">🥈 2nd</span><span class="fade-step d3">🥉 3rd</span></div>',
+      caption:'first 第一、second 第二、third 第三。比赛里告诉我们谁跑得最快!', say:en('first, second, third')},
+    quiz('谁是 first? 🥇🐰 🥈🐢 🥉🐌', [O('🐰 rabbit',1),O('🐢 turtle'),O('🐌 snail')], {say:en('Who is first?'), optClass:'bigmoji', sayAfter:en('The rabbit is first.')}),
+    quiz('🐢 turtle 是第几名?', [O('2nd 第二',1),O('1st 第一'),O('3rd 第三')], {say:en('What place is the turtle?'), sayAfter:en('Second.')}),
+    quiz('一周的 first day(第一天)在西方是?', [O('Sunday 周日',1),O('Monday 周一'),O('Friday 周五')], {say:en('What is the first day of the week?'), sayAfter:en('Sunday.')}),
+    {t:'challenge', q:'🏔️ Challenge: 排队第 5 个,前面有几个人?', options:[O('4 个',1),O('5 个',0),O('6 个',0),O('3 个',0)], say:en('You are fifth in line. How many people are in front of you?'), sayAfter:en('Four people.')}
+  ]},
+  { icon:'🧮', title:'数学应用题大挑战', subtitle:'读题,想一想,算一算', screens:[
+    {t:'discover', top:'✨ Word problems', title:'故事里藏着数学题!',
+      scene:'<div class="anim go" style="font-size:30px;color:#1F9D8B"><div class="fade-step d1">📖 读题目</div><div class="fade-step d2">🤔 想:加还是减?</div><div class="fade-step d3">✏️ 算出答案!</div></div>',
+      caption:'应用题要先读懂故事,再想用加法还是减法。"一共"用加,"还剩"用减!', say:en('Read the problem, think, then solve!')},
+    quiz('Alan 有 12 颗糖,吃了 4 颗,还剩几颗?', [O('8',1),O('16'),O('4'),O('12')], {say:en('Alan has twelve candies. He eats four. How many are left?'), sayAfter:en('Eight candies.')}),
+    quiz('一盒有 10 支铅笔,Alan 买了 3 盒,一共几支?', [O('30',1),O('13'),O('7'),O('10')], {say:en('A box has ten pencils. Alan buys three boxes. How many pencils in total?'), sayAfter:en('Thirty pencils.')}),
+    quiz('停车场有 15 辆车,开走 6 辆,又来了 4 辆,现在几辆?', [O('13',1),O('11'),O('14'),O('25')], {say:en('There are fifteen cars. Six leave, then four come. How many now?'), sayAfter:en('Thirteen cars.')}),
+    {t:'challenge', q:'🏔️ Challenge: 哥哥 8 岁,弟弟比他小 2 岁,弟弟几岁?', options:[O('6 岁',1),O('10 岁',0),O('2 岁',0),O('8 岁',0)], say:en('The big brother is eight. The little brother is two years younger. How old is the little brother?'), sayAfter:en('Six years old.')}
+  ]}
+]};
+
+
+const M5 = {
+  id:'m5', icon:'🎒', accent:'#F08C2E', mascot:'🦝',
+  title:'课堂习惯适应', subtitle:'时间顺序 · 一周 · 情景决策',
+  lessons:[
+  { icon:'📅', title:'一周七天', subtitle:'Days of the week(顺序练习)', screens:[
+    {t:'discover', top:'✨ New: Days of the week', title:'一个星期有七天!',
+      scene:'<div class="anim go" style="font-size:26px;color:#F08C2E;font-weight:800"><div class="fade-step d1">Sun · Mon · Tue</div><div class="fade-step d2">Wed · Thu</div><div class="fade-step d3">Fri · Sat 🎉</div></div>',
+      caption:'Sunday, Monday, Tuesday... 周末 Saturday、Sunday 不上学!上学日是 Monday 到 Friday。', say:en('Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday.')},
+    card({top:'上学日', big:'Monday → Friday', bigClass:'phrase', emoji:'🏫', caption:'周一到周五要上学', say:en('Monday to Friday is school.')}),
+    quiz('Monday 后面是哪天?', [O('Tuesday',1),O('Sunday'),O('Friday'),O('Monday')], {say:en('What comes after Monday?'), optClass:'word', sayAfter:en('Tuesday')}),
+    {t:'order', q:'按顺序排好一周!(从 Sunday 开始)',
+      items:['Sun','Mon','Tue','Wed','Thu','Fri','Sat']},
+    quiz('哪天不用上学?', [O('Saturday 🎉',1),O('Monday'),O('Wednesday')], {say:en('Which day is NOT a school day?'), optClass:'word', sayAfter:en('Saturday is the weekend.')}),
+    {t:'challenge', q:'🏔️ Challenge: 今天 Wednesday,后天是星期几?', options:[O('Friday',1),O('Thursday',0),O('Saturday',0),O('Monday',0)], say:en('Today is Wednesday. What day is the day after tomorrow?'), optClass:'word', sayAfter:en('Friday')}
+  ]},
+  { icon:'🌞', title:'我的一天(细致版)', subtitle:'更多步骤,排对顺序', screens:[
+    {t:'discover', top:'✨ Sequence the day', title:'一天有很多事,先后顺序很重要!',
+      scene:'<div class="anim go" style="font-size:40px"><span class="fade-step d1">🌅</span><span class="arrow-grow">→</span><span class="fade-step d2">🏫</span><span class="arrow-grow">→</span><span class="fade-step d3">🌙</span></div>',
+      caption:'想一想:起床 → 刷牙 → 早饭 → 上学 → 午饭 → 放学 → 晚饭 → 睡觉。把它们排对!', say:zh('一天的事情,要按顺序做')},
+    {t:'order', q:'排好上学前的顺序!(从起床开始)',
+      items:['🌅 起床','🦷 刷牙','🥣 早饭','🎒 背书包','🚌 出门']},
+    {t:'order', q:'排好放学后的顺序!(从到家开始)',
+      items:['🏠 到家','📚 做作业','🍚 晚饭','🛁 洗澡','🌙 睡觉']},
+    quiz('刷牙应该在什么时候?', [O('早饭后和睡觉前',1,'🦷'),O('一整天不刷',0),O('只在过年',0)], {sayAfter:zh('早饭后、睡觉前都要刷牙')}),
+    {t:'challenge', q:'🏔️ Challenge: 做作业和看电视,应该先做哪个?', options:[O('先做作业 📚',1),O('先看电视 📺',0),O('都不做',0),O('一起做',0)], sayAfter:zh('先做完作业,再看电视')}
+  ]},
+  { icon:'🤔', title:'遇到问题怎么办', subtitle:'课堂情景决策', screens:[
+    {t:'discover', top:'✨ Problem solving', title:'遇到困难,聪明的小朋友这样做!',
+      scene:'<div class="anim go" style="font-size:32px;color:#F08C2E"><div class="fade-step d1">😕 有问题</div><div class="fade-step d2">🙋 举手</div><div class="fade-step d3">😊 老师帮忙</div></div>',
+      caption:'不会、不懂、需要帮忙,都可以举手告诉老师。这不是坏事,是聪明!', say:en('If you need help, put up your hand and ask the teacher.')},
+    quiz('你不会做题,应该怎么办?', [O('举手问老师 🙋',1),O('哭 😭',0),O('乱写 ✏️',0)], {say:en('You do not know the answer. What should you do?'), sayAfter:en('Put up your hand and ask.')}),
+    quiz('你想上洗手间,应该说什么?', [O('May I go to the toilet? 🚻',1),O('什么都不说 🤐',0),O('大喊 🗣️',0)], {optClass:'word', sayAfter:en('May I go to the toilet, please?')}),
+    quiz('同学摔倒了,你应该?', [O('扶他+告诉老师 🤝',1),O('笑他 😆',0),O('走开 🚶',0)], {sayAfter:zh('帮助同学,告诉老师')}),
+    quiz('听不懂老师说的话,可以说?', [O('Can you say it again? 🔁',1),O('假装懂了 😶',0),O('睡觉 😴',0)], {optClass:'word', sayAfter:en('Can you say it again, please?')}),
+    {t:'challenge', q:'🏔️ Challenge: 别的小朋友抢你的玩具,最好怎么做?', options:[O('好好说+找老师 🗣️🧑‍🏫',1),O('打他 👊',0),O('抢回来 🤜',0),O('哭着跑开 😭',0)], say:en('Another child takes your toy. What is the best thing to do?'), sayAfter:zh('好好说,如果不行就找老师')}
+  ]},
+  { icon:'🗣️', title:'我会表达(录音)', subtitle:'大声说出你的需要', screens:[
+    {t:'discover', top:'🎤 Speak up!', title:'在学校,要大声清楚地表达!',
+      scene:'<div class="anim go" style="font-size:80px"><span class="fade-step d1">🤐</span><span class="arrow-grow">→</span><span class="fade-step d3">🗣️😊</span></div>',
+      caption:'按住麦克风,大声说出这些句子!在学校敢说、会说很重要。', say:en('Speak loudly and clearly at school!')},
+    {t:'rec', text:'May I have some water?', zh:'我可以喝点水吗?', say:en('May I have some water?')},
+    {t:'rec', text:'I need help, please.', zh:'请帮帮我。', say:en('I need help, please.')},
+    {t:'rec', text:'I don\'t understand.', zh:'我不明白。', say:en("I don't understand.")},
+    {t:'rec', text:'Thank you, teacher!', zh:'谢谢老师!', say:en('Thank you, teacher!')}
+  ]},
+  { icon:'🎒', title:'整理与责任', subtitle:'我能照顾好自己的东西', screens:[
+    {t:'discover', top:'✨ Be responsible', title:'一年级要学会管好自己的东西!',
+      scene:'<div class="anim go" style="font-size:40px"><span class="fade-step d1">🎒</span><span class="fade-step d2">📘✏️💧</span><span class="fade-step d3">✅</span></div>',
+      caption:'每天检查:书、铅笔盒、水壶、午餐、家课本,都带了吗?自己的事情自己做!', say:zh('自己的东西自己管')},
+    {t:'sort', q:'明天有美术课,书包要带什么?(点进书包)', target:'🎒',
+      items:[
+        {label:'📘 课本', good:true, say:en('book')},
+        {label:'✏️ 铅笔盒', good:true, say:en('pencil case')},
+        {label:'🖍️ 蜡笔', good:true, say:en('crayons')},
+        {label:'💧 水壶', good:true, say:en('water bottle')},
+        {label:'🎮 游戏机', good:false, hint:'游戏机不能带去学校!'},
+        {label:'🐶 小狗', good:false, hint:'宠物要留在家里!'},
+        {label:'🍭 糖果', good:false, hint:'糖果留在家吃!'}
+      ]},
+    quiz('放学前,你应该检查?', [O('东西都带齐了吗 ✅',1),O('什么都不用管',0),O('把东西送人',0)], {sayAfter:zh('检查东西有没有带齐')}),
+    {t:'challenge', q:'🏔️ Challenge: 你把午餐盒忘在学校了,明天应该?', options:[O('记得去拿回来 🍱',1),O('再也不要了',0),O('怪别人',0),O('买十个新的',0)], sayAfter:zh('记得去把它拿回来')}
+  ]}
+]};
+
+
+/* ---- v4.1 一体版:登山路线主页 + 学习报告导出 ---- */
+const ALL_MODS = [M2, M3, M4, M5];
+
+function recOf(modId, li){
+  try{
+    const raw = sget('alan_v4_' + modId + '_' + li);
+    if (raw){ const r = JSON.parse(raw); if (r && typeof r === 'object') return r; }
+  }catch(e){}
+  return null;
+}
+function hubStats(mod){
+  let t = 0, done = 0;
+  mod.lessons.forEach(function(l, i){
+    const r = recOf(mod.id, i);
+    if (r){ t += (r.s||0); if ((r.s||0) > 0) done++; }
+  });
+  return { t: t, done: done, n: mod.lessons.length };
+}
+function grandTotals(){
+  let star=0, done=0, total=0;
+  ALL_MODS.forEach(function(mod){ const s=hubStats(mod); star+=s.t; done+=s.done; total+=s.n; });
+  return { star:star, done:done, total:total };
+}
+
+function buildReport(){
+  const rep = {
+    报告类型:'艾伦学前衔接课件 学习报告', 版本:'v4.1', 孩子:'Alan(艾伦)',
+    导出时间:new Date().toLocaleString('zh-CN'),
+    总星星:0, 总完成关卡:0, 总关卡:0, 模块:[]
+  };
+  ALL_MODS.forEach(function(mod){
+    const m = { 模块:mod.title, 模块id:mod.id, 关卡:[] };
+    mod.lessons.forEach(function(les, i){
+      const r = recOf(mod.id, i);
+      const max = les.screens.reduce(function(n,s){ return n + (STARRY[s.t]||0); }, 0);
+      rep.总关卡++;
+      if (r){
+        rep.总星星 += (r.s||0);
+        if ((r.s||0) > 0) rep.总完成关卡++;
+        m.关卡.push({ 关卡:les.title, 最好成绩星:(r.s||0), 满星:max, 练习次数:(r.p||0),
+          最近一次错误总数:(r.e||0), 每屏错误分布:(r.sc||[]),
+          屏型:les.screens.map(function(s){return s.t;}), 最近游玩日期:(r.d||'') });
+      } else {
+        m.关卡.push({ 关卡:les.title, 最好成绩星:0, 满星:max, 练习次数:0, 状态:'未开始' });
+      }
+    });
+    rep.模块.push(m);
+  });
+  return rep;
+}
+
+function exportReport(){
+  const rep = buildReport();
+  const txt = JSON.stringify(rep, null, 2);
+  const d = new Date();
+  const ymd = '' + d.getFullYear() + ('0'+(d.getMonth()+1)).slice(-2) + ('0'+d.getDate()).slice(-2);
+  const name = ymd + '_艾伦学习报告_v4.1.json';
+  let ok = false;
+  try{
+    const blob = new Blob([txt], {type:'application/json;charset=utf-8'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 800);
+    ok = true;
+  }catch(e){}
+  showReportModal(txt, name, ok);
+}
+
+function showReportModal(txt, name, downloaded){
+  const old = document.getElementById('rep-modal'); if (old) old.remove();
+  const wrap = el('div','rep-modal'); wrap.id = 'rep-modal';
+  const box = el('div','rep-box');
+  box.appendChild(el('div','rep-title', downloaded ? ('✅ 报告已生成:' + name) : '📋 报告内容(请复制后发送)'));
+  box.appendChild(el('div','rep-sub', downloaded
+    ? '文件已保存到平板的「下载」文件夹。把这个文件发回给 Claude,就能得到针对性的学习分析与下一版调整。如果没看到下载,也可以点下面按钮复制文字。'
+    : '请点「复制报告」,把内容粘贴发送给 Claude。'));
+  const ta = document.createElement('textarea');
+  ta.className = 'rep-text'; ta.readOnly = true; ta.value = txt;
+  box.appendChild(ta);
+  const row = el('div','btn-row');
+  const cp = el('button','next-btn','📋 复制报告');
+  cp.onclick = function(){
+    ta.focus(); ta.select();
+    let done = false; try{ done = document.execCommand('copy'); }catch(e){}
+    if (!done && navigator.clipboard){ navigator.clipboard.writeText(txt).then(function(){ cp.textContent='✅ 已复制!'; }); }
+    else cp.textContent = done ? '✅ 已复制!' : '请长按文字手动复制';
+  };
+  const cl = el('button','next-btn ghost','关闭'); cl.onclick = function(){ wrap.remove(); };
+  row.appendChild(cp); row.appendChild(cl); box.appendChild(row);
+  wrap.appendChild(box); document.body.appendChild(wrap);
+}
+
+/* ---- 登山路线 SVG:浣熊随进度移动 ---- */
+function trailSVG(progress){  // progress 0..1
+  const pts = [[80,360],[240,300],[400,250],[560,180],[720,110],[880,60]];
+  // 路径
+  let path = 'M'+pts[0][0]+' '+pts[0][1];
+  for (let i=1;i<pts.length;i++) path += ' L'+pts[i][0]+' '+pts[i][1];
+  // 浣熊位置
+  const seg = progress * (pts.length-1);
+  const i0 = Math.min(Math.floor(seg), pts.length-2);
+  const f = seg - i0;
+  const rx = pts[i0][0] + (pts[i0+1][0]-pts[i0][0])*f;
+  const ry = pts[i0][1] + (pts[i0+1][1]-pts[i0][1])*f - 26;
+  let dots = '';
+  pts.forEach(function(p,i){
+    const reached = (i/(pts.length-1)) <= progress + 0.001;
+    dots += '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="13" fill="'+(reached?'#FFC233':'#fff')+'" stroke="#C9920A" stroke-width="3"/>';
+  });
+  return '<svg viewBox="0 0 1000 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="登山进度路线">'
+    + '<rect width="1000" height="420" fill="#BFE6FF"/>'
+    + '<circle cx="870" cy="70" r="42" fill="#FFD23E"/><circle cx="870" cy="70" r="58" fill="#FFD23E" opacity=".3"/>'
+    + '<ellipse cx="220" cy="80" rx="62" ry="22" fill="#fff" opacity=".85"/><ellipse cx="320" cy="66" rx="46" ry="17" fill="#fff" opacity=".85"/>'
+    + '<path d="M-20 420 L250 200 L520 420 Z" fill="#7FA8D6"/>'
+    + '<path d="M140 420 L520 120 L900 420 Z" fill="#5C84C2"/>'
+    + '<path d="M520 120 L585 175 L550 175 L615 235 L572 235 L654 312 L386 312 L468 235 L425 235 L490 175 L455 175 Z" fill="#fff" opacity=".95"/>'
+    + '<path d="M640 420 L840 230 L1040 420 Z" fill="#7FA8D6"/>'
+    + '<rect x="877" y="44" width="6" height="42" fill="#7A4A21"/><path d="M883 44 L922 56 L883 68 Z" fill="#E2574C"/>'
+    + '<path d="'+path+'" fill="none" stroke="#fff" stroke-width="8" stroke-dasharray="2 16" stroke-linecap="round" opacity=".9"/>'
+    + dots
+    + '<text x="'+rx+'" y="'+ry+'" font-size="46" text-anchor="middle">🦝</text>'
+    + '<path d="M0 420 Q250 360 500 388 Q750 416 1000 376 L1000 420 Z" fill="#9CCB7E"/>'
+    + '</svg>';
+}
+
+function renderHub(){
+  hush();
+  document.title = '艾伦的登山大冒险 · v4.1';
+  document.documentElement.style.setProperty('--accent', '#2563B8');
+  const tb = document.getElementById('mod-title'); if (tb) tb.textContent = '⛰️ 艾伦的登山大冒险';
+  const stage = document.getElementById('stage'); stage.innerHTML = '';
+
+  const g = grandTotals();
+  const progress = g.total ? g.done / g.total : 0;
+
+  const hero = el('div','hub-hero', trailSVG(progress));
+  const ht = el('div','hero-text');
+  ht.appendChild(el('h1','','🦝 艾伦的登山大冒险'));
+  ht.appendChild(el('p','','North Mounthill 一年级准备营 · 终极版'));
+  let d = null; try{ d = Math.ceil((new Date(2026,8,8) - new Date()) / 86400000); }catch(e){}
+  ht.appendChild(el('span','badge', (d != null && d > 0) ? ('⏰ 距开学还有 ' + d + ' 天') : '🎉 一年级,出发!'));
+  hero.appendChild(ht);
+  stage.appendChild(hero);
+
+  stage.appendChild(el('div','hub-total','⭐ 已收集 ' + g.star + ' 颗星 · 已登顶 ' + g.done + '/' + g.total + ' 关'));
+
+  const grid = el('div','hub-grid');
+  ALL_MODS.forEach(function(mod){
+    const s = hubStats(mod);
+    const b = el('button','camp'); b.style.setProperty('--c', mod.accent);
+    b.innerHTML = '<span class="ico">' + mod.icon + '</span>'
+      + '<span class="tt"><b>' + mod.title + '</b><span>' + (mod.subtitle || '') + '(' + s.n + ' 关)</span></span>'
+      + '<span class="stars">' + (s.t > 0 ? '⭐ ' : '☆ ') + s.t + ' · ' + s.done + '/' + s.n + '</span>';
+    b.onclick = function(){ boot(mod); };
+    grid.appendChild(b);
+  });
+  stage.appendChild(grid);
+
+  const exp = el('button','export-btn','📤 导出学习报告(发给 Claude 看)');
+  exp.onclick = exportReport;
+  stage.appendChild(exp);
+
+  stage.appendChild(el('div','hub-tip','<b>v4.1 终极版新增:</b>每关开头有「✨ 发现」动画教新本领(不用爸爸先教);中文/字母有「✍️ 手指描红」;英文有「🎤 录音跟读」;每科有「📖 迷你绘本」;难题答对得 ⭐⭐。<br><br><b>给爸爸妈妈:</b>难度已对标安省一年级。进度全程离线保存,点「📤 导出学习报告」把文件发回给 Claude,获得下一步分析。录音和描红需要在平板上用 Edge 打开才能用(录音第一次会问麦克风权限,点允许)。'));
+
+  const ts = document.getElementById('topstars'); if (ts) ts.textContent = '⭐ ' + g.star;
+}
+
+document.getElementById('home-btn').onclick = renderHub;
+renderHub();
+
+
+/* ##################### v5 注入开始 ##################### */
+
+/* ======================================================================
+   v5 新增内容  ·  弱点补强(中/英/数/习惯) + 法语启蒙模块 M6
+   依据 v4.1 学习报告弱点:应用题、两位数进退位、后鼻音、排序/分类
+   难度在教案轨迹上小幅进阶。法语面向已有 1-2 年基础的入门巩固。
+   ====================================================================== */
+
+const fr = t => ({text:t, lang:'fr-FR'});
+
+/* ---------------- 中文识字拼音:补强 ---------------- */
+M2.lessons.push(
+  { icon:'🐲', title:'后鼻音强化(进阶)', subtitle:'前后鼻音对比 · 重点补弱', screens:[
+    {t:'discover', top:'✨ 新本领:前鼻音 vs 后鼻音', title:'an 短短的,ang 长长从鼻子哼!',
+      scene:'<div class="anim go"><span class="disc-letter fade-step">an</span><span class="disc-plus">→</span><span class="disc-letter fade-step d1" style="color:#E2574C">ang</span></div>',
+      caption:'前鼻音 an(像「安」),后鼻音 ang(像「昂」「羊」)。捏住鼻子读 ang,会震动哦!', say:zh('安……昂'), say2:zh('前鼻音安,后鼻音昂')},
+    card({top:'对比', big:'an / ang', bigClass:'letter', emoji:'🐑', caption:'山 shān(an) ↔ 上 shàng(ang)', say:zh('山……上'), say2:zh('山上')}),
+    card({top:'对比', big:'en / eng', bigClass:'letter', emoji:'💡', caption:'本 běn(en) ↔ 灯 dēng(eng)', say:zh('本……灯'), say2:zh('一本书,一盏灯')}),
+    card({top:'对比', big:'in / ing', bigClass:'letter', emoji:'⭐', caption:'心 xīn(in) ↔ 星 xīng(ing)', say:zh('心……星'), say2:zh('小心,星星')}),
+    quiz('「上 shàng」的韵母是哪个?', [O('ang',1),O('an',0),O('ai',0)], {say:zh('上,上学的上'), optClass:'letter', sayAfter:zh('ang,后鼻音')}),
+    quiz('「心 xīn」的韵母是哪个?', [O('in',1),O('ing',0),O('en',0)], {say:zh('心,小心的心'), optClass:'letter', sayAfter:zh('in,前鼻音')}),
+    quiz('「明 míng」的韵母是哪个?', [O('ing',1),O('in',0),O('eng',0)], {say:zh('明,明天的明'), optClass:'letter', sayAfter:zh('ing,后鼻音')}),
+    match([['羊','ang'],['门','en'],['星','ing'],['灯','eng']], '把字和它的韵母配起来!(听一听读音)'),
+    {t:'challenge', q:'🏔️ 挑战:哪个词两个字都是后鼻音?', options:[O('帮忙 bāng máng',1),O('弟弟 dì di',0),O('哥哥 gē ge',0),O('妈妈 mā ma',0)], say:zh('帮忙'), sayAfter:zh('帮忙,昂和昂,都是后鼻音')}
+  ]},
+  { icon:'🔁', title:'反义词与量词', subtitle:'意思相反 · 一只一条一本(新本领)', screens:[
+    {t:'discover', top:'✨ 新本领:反义词', title:'反义词 = 意思正好相反!',
+      scene:'<div class="anim go"><span class="fade-step" style="font-size:90px">🐘</span><span class="disc-plus">↔</span><span class="fade-step d1" style="font-size:60px">🐭</span></div>',
+      caption:'大 ↔ 小,上 ↔ 下,这样意思相反的词,就是反义词!', say:zh('大象很大,老鼠很小'), say2:zh('大和小,意思相反')},
+    card({top:'认一认', big:'大 ↔ 小', bigClass:'hanzi', caption:'高 ↔ 矮,多 ↔ 少', say:zh('大,小'), say2:zh('高,矮')}),
+    quiz('「大」的反义词是?', [O('小',1),O('多',0),O('高',0)], {say:zh('大的反义词'), optClass:'hanzi', sayAfter:zh('小')}),
+    quiz('「快」的反义词是?', [O('慢',1),O('长',0),O('白',0)], {say:zh('快的反义词'), optClass:'hanzi', sayAfter:zh('慢')}),
+    match([['上','下'],['多','少'],['长','短'],['白','黑']], '把反义词配成对!'),
+    {t:'discover', top:'✨ 新本领:量词', title:'数东西要用「量词」!',
+      scene:'<div class="anim go"><span class="fade-step">🐱 一只</span><span class="disc-plus">·</span><span class="fade-step d1">🐟 一条</span><span class="disc-plus">·</span><span class="fade-step d2">📕 一本</span></div>',
+      caption:'一只小猫、一条鱼、一本书——不同东西用不同量词!', say:zh('一只猫,一条鱼,一本书'), say2:zh('只,条,本')},
+    quiz('一(  )书,填哪个量词?', [O('本',1,'📕'),O('只',0),O('条',0)], {say:zh('一本书'), optClass:'hanzi', sayAfter:zh('一本书')}),
+    quiz('一(  )鱼,填哪个量词?', [O('条',1,'🐟'),O('本',0),O('只',0)], {say:zh('一条鱼'), optClass:'hanzi', sayAfter:zh('一条鱼')}),
+    {t:'challenge', q:'🏔️ 挑战:三(  )小鸟,填哪个量词?', options:[O('只',1,'🐦'),O('条',0),O('本',0),O('张',0)], say:zh('三只小鸟'), optClass:'hanzi', sayAfter:zh('三只小鸟')}
+  ]}
+);
+
+/* ---------------- 英文阅读进阶:补强 ---------------- */
+M3.lessons.push(
+  { icon:'🪄', title:'Long Vowels 进阶', subtitle:'magic-e & vowel teams(补弱)', screens:[
+    {t:'discover', top:'✨ Magic e', title:'结尾加 e,元音读自己的名字!',
+      scene:'<div class="anim go disc-row"><span>c</span><span>a</span><span>n</span><span class="disc-plus">+</span><span class="magic-e" style="color:#E2574C">e</span><span class="disc-plus">=</span><span style="color:#E2574C">cane</span></div>',
+      caption:'can(短 a)加一个不出声的 magic e → cane,a 就读它的名字 /ei/!', say:en('can, cane'), say2:en('magic e makes the vowel say its name')},
+    card({top:'a_e', big:'cake', bigClass:'letter', emoji:'🍰', caption:'a 读名字 /ei/:cake、name、game', say:en('cake')}),
+    card({top:'vowel team ee/ai', big:'tree', bigClass:'letter', emoji:'🌳', caption:'ee 读 /iː/:tree、see;ai 读 /ei/:rain', say:en('tree'), say2:en('rain')}),
+    quiz('Listen! 哪个词读长音 a(/ei/)?', [O('cake',1,'🍰'),O('cat',0,'🐱'),O('can',0)], {say:en('cake'), optClass:'word', sayAfter:en('cake, long a')}),
+    quiz('点一点有 ee 的词:', [O('tree',1,'🌳'),O('ten',0),O('top',0)], {say:en('tree'), optClass:'word', sayAfter:en('tree')}),
+    quiz('Add magic e: "kit" 变成?', [O('kite',1,'🪁'),O('kitten',0),O('kid',0)], {say:en('kit, kite'), optClass:'word', sayAfter:en('kite')}),
+    quiz('Listen! 哪个词读长音 o?', [O('boat',1,'⛵'),O('box',0),O('dog',0)], {say:en('boat'), optClass:'word', sayAfter:en('boat, long o')}),
+    {t:'challenge', q:'🏔️ Challenge: 哪个词的元音读它的名字(长音)?', options:[O('bike',1,'🚲'),O('big',0),O('bit',0),O('bib',0)], say:en('bike'), optClass:'word', sayAfter:en('bike, long i')}
+  ]},
+  { icon:'🔤', title:'Digraphs 双字母 sh ch th', subtitle:'两个字母一个音(进阶)', screens:[
+    {t:'discover', top:'✨ Digraph', title:'两个字母合起来,发一个新音!',
+      scene:'<div class="anim go disc-row"><span>s</span><span class="disc-plus">+</span><span>h</span><span class="disc-plus">=</span><span style="color:#E2574C">sh 🤫</span></div>',
+      caption:'s + h 不是分开读,而是合成 /ʃ/，像 "shhh" 安静的声音,如 ship!', say:en('sh, ship'), say2:en('two letters, one sound')},
+    card({top:'sh', big:'ship', bigClass:'letter', emoji:'🚢', caption:'sh = /ʃ/:ship、fish、shoe', say:en('ship')}),
+    card({top:'ch', big:'chair', bigClass:'letter', emoji:'🪑', caption:'ch = /tʃ/:chair、cheese、chip', say:en('chair')}),
+    card({top:'th', big:'thumb', bigClass:'letter', emoji:'👍', caption:'th = /θ/:thumb、three、bath(舌头在牙齿中间)', say:en('thumb')}),
+    quiz('哪个词以 sh 开头?', [O('ship',1,'🚢'),O('top',0),O('cat',0)], {say:en('ship'), optClass:'word', sayAfter:en('ship')}),
+    quiz('哪个词以 ch 开头?', [O('chair',1,'🪑'),O('ten',0),O('sun',0)], {say:en('chair'), optClass:'word', sayAfter:en('chair')}),
+    match([['sh','ship'],['ch','chip'],['th','thin']], '把双字母和它的词配起来!(听读音)'),
+    {t:'challenge', q:'🏔️ Challenge: 哪个词以 sh 结尾?', options:[O('fish',1,'🐟'),O('fan',0),O('fin',0),O('fun',0)], say:en('fish'), optClass:'word', sayAfter:en('fish, ends with sh')}
+  ]}
+);
+
+/* ---------------- 数学进阶:补强(进位/借位/应用题/数到100) ---------------- */
+M4.lessons.push(
+  { icon:'➕', title:'两位数加法·进位强化', subtitle:'个位满十进一(补弱)', screens:[
+    {t:'discover', top:'✨ 进位加法', title:'个位满 10,就向十位「进 1」!',
+      scene:'<div class="anim go"><span class="fade-step">7 + 5 = 12</span><span class="disc-plus">→</span><span class="fade-step d1" style="color:#E2574C">写 2,进 1</span></div>',
+      caption:'7+5=12,个位写 2,把 1 放到十位上。所以 27+5=32!', say:zh('七加五等于十二,写二进一'), say2:zh('二十七加五等于三十二')},
+    card({top:'看一看', big:'38 + 6 = 44', caption:'个位 8+6=14,写 4 进 1;十位 3+1=4', say:zh('三十八加六等于四十四')}),
+    quiz('27 + 5 = ?', [O('32',1),O('22',0),O('33',0)], {say:zh('二十七加五等于几'), sayAfter:zh('三十二')}),
+    quiz('36 + 8 = ?', [O('44',1),O('43',0),O('45',0)], {say:zh('三十六加八等于几'), sayAfter:zh('四十四')}),
+    quiz('45 + 27 = ?', [O('72',1),O('62',0),O('73',0)], {say:zh('四十五加二十七等于几'), sayAfter:zh('七十二')}),
+    {t:'challenge', q:'🏔️ 挑战:49 + 25 = ?', options:[O('74',1),O('64',0),O('75',0),O('84',0)], say:zh('四十九加二十五等于几'), sayAfter:zh('七十四')}
+  ]},
+  { icon:'➖', title:'两位数减法·借位强化', subtitle:'不够减就借一当十(重点补弱)', screens:[
+    {t:'discover', top:'✨ 借位减法', title:'个位不够减,向十位「借 1」当 10!',
+      scene:'<div class="anim go"><span class="fade-step">32 − 7</span><span class="disc-plus">→</span><span class="fade-step d1" style="color:#E2574C">2 不够减,借 1 → 12−7=5</span></div>',
+      caption:'32−7:个位 2 减不了 7,从十位借 1 变成 12,12−7=5;十位剩 2 → 25!', say:zh('三十二减七,个位不够,借一当十'), say2:zh('三十二减七等于二十五')},
+    card({top:'看一看', big:'43 − 8 = 35', caption:'3 不够减 8,借 1 → 13−8=5;十位 4 变 3 → 35', say:zh('四十三减八等于三十五')}),
+    quiz('32 − 7 = ?', [O('25',1),O('24',0),O('35',0)], {say:zh('三十二减七等于几'), sayAfter:zh('二十五')}),
+    quiz('50 − 6 = ?', [O('44',1),O('46',0),O('54',0)], {say:zh('五十减六等于几'), sayAfter:zh('四十四')}),
+    quiz('62 − 27 = ?', [O('35',1),O('45',0),O('34',0)], {say:zh('六十二减二十七等于几'), sayAfter:zh('三十五')}),
+    {t:'challenge', q:'🏔️ 挑战:70 − 24 = ?', options:[O('46',1),O('56',0),O('44',0),O('54',0)], say:zh('七十减二十四等于几'), sayAfter:zh('四十六')}
+  ]},
+  { icon:'🧠', title:'应用题进阶(两步)', subtitle:'读题→想→算(重点补弱)', screens:[
+    {t:'discover', top:'✨ 解题三步', title:'读一遍 → 想清楚 → 再动笔!',
+      scene:'<div class="anim go"><span class="fade-step">👀 读</span><span class="disc-plus">→</span><span class="fade-step d1">💭 想</span><span class="disc-plus">→</span><span class="fade-step d2">✏️ 算</span></div>',
+      caption:'看到「又来」「一共」就加;看到「走了」「用了」「剩」就减。两步题先算前一步!', say:zh('先读题,再想是加还是减,最后算'), say2:zh('又来、一共用加;走了、剩下用减')},
+    quiz('Alan 有 8 颗糖,妈妈又给 5 颗,现在有几颗?', [O('13',1),O('3',0),O('12',0)], {say:zh('艾伦有八颗糖,妈妈又给五颗,现在有几颗'), sayAfter:zh('八加五等于十三')}),
+    quiz('停车场有 12 辆车,开走 4 辆,又来 3 辆,现在几辆?', [O('11',1),O('9',0),O('15',0),O('13',0)], {say:zh('停车场有十二辆车,开走四辆,又来三辆,现在几辆'), sayAfter:zh('先十二减四等于八,再加三等于十一')}),
+    quiz('一盒有 10 支笔,Sailor 用了 3 支,Alan 用了 2 支,还剩几支?', [O('5',1),O('7',0),O('15',0),O('4',0)], {say:zh('一盒有十支笔,用了三支,又用了两支,还剩几支'), sayAfter:zh('十减三减二等于五')}),
+    quiz('Alan 有 15 元,买玩具花了 8 元,还剩几元?', [O('7',1),O('8',0),O('23',0),O('6',0)], {say:zh('艾伦有十五元,花了八元,还剩几元'), sayAfter:zh('十五减八等于七')}),
+    {t:'challenge', q:'🏔️ 挑战:操场有 9 个男孩和 7 个女孩,走了 5 个,还剩几人?', options:[O('11',1),O('12',0),O('21',0),O('16',0)], say:zh('九个男孩加七个女孩,走了五个,还剩几人'), sayAfter:zh('九加七等于十六,再减五等于十一')}
+  ]},
+  { icon:'💯', title:'数到100 & 跳数', subtitle:'2 / 5 / 10 跳数(进阶)', screens:[
+    {t:'discover', top:'✨ 跳数', title:'不用一个一个数,可以「跳着」数!',
+      scene:'<div class="anim go"><span class="fade-step">2</span><span class="disc-plus">→</span><span class="fade-step d1">4</span><span class="disc-plus">→</span><span class="fade-step d2">6</span><span class="disc-plus">→</span><span class="fade-step d3">8</span></div>',
+      caption:'跳数 2:2,4,6,8,10…… 跳数 10 数得最快:10,20,30…一直到 100!', say:zh('二,四,六,八,十'), say2:zh('十,二十,三十,一直到一百')},
+    card({top:'数到 100', big:'10 · 20 · 30 … 100', caption:'十个十个地数,一直数到 100!', say:zh('十,二十,三十,四十,五十,六十,七十,八十,九十,一百')}),
+    {t:'order', q:'跳数 2:从小到大排好!', items:['2','4','6','8','10']},
+    {t:'order', q:'跳数 5:从小到大排好!', items:['5','10','15','20','25']},
+    {t:'order', q:'跳数 10:从小到大排好!', items:['10','20','30','40','50']},
+    quiz('跳数 2:2, 4, 6, 8, ?', [O('10',1),O('9',0),O('11',0)], {say:zh('二,四,六,八,下一个是几'), sayAfter:zh('十')}),
+    quiz('跳数 10:10, 20, 30, __ , 50,中间缺几?', [O('40',1),O('35',0),O('45',0),O('41',0)], {say:zh('十,二十,三十,空,五十'), sayAfter:zh('四十')}),
+    {t:'challenge', q:'🏔️ 挑战:跳数 5:5, 10, __ , 20, 25,缺几?', options:[O('15',1),O('11',0),O('14',0),O('16',0)], say:zh('五,十,空,二十,二十五'), sayAfter:zh('十五')}
+  ]}
+);
+
+/* ---------------- 课堂习惯适应:补强(分类/英文指令) ---------------- */
+M5.lessons.push(
+  { icon:'🧺', title:'整理与分类(进阶)', subtitle:'同一类放一起(重点补弱)', screens:[
+    {t:'discover', top:'✨ 分类小达人', title:'把「同一类」的东西放在一起!',
+      scene:'<div class="anim go"><span class="fade-step">✏️📘📐 → 文具盒</span></div>',
+      caption:'文具放文具盒,水果放果篮,脏衣服放洗衣篮。先想「它是哪一类」!', say:zh('同一类的东西放在一起'), say2:zh('先想想它属于哪一类')},
+    {t:'sort', q:'把「文具」点进笔袋!(不是文具的别放)', target:'🖊️',
+      items:[
+        {label:'✏️ 铅笔', good:true, say:zh('铅笔')},
+        {label:'📐 尺子', good:true, say:zh('尺子')},
+        {label:'🖍️ 蜡笔', good:true, say:zh('蜡笔')},
+        {label:'🍎 苹果', good:false, hint:'苹果是食物,不是文具!'},
+        {label:'⚽ 足球', good:false, hint:'足球是玩具!'}
+      ]},
+    {t:'sort', q:'把「水果」点进果篮!', target:'🧺',
+      items:[
+        {label:'🍎 苹果', good:true, say:zh('苹果')},
+        {label:'🍌 香蕉', good:true, say:zh('香蕉')},
+        {label:'🍇 葡萄', good:true, say:zh('葡萄')},
+        {label:'🥕 胡萝卜', good:false, hint:'胡萝卜是蔬菜哦!'},
+        {label:'📕 书', good:false, hint:'书不是水果!'}
+      ]},
+    {t:'sort', q:'把「要洗的脏衣服」点进洗衣篮!', target:'🧺',
+      items:[
+        {label:'🧦 袜子', good:true, say:zh('袜子')},
+        {label:'👕 T恤', good:true, say:zh('T恤')},
+        {label:'🩳 短裤', good:true, say:zh('短裤')},
+        {label:'🚗 玩具车', good:false, hint:'玩具不用洗!'},
+        {label:'🖍️ 蜡笔', good:false, hint:'蜡笔放文具盒!'}
+      ]},
+    quiz('玩具玩好了,应该怎么做?', [O('放回原处 🧸',1),O('留在地上',0),O('扔进垃圾桶',0)], {say:zh('玩具玩好了应该怎么做'), sayAfter:zh('放回原来的地方')}),
+    {t:'challenge', q:'🏔️ 挑战:下面哪个是「蔬菜」?', options:[O('🥦 西兰花',1),O('🍎 苹果',0),O('🍪 饼干',0),O('🧸 玩具熊',0)], say:zh('哪个是蔬菜'), sayAfter:zh('西兰花是蔬菜')}
+  ]},
+  { icon:'🧑‍🏫', title:'课堂英文指令(听辨)', subtitle:'听懂老师的话 · 衔接全英浸入', screens:[
+    {t:'discover', top:'✨ Classroom English', title:'老师上课常说这些话!',
+      scene:'<div class="anim go"><span class="fade-step">🧍 Line up</span><span class="disc-plus">·</span><span class="fade-step d1">⭕ Circle time</span></div>',
+      caption:'在全英班级,老师会用英语下指令。听懂这些,就知道该做什么啦!', say:en('Line up, please.'), say2:en('It is circle time!')},
+    card({top:'指令', big:'Line up!', bigClass:'letter', emoji:'🧍🧍', caption:'排队!', say:en('Line up, please.')}),
+    card({top:'指令', big:'Circle time!', bigClass:'letter', emoji:'⭕', caption:'围圈坐好!', say:en('It is circle time. Come and sit.')}),
+    card({top:'指令', big:'Clean up!', bigClass:'letter', emoji:'🧹', caption:'收拾整理!', say:en('Time to clean up.')}),
+    quiz('老师说 "Line up!" 你应该?', [O('去排队 🧍',1),O('躺下睡觉',0),O('吃零食',0)], {say:en('Line up, please.'), sayAfter:zh('去排队')}),
+    quiz('"Wash your hands." 是什么意思?', [O('洗手 🧼',1),O('举手',0),O('拍手',0)], {say:en('Wash your hands.'), sayAfter:zh('洗手')}),
+    quiz('"Sit down, please." 让你做什么?', [O('坐下 🪑',1),O('站起来',0),O('跑出去',0)], {say:en('Sit down, please.'), sayAfter:zh('坐下')}),
+    {t:'challenge', q:'🏔️ Challenge: 老师说 "Time to clean up!" 该做什么?', options:[O('收拾整理 🧹',1),O('出去玩',0),O('打开零食',0),O('画画',0)], say:en('Time to clean up!'), sayAfter:zh('把东西收拾整理好')}
+  ]}
+);
+
+/* ====================================================================
+   M6  法语启蒙(NEW)  ·  面向已有 1-2 年基础的入门巩固
+   带撇号的法语句子一律用双引号字符串,避免破坏语法
+   ==================================================================== */
+const M6 = {
+  id:'m6', icon:'🇫🇷', accent:'#1F5FCC', mascot:'🐓',
+  title:'法语启蒙', subtitle:'Bonjour! 问候·颜色·数字·动物·绘本',
+  lessons:[
+  /* L1 问候 */
+  { icon:'👋', title:'Bonjour! 问候', subtitle:'打招呼 · 谢谢 · 再见', screens:[
+    {t:'discover', top:'✨ Nouveau:打招呼', title:'见面说 Bonjour!',
+      scene:'<div class="anim go" style="font-size:64px"><span class="fade-step">🇫🇷</span> <span class="fade-step d1" style="color:#1F5FCC;font-family:Comic Sans MS,sans-serif">Bonjour</span></div>',
+      caption:'见面问好说 Bonjour(你好);分别时说 Au revoir(再见)。', say:fr('Bonjour'), say2:fr('Au revoir')},
+    card({top:'认一认', big:'Bonjour', bigClass:'letter', emoji:'👋', caption:'你好 / 早上好', say:fr('Bonjour')}),
+    card({top:'认一认', big:'Merci', bigClass:'letter', emoji:'🙏', caption:'谢谢', say:fr('Merci')}),
+    card({top:'认一认', big:'Au revoir', bigClass:'letter', emoji:'👋', caption:'再见', say:fr('Au revoir')}),
+    {t:'rec', text:'Bonjour!', zh:'听老师读,再大声说:你好!', say:fr('Bonjour')},
+    quiz('见面问好,应该说哪个?', [O('Bonjour',1,'👋'),O('Merci',0),O('Au revoir',0)], {say:fr('Bonjour'), optClass:'word', sayAfter:fr('Bonjour')}),
+    quiz('「谢谢」用法语怎么说?', [O('Merci',1,'🙏'),O('Bonjour',0),O('Oui',0)], {say:fr('Merci'), optClass:'word', sayAfter:fr('Merci')}),
+    match([['Bonjour','你好'],['Merci','谢谢'],['Au revoir','再见']], '把法语和中文配起来!'),
+    {t:'challenge', q:'🏔️ Défi: 要分别了,应该说哪个?', options:[O('Au revoir',1,'👋'),O('Bonjour',0),O('Merci',0),O('Oui',0)], say:fr('Au revoir'), optClass:'word', sayAfter:fr('Au revoir')}
+  ]},
+  /* L2 颜色 */
+  { icon:'🎨', title:'Les couleurs 颜色', subtitle:'rouge bleu vert jaune', screens:[
+    {t:'discover', top:'✨ Les couleurs', title:'认识法语的颜色!',
+      scene:'<div class="anim go" style="font-size:70px"><span class="fade-step">🔴</span><span class="fade-step d1">🔵</span><span class="fade-step d2">🟢</span><span class="fade-step d3">🟡</span></div>',
+      caption:'rouge 红、bleu 蓝、vert 绿、jaune 黄。', say:fr('rouge, bleu, vert, jaune'), say2:fr('Les couleurs')},
+    card({top:'认一认', big:'rouge', bigClass:'letter', emoji:'🔴', caption:'红色', say:fr('rouge')}),
+    card({top:'认一认', big:'bleu', bigClass:'letter', emoji:'🔵', caption:'蓝色', say:fr('bleu')}),
+    card({top:'认一认', big:'vert', bigClass:'letter', emoji:'🟢', caption:'绿色', say:fr('vert')}),
+    card({top:'认一认', big:'jaune', bigClass:'letter', emoji:'🟡', caption:'黄色', say:fr('jaune')}),
+    quiz('🔴 是哪个颜色?', [O('rouge',1),O('bleu',0),O('vert',0)], {say:fr('rouge'), optClass:'word', sayAfter:fr('rouge')}),
+    quiz('「蓝色」用法语怎么说?', [O('bleu',1,'🔵'),O('jaune',0),O('rouge',0)], {say:fr('bleu'), optClass:'word', sayAfter:fr('bleu')}),
+    match([['rouge','🔴'],['bleu','🔵'],['vert','🟢'],['jaune','🟡']], '颜色和法语配起来!'),
+    {t:'challenge', q:'🏔️ Défi: 草地是什么颜色?', options:[O('vert',1,'🟢'),O('rouge',0),O('bleu',0),O('jaune',0)], say:fr('vert'), optClass:'word', sayAfter:fr('vert')}
+  ]},
+  /* L3 数字 1-10 */
+  { icon:'🔢', title:'Les nombres 1–10', subtitle:'un deux trois … dix', screens:[
+    {t:'discover', top:'✨ Les nombres', title:'用法语从 1 数到 10!',
+      scene:'<div class="anim go" style="font-size:60px"><span class="fade-step">1️⃣</span><span class="fade-step d1">2️⃣</span><span class="fade-step d2">3️⃣</span></div>',
+      caption:'un(1) deux(2) trois(3) quatre(4) cinq(5) … dix(10)。', say:fr('un, deux, trois'), say2:fr('quatre, cinq')},
+    card({top:'1 · 2 · 3', big:'un deux trois', bigClass:'letter', caption:'1、2、3', say:fr('un, deux, trois')}),
+    card({top:'4 · 5', big:'quatre cinq', bigClass:'letter', caption:'4、5', say:fr('quatre, cinq')}),
+    card({top:'6 · 7 · 8', big:'six sept huit', bigClass:'letter', caption:'6、7、8', say:fr('six, sept, huit')}),
+    card({top:'9 · 10', big:'neuf dix', bigClass:'letter', caption:'9、10', say:fr('neuf, dix')}),
+    quiz('deux 是几?', [O('2',1),O('3',0),O('10',0)], {say:fr('deux'), sayAfter:fr('deux')}),
+    quiz('5 用法语怎么说?', [O('cinq',1),O('six',0),O('dix',0)], {say:fr('cinq'), optClass:'word', sayAfter:fr('cinq')}),
+    match([['un','1'],['trois','3'],['cinq','5'],['dix','10']], '数字和法语配起来!'),
+    {t:'challenge', q:'🏔️ Défi: trois + un = ? 用法语说结果', options:[O('quatre',1),O('cinq',0),O('deux',0),O('huit',0)], say:fr('trois plus un'), optClass:'word', sayAfter:fr('quatre')}
+  ]},
+  /* L4 动物 */
+  { icon:'🐾', title:'Les animaux 动物', subtitle:'chat chien oiseau poisson', screens:[
+    {t:'discover', top:'✨ Les animaux', title:'认识法语的小动物!',
+      scene:'<div class="anim go" style="font-size:70px"><span class="fade-step">🐱</span><span class="fade-step d1">🐶</span><span class="fade-step d2">🐦</span><span class="fade-step d3">🐟</span></div>',
+      caption:'chat 猫、chien 狗、oiseau 鸟、poisson 鱼。', say:fr('chat, chien, oiseau, poisson'), say2:fr('Les animaux')},
+    card({top:'认一认', big:'chat', bigClass:'letter', emoji:'🐱', caption:'猫', say:fr('chat')}),
+    card({top:'认一认', big:'chien', bigClass:'letter', emoji:'🐶', caption:'狗', say:fr('chien')}),
+    card({top:'认一认', big:'oiseau', bigClass:'letter', emoji:'🐦', caption:'鸟', say:fr('oiseau')}),
+    card({top:'认一认', big:'poisson', bigClass:'letter', emoji:'🐟', caption:'鱼', say:fr('poisson')}),
+    quiz('🐱 用法语怎么说?', [O('chat',1),O('chien',0),O('poisson',0)], {say:fr('chat'), optClass:'word', sayAfter:fr('chat')}),
+    quiz('「狗」用法语怎么说?', [O('chien',1,'🐶'),O('chat',0),O('oiseau',0)], {say:fr('chien'), optClass:'word', sayAfter:fr('chien')}),
+    match([['chat','🐱'],['chien','🐶'],['oiseau','🐦'],['poisson','🐟']], '动物和法语配起来!'),
+    {t:'challenge', q:'🏔️ Défi: 哪个动物会飞?', options:[O('oiseau 🐦',1),O('chat 🐱',0),O('poisson 🐟',0),O('chien 🐶',0)], say:fr('oiseau'), optClass:'word', sayAfter:fr('oiseau')}
+  ]},
+  /* L5 家庭 */
+  { icon:'👨‍👩‍👧‍👦', title:'La famille 家庭', subtitle:'maman papa frère sœur', screens:[
+    {t:'discover', top:'✨ La famille', title:'用法语介绍家人!',
+      scene:'<div class="anim go" style="font-size:70px"><span class="fade-step">👩</span><span class="fade-step d1">👨</span><span class="fade-step d2">👦</span><span class="fade-step d3">👧</span></div>',
+      caption:'maman 妈妈、papa 爸爸、frère 兄弟、sœur 姐妹。', say:fr('maman, papa'), say2:fr('frère, sœur')},
+    card({top:'认一认', big:'maman', bigClass:'letter', emoji:'👩', caption:'妈妈', say:fr('maman')}),
+    card({top:'认一认', big:'papa', bigClass:'letter', emoji:'👨', caption:'爸爸', say:fr('papa')}),
+    card({top:'认一认', big:'frère', bigClass:'letter', emoji:'👦', caption:'哥哥 / 弟弟', say:fr('frère')}),
+    card({top:'认一认', big:'sœur', bigClass:'letter', emoji:'👧', caption:'姐姐 / 妹妹', say:fr('sœur')}),
+    quiz('👩 用法语怎么说?', [O('maman',1),O('papa',0),O('frère',0)], {say:fr('maman'), optClass:'word', sayAfter:fr('maman')}),
+    quiz('「爸爸」用法语怎么说?', [O('papa',1,'👨'),O('maman',0),O('sœur',0)], {say:fr('papa'), optClass:'word', sayAfter:fr('papa')}),
+    match([['maman','👩'],['papa','👨'],['frère','👦'],['sœur','👧']], '家人和法语配起来!'),
+    {t:'challenge', q:'🏔️ Défi: Sailor 是 Alan 的哥哥,「兄弟」用法语?', options:[O('frère',1,'👦'),O('sœur',0),O('maman',0),O('papa',0)], say:fr('frère'), optClass:'word', sayAfter:fr('frère')}
+  ]},
+  /* L6 法语字音 */
+  { icon:'🔊', title:'Les sons 法语字音', subtitle:'é · ou · on(进阶)', screens:[
+    {t:'discover', top:'✨ Les sons', title:'法语字母上有「小帽子」!',
+      scene:'<div class="anim go" style="font-size:64px;font-family:Comic Sans MS,sans-serif;color:#1F5FCC"><span class="fade-step">é</span><span class="disc-plus">·</span><span class="fade-step d1">ou</span><span class="disc-plus">·</span><span class="fade-step d2">on</span></div>',
+      caption:'é 读 /e/(像 bébé 宝宝);ou 读 /u/(呜,像 loup 狼);on 是鼻音(像 bonbon 糖)。', say:fr('bébé, loup, bonbon'), say2:fr('é, ou, on')},
+    card({top:'é = /e/', big:'bébé', bigClass:'letter', emoji:'👶', caption:'宝宝(é 读「诶」)', say:fr('bébé')}),
+    card({top:'ou = /u/', big:'loup', bigClass:'letter', emoji:'🐺', caption:'狼(ou 读「呜」)', say:fr('loup')}),
+    card({top:'on(鼻音)', big:'bonbon', bigClass:'letter', emoji:'🍬', caption:'糖(on 从鼻子哼)', say:fr('bonbon')}),
+    quiz('听一听,哪个是「糖」?', [O('bonbon',1,'🍬'),O('chat',0),O('rouge',0)], {say:fr('bonbon'), optClass:'word', sayAfter:fr('bonbon')}),
+    quiz('听一听,哪个是「狼」?', [O('loup',1,'🐺'),O('chien',0),O('chat',0)], {say:fr('loup'), optClass:'word', sayAfter:fr('loup')}),
+    quiz('听一听,哪个是「宝宝」?', [O('bébé',1,'👶'),O('maman',0),O('papa',0)], {say:fr('bébé'), optClass:'word', sayAfter:fr('bébé')}),
+    {t:'challenge', q:'🏔️ Défi: 哪个词里有「呜」/ou/ 的音?', options:[O('loup 🐺',1),O('chat 🐱',0),O('bébé 👶',0),O('papa 👨',0)], say:fr('loup'), optClass:'word', sayAfter:fr('loup')}
+  ]},
+  /* L7 高频小词 */
+  { icon:'🧩', title:'Petits mots 高频小词', subtitle:'oui non le la et', screens:[
+    {t:'discover', top:'✨ Petits mots', title:'最常用的法语小词!',
+      scene:'<div class="anim go" style="font-size:64px"><span class="fade-step">✅ oui</span><span class="disc-plus">·</span><span class="fade-step d1">❌ non</span></div>',
+      caption:'oui 是/对、non 不/不是、et 和、le/la 表示「这个」。', say:fr('oui, non'), say2:fr('chat et chien')},
+    card({top:'认一认', big:'oui', bigClass:'letter', emoji:'✅', caption:'是 / 对', say:fr('oui')}),
+    card({top:'认一认', big:'non', bigClass:'letter', emoji:'❌', caption:'不 / 不是', say:fr('non')}),
+    card({top:'认一认', big:'et', bigClass:'letter', emoji:'➕', caption:'和(chat et chien 猫和狗)', say:fr('chat et chien')}),
+    quiz('「是 / 对」用法语怎么说?', [O('oui',1,'✅'),O('non',0,'❌'),O('et',0)], {say:fr('oui'), optClass:'word', sayAfter:fr('oui')}),
+    quiz('「和」用法语怎么说?', [O('et',1),O('oui',0),O('non',0)], {say:fr('et'), optClass:'word', sayAfter:fr('et')}),
+    match([['oui','✅'],['non','❌'],['et','和'],['le','这个']], '小词和意思配起来!'),
+    {t:'challenge', q:'🏔️ Défi: 「猫和狗」= chat ___ chien,填哪个?', options:[O('et',1),O('oui',0),O('non',0),O('le',0)], say:fr('chat et chien'), optClass:'word', sayAfter:fr('et')}
+  ]},
+  /* L8 迷你绘本 */
+  { icon:'📖', title:'迷你绘本 Le petit chat', subtitle:'读一个法语小故事', screens:[
+    {t:'book', pages:[
+      {art:'🐱', text:'Bonjour! Je suis un chat.', zh:'你好!我是一只猫。', say:fr('Bonjour! Je suis un chat.')},
+      {art:'🔴', text:"J'aime le rouge.", zh:'我喜欢红色。', say:fr("J'aime le rouge.")},
+      {art:'🐟', text:'Je vois un poisson.', zh:'我看见一条鱼。', say:fr('Je vois un poisson.')},
+      {art:'😺', text:'Miam! Merci, poisson!', zh:'好吃!谢谢你,小鱼!', say:fr('Miam! Merci!')},
+      {art:'👋', text:'Au revoir!', zh:'再见!', say:fr('Au revoir!')}
+    ]},
+    quiz('小猫喜欢什么颜色?', [O('rouge 🔴',1),O('bleu 🔵',0),O('vert 🟢',0)], {say:fr('rouge'), optClass:'word', sayAfter:fr('rouge')}),
+    quiz('小猫看见了什么动物?', [O('poisson 🐟',1),O('chien 🐶',0),O('oiseau 🐦',0)], {say:fr('poisson'), optClass:'word', sayAfter:fr('poisson')}),
+    {t:'challenge', q:'🏔️ Défi: 小猫吃完后说了什么?', options:[O('Merci 🙏',1),O('Bonjour',0),O('Non',0),O('Oui',0)], say:fr('Merci'), optClass:'word', sayAfter:fr('Merci')}
+  ]},
+  /* L9 复习 */
+  { icon:'🏅', title:'Révision 复习', subtitle:'问候·颜色·数字·动物·小词', screens:[
+    quiz('Bonjour 是什么意思?', [O('你好 👋',1),O('谢谢',0),O('再见',0)], {say:fr('Bonjour'), sayAfter:zh('你好')}),
+    quiz('🔵 用法语怎么说?', [O('bleu',1),O('rouge',0),O('vert',0)], {say:fr('bleu'), optClass:'word', sayAfter:fr('bleu')}),
+    quiz('🐶 用法语怎么说?', [O('chien',1),O('chat',0),O('oiseau',0)], {say:fr('chien'), optClass:'word', sayAfter:fr('chien')}),
+    quiz('3 用法语怎么说?', [O('trois',1),O('deux',0),O('dix',0)], {say:fr('trois'), optClass:'word', sayAfter:fr('trois')}),
+    match([['Merci','谢谢'],['maman','妈妈'],['rouge','🔴'],['chat','🐱']], '法语和意思配起来!'),
+    {t:'challenge', q:'🏔️ Défi: un, deux, trois, ___, cinq,缺哪个?', options:[O('quatre',1),O('six',0),O('dix',0),O('huit',0)], say:fr('quatre'), optClass:'word', sayAfter:fr('quatre')}
+  ]}
+  ]
+};
+ALL_MODS.push(M6);
+
+
+/* ======================================================================
+   v5 引擎扩展  ·  答错即停 + 全局错题本 + 双星(首次⭐ / 订正🌟)
+   设计:
+   - 仅覆盖"判错型"屏:quiz / match / order / sort(challenge 复用 quiz)
+   - 学习型屏(discover/card/trace/rec/book/blend)不判错,完成即得首次星
+   - 判错型屏「本次只要点错一次」→ 0 星 + 进全局错题本(揭示正确答案)
+   - 只有「第一次就答对」才得金色 ⭐(runStars,驱动进度)
+   - 错题本里「一次答对」→ 得绿色 🌟 订正星 + 该题飞出错题本
+   - 存储前缀 alan_v5_ 全新开局;旧版 alan_v4_ 数据保留不动
+   - 满星口径统一为 STARRY 求和(挑战题=2),保证 首次星 ≤ 满星 且与报告一致
+   ====================================================================== */
+(function(){
+'use strict';
+
+/* ---------- 存储:统一切到 v5 前缀 ---------- */
+starKey = function(li){ return 'alan_v5_' + M.id + '_' + li; };
+recOf = function(modId, li){
+  try{ var raw = sget('alan_v5_' + modId + '_' + li);
+    if (raw){ var r = JSON.parse(raw); if (r && typeof r === 'object') return r; } }catch(e){}
+  return null;
+};
+/* 满星口径统一(challenge=2) */
+lessonMax = function(les){ return les.screens.reduce(function(n,s){ return n + (STARRY[s.t]||0); }, 0); };
+
+/* ---------- 全局状态(私有) ---------- */
+var WRONGMODE = false, WQ = [], WQI = 0;   // 错题本订正模式
+var scrFailed = false;                     // 当前屏本次是否已失星
+var JUDGE = { quiz:1, match:1, order:1, sort:1, challenge:1 };  // 可进错题本的屏型
+
+/* ---------- 错题本持久化(全局,跨模块) ---------- */
+var WB_KEY = 'alan_v5_wrongbook';
+function wbLoad(){ try{ var r = sget(WB_KEY); return r ? JSON.parse(r) : []; }catch(e){ return []; } }
+function wbSave(a){ sset(WB_KEY, JSON.stringify(a)); }
+function wbAdd(q){ var a = wbLoad(); if (a.indexOf(q) < 0){ a.push(q); wbSave(a); } }
+function wbDel(q){ wbSave(wbLoad().filter(function(x){ return x !== q; })); }
+function wbCount(){ return wbLoad().length; }
+function wbForLesson(modId, li){ var pre = modId + '|' + li + '|'; return wbLoad().filter(function(q){ return q.indexOf(pre) === 0; }).length; }
+
+/* ---------- 订正星持久化 ---------- */
+var FIX_KEY = 'alan_v5_fixstars';
+function fixGet(){ var v = parseInt(sget(FIX_KEY), 10); return isNaN(v) ? 0 : v; }
+function fixAdd(n){ sset(FIX_KEY, fixGet() + (n || 1)); }
+
+/* ---------- 工具 ---------- */
+function curQid(){ return M.id + '|' + LI + '|' + SI; }
+function modById(id){ for (var i=0;i<ALL_MODS.length;i++){ if (ALL_MODS[i].id === id) return ALL_MODS[i]; } return null; }
+
+/* ---------- 轻提示 / 飞星动画 ---------- */
+function toast(txt, color){
+  var t = el('div', null, txt);
+  t.style.cssText = 'position:fixed;left:50%;top:16%;transform:translateX(-50%);z-index:130;'
+    + 'background:' + (color || '#1B2A4A') + ';color:#fff;font-size:21px;font-weight:800;'
+    + 'padding:13px 22px;border-radius:16px;box-shadow:0 8px 0 rgba(0,0,0,.16);max-width:88vw;'
+    + 'text-align:center;line-height:1.4;animation:pop .3s;';
+  document.body.appendChild(t);
+  setTimeout(function(){ t.style.transition = 'opacity .4s'; t.style.opacity = '0'; }, 1500);
+  setTimeout(function(){ t.remove(); }, 2000);
+}
+function flyToBook(){
+  var s = el('div', null, '📒');
+  s.style.cssText = 'position:fixed;left:50%;top:48%;font-size:64px;z-index:130;pointer-events:none;animation:flyup 1s ease-out forwards;';
+  document.body.appendChild(s); setTimeout(function(){ s.remove(); }, 1000);
+  toast('这题先放进错题本 📒 待会儿再练一次就懂啦!', '#E2574C');
+}
+function fixStarFly(n){
+  for (var i=0;i<(n||1);i++){
+    (function(k){ setTimeout(function(){
+      var s = el('div', null, '🌟');
+      s.style.cssText = 'position:fixed;left:' + (window.innerWidth/2 - 32 + (Math.random()*120 - 60)) + 'px;top:55vh;font-size:60px;z-index:130;pointer-events:none;animation:flyup 1s ease-out forwards;';
+      document.body.appendChild(s); setTimeout(function(){ s.remove(); }, 1000);
+    }, k*140); })(i);
+  }
+  toast('订正成功!这道题飞走啦 ✨🌟', '#2F7A47');
+}
+function inlineMsg(scr, txt, color){
+  var m = el('div', 't-cap', txt);
+  m.style.color = color || '#B3573F'; m.style.fontSize = '22px'; m.style.fontWeight = '700';
+  scr.appendChild(m);   // 在 showNext 之前 append → 显示在「下一题」按钮上方
+}
+
+/* ---------- 判错核心 ---------- */
+function questionFailed(){
+  if (scrFailed) return;          // 本屏本次只记一次
+  scrFailed = true;
+  scMist[SI] = (scMist[SI]||0) + 1;
+  if (WRONGMODE){
+    toast('再看看绿色的正确答案,下次一定行! 💪', '#C2410C');
+  } else {
+    wbAdd(curQid());
+    flyToBook();
+  }
+}
+function extraWrong(){ scMist[SI] = (scMist[SI]||0) + 1; }   // 失星后再点错:只计数,不重复入册
+function questionStar(n){
+  n = n || 1;
+  if (WRONGMODE){
+    fixAdd(n); wbDel(curQid()); fixStarFly(n);
+  } else {
+    for (var i=0;i<n;i++) giveStar();   // 复用金星动画 + runStars++
+  }
+}
+
+/* ====================== 覆盖:点选答题(严格 + 揭示) ====================== */
+rQuiz = function(scr, s){
+  scr.appendChild(el('div','q-title', s.q));
+  if (s.say){
+    var rb = el('button','speak-btn big','🔊 听一听');
+    var ds = function(){ speak(s.say.text, s.say.lang); };
+    rb.onclick = ds; scr.appendChild(rb); setTimeout(ds, 500);
+  }
+  var grid = el('div','opt-grid' + (s.optClass ? ' ' + s.optClass : ''));
+  var done = false;
+  shuffle(s.options).forEach(function(o){
+    var b = el('button','opt');
+    b.innerHTML = (o.emoji ? '<span class="o-emoji">' + o.emoji + '</span>' : '') + (o.label ? '<span class="o-label">' + o.label + '</span>' : '');
+    b._ok = !!o.ok;
+    b.onclick = function(){
+      if (done) return;
+      if (o.ok){
+        done = true; b.classList.add('right'); fx(true);
+        questionStar(s._double ? 2 : 1);
+        grid.querySelectorAll('.opt').forEach(function(x){ if (x !== b) x.classList.add('dim'); x.disabled = true; });
+        if (s.sayAfter) setTimeout(function(){ speak(s.sayAfter.text, s.sayAfter.lang); }, 350);
+        showNext(scr, '下一题 ➜');
+      } else {
+        // 首次点错 → 定格、揭示正确答案、0 星、入错题本
+        done = true; b.classList.add('wrong'); fx(false);
+        questionFailed();
+        grid.querySelectorAll('.opt').forEach(function(x){
+          x.disabled = true;
+          if (x._ok) x.classList.add('right');
+          else if (x !== b) x.classList.add('dim');
+        });
+        if (s.say) setTimeout(function(){ speak(s.say.text, s.say.lang); }, 300);
+        inlineMsg(scr, WRONGMODE ? '再看看绿色的正确答案,这题留在错题本里再练一次。' : '✅ 绿色的是正确答案。这题进了错题本,我们一会儿再练一次!');
+        showNext(scr, '下一题 ➜');
+      }
+    };
+    grid.appendChild(b);
+  });
+  scr.appendChild(grid);
+};
+
+/* ====================== 覆盖:配对(首错失星,可完成) ====================== */
+rMatch = function(scr, s){
+  scr.appendChild(el('div','q-title', s.q || '配一配:先点左边,再点它的好朋友!'));
+  var wrap = el('div','match-wrap');
+  var L = el('div','match-col'), R = el('div','match-col');
+  var sel = null, locked = 0;
+  shuffle(s.pairs.map(function(p,i){ return {v:p[0], i:i}; })).forEach(function(o){
+    var b = el('button','m-item', o.v); b.dataset.i = o.i;
+    b.onclick = function(){
+      if (b.classList.contains('locked')) return;
+      L.querySelectorAll('.m-item').forEach(function(x){ x.classList.remove('sel'); });
+      b.classList.add('sel'); sel = b;
+    };
+    L.appendChild(b);
+  });
+  shuffle(s.pairs.map(function(p,i){ return {v:p[1], i:i}; })).forEach(function(o){
+    var b = el('button','m-item', o.v); b.dataset.i = o.i;
+    b.onclick = function(){
+      if (b.classList.contains('locked') || !sel) return;
+      if (sel.dataset.i === b.dataset.i){
+        sel.classList.add('locked'); sel.classList.remove('sel'); b.classList.add('locked');
+        fx(true); sel = null; locked++;
+        if (locked === s.pairs.length){
+          if (!scrFailed){ questionStar(1); }
+          else { inlineMsg(scr, '这屏有一次配错,先不加星;到错题本再练一次拿订正星 🌟', '#B3573F'); }
+          showNext(scr, '下一题 ➜');
+        }
+      } else {
+        if (!scrFailed) questionFailed(); else extraWrong();
+        b.classList.add('wrong'); fx(false);
+        setTimeout(function(){ b.classList.remove('wrong'); }, 500);
+      }
+    };
+    R.appendChild(b);
+  });
+  wrap.appendChild(L); wrap.appendChild(R); scr.appendChild(wrap);
+};
+
+/* ====================== 覆盖:排顺序(首错失星,可完成) ====================== */
+rOrder = function(scr, s){
+  scr.appendChild(el('div','q-title', s.q));
+  var line = el('div','order-line');
+  var pool = el('div','order-pool');
+  var idx = 0;
+  shuffle(s.items.map(function(v,i){ return {v:v, i:i}; })).forEach(function(o){
+    var b = el('button','chip', o.v);
+    b.onclick = function(){
+      if (b.classList.contains('used')) return;
+      if (o.i === idx){
+        b.classList.add('used');
+        line.appendChild(el('div','chip placed', o.v));
+        fx(true); idx++;
+        if (idx === s.items.length){
+          if (!scrFailed){ questionStar(1); }
+          else { inlineMsg(scr, '这屏有一次排错,先不加星;到错题本再练一次拿订正星 🌟', '#B3573F'); }
+          showNext(scr, '下一题 ➜');
+        }
+      } else {
+        if (!scrFailed) questionFailed(); else extraWrong();
+        b.classList.add('wrong'); fx(false);
+        setTimeout(function(){ b.classList.remove('wrong'); }, 500);
+      }
+    };
+    pool.appendChild(b);
+  });
+  scr.appendChild(line); scr.appendChild(pool);
+};
+
+/* ====================== 覆盖:分拣分类(首错失星,可完成) ====================== */
+rSort = function(scr, s){
+  scr.appendChild(el('div','q-title', s.q));
+  var target = el('div','sort-target', s.target || '🎒');
+  var goods = s.items.filter(function(i){ return i.good; }).length;
+  var count = el('div','sort-count','0 / ' + goods);
+  var pool = el('div','order-pool');
+  var hint = el('div','sort-hint','');
+  var got = 0;
+  shuffle(s.items).forEach(function(it){
+    var b = el('button','chip big', it.label);
+    b.onclick = function(){
+      if (b.classList.contains('gone')) return;
+      if (it.good){
+        b.classList.add('gone'); fx(true); got++;
+        count.textContent = got + ' / ' + goods;
+        target.classList.add('pop'); setTimeout(function(){ target.classList.remove('pop'); }, 320);
+        if (it.say) speak(it.say.text, it.say.lang);
+        if (got === goods){
+          hint.textContent = '分类完成啦!'; hint.style.color = '#2F7A47';
+          if (!scrFailed){ questionStar(1); }
+          else { inlineMsg(scr, '这屏有一次放错,先不加星;到错题本再练一次拿订正星 🌟', '#B3573F'); }
+          showNext(scr, '下一题 ➜');
+        }
+      } else {
+        if (!scrFailed) questionFailed(); else extraWrong();
+        b.classList.add('wrong'); fx(false);
+        hint.textContent = it.hint || '这个不属于这一类哦!';
+        setTimeout(function(){ b.classList.remove('wrong'); }, 500);
+      }
+    };
+    pool.appendChild(b);
+  });
+  scr.appendChild(target); scr.appendChild(count); scr.appendChild(pool); scr.appendChild(hint);
+};
+
+/* ---------- 调度表(捕获覆盖后的判错屏 + 原学习屏) ---------- */
+var DISPATCH = {
+  card:rCard, quiz:rQuiz, match:rMatch, order:rOrder, sort:rSort, blend:rBlend,
+  discover:rDiscover, trace:rTrace, rec:rSpeak, book:rBook, challenge:rChallenge
+};
+
+/* ---------- 覆盖:showNext(按模式决定前进方向) ---------- */
+showNext = function(scr, label){
+  if (scr.querySelector('.next-btn')) return;
+  var b = el('button','next-btn', label || '下一个 ➜');
+  b.onclick = function(){
+    if (WRONGMODE){ WQI++; renderWrongScreen(); }
+    else { SI++; renderScreen(); }
+  };
+  scr.appendChild(b);
+};
+
+/* ---------- 覆盖:renderScreen(正常闯关 + 每屏重置失星标记) ---------- */
+renderScreen = function(){
+  var les = M.lessons[LI];
+  if (SI >= les.screens.length){ rFinish(); return; }
+  var scr = screenShell();
+  scrFailed = false;
+  var s = les.screens[SI];
+  (DISPATCH[s.t] || rCard)(scr, s);
+};
+
+/* ---------- 覆盖:rFinish(诚实计分 + 错题本提示 + 入口) ---------- */
+rFinish = function(){
+  hush();
+  var les = M.lessons[LI];
+  var max = lessonMax(les);
+  var prev = getRec(LI);
+  var errs = []; for (var i=0;i<les.screens.length;i++) errs.push(scMist[i]||0);
+  var rec = {
+    s: Math.max(runStars, prev.s||0), m: max, p: (prev.p||0)+1,
+    e: errs.reduce(function(a,b){ return a+b; }, 0), sc: errs,
+    d: new Date().toISOString().slice(0,10)
+  };
+  sset(starKey(LI), JSON.stringify(rec));
+  var lw = wbForLesson(M.id, LI);
+
+  var stage = document.getElementById('stage'); stage.innerHTML = '';
+  var scr = el('div','screen finish');
+  scr.appendChild(el('div','t-emoji big', runStars >= max ? '🏆' : '🎉'));
+  scr.appendChild(el('div','q-title','完成「' + les.title + '」!'));
+  scr.appendChild(el('div','finish-stars', '⭐'.repeat(Math.max(runStars,1))));
+  scr.appendChild(el('div','t-cap','这一关 ' + runStars + ' / ' + max + ' 颗星(只算第一次就答对的)'));
+  if (lw > 0){
+    var note = el('div','t-cap'); note.style.color = '#B3573F'; note.style.fontSize = '22px'; note.style.fontWeight = '700';
+    note.innerHTML = '📒 有 ' + lw + ' 道题进了错题本,去再练一次就能拿到 🌟 订正星!';
+    scr.appendChild(note);
+  } else {
+    var perfect = el('div','t-cap'); perfect.style.color = '#2F7A47'; perfect.style.fontSize = '22px'; perfect.style.fontWeight = '700';
+    perfect.textContent = '✨ 全部一次答对,太棒了!';
+    scr.appendChild(perfect);
+  }
+  var row = el('div','btn-row');
+  if (lw > 0){ var wb = el('button','next-btn','📒 去错题本'); wb.onclick = startWrongBook; row.appendChild(wb); }
+  var again = el('button','next-btn ghost','再玩一次 🔁'); again.onclick = function(){ startLesson(LI); };
+  var menu = el('button', 'next-btn' + (lw > 0 ? ' ghost' : ''), '回到选关 ⛺'); menu.onclick = renderMenu;
+  row.appendChild(again); row.appendChild(menu);
+  scr.appendChild(row);
+  stage.appendChild(scr);
+
+  for (var k=0;k<6;k++){
+    (function(kk){ setTimeout(function(){
+      var st = el('div','star-fly','⭐');
+      st.style.left = (10 + Math.random()*80) + 'vw'; st.style.top = '70vh';
+      document.body.appendChild(st); setTimeout(function(){ st.remove(); }, 1100);
+    }, kk*150); })(k);
+  }
+  setTimeout(function(){ speak(runStars > 0 ? '太棒了!' : '我们再练一次!', 'zh-CN'); }, 400);
+  updateTopStars();
+};
+
+/* ====================== 错题本播放器 ====================== */
+function startWrongBook(){
+  WQ = wbLoad().slice(); WQI = 0; WRONGMODE = true;
+  renderWrongScreen();
+}
+function wrongShell(mod){
+  var stage = document.getElementById('stage'); stage.innerHTML = '';
+  var tb = document.getElementById('mod-title'); if (tb) tb.textContent = '📒 错题本 · 再练一次';
+  document.documentElement.style.setProperty('--accent', mod.accent || '#2563B8');
+  var bar = el('div','play-bar');
+  var back = el('button','quit-btn','⬅ 大本营'); back.onclick = function(){ WRONGMODE = false; renderHub(); }; bar.appendChild(back);
+  var info = el('div','dots'); info.style.fontWeight = '800'; info.style.color = '#8A6100';
+  info.textContent = '📒 第 ' + (WQI+1) + ' / ' + WQ.length + ' 题   (' + mod.icon + ' ' + mod.title + ')';
+  bar.appendChild(info);
+  var rs = el('div','run-stars'); rs.style.color = '#2F7A47'; rs.style.background = '#E7F6EC';
+  rs.textContent = '🌟 ' + fixGet(); bar.appendChild(rs);
+  stage.appendChild(bar);
+  var scr = el('div','screen'); stage.appendChild(scr);
+  return scr;
+}
+function renderWrongScreen(){
+  hush();
+  if (WQI >= WQ.length){ WRONGMODE = false; renderWrongDone(); return; }
+  var qid = WQ[WQI]; var parts = qid.split('|');
+  var mod = modById(parts[0]); var li = +parts[1], si = +parts[2];
+  var ok = mod && mod.lessons[li] && mod.lessons[li].screens[si] && JUDGE[mod.lessons[li].screens[si].t];
+  if (!ok){ wbDel(qid); WQI++; renderWrongScreen(); return; }   // 失效题:移除并跳过
+  M = mod; LI = li; SI = si; scrFailed = false;
+  var scr = wrongShell(mod);
+  var s = mod.lessons[li].screens[si];
+  (DISPATCH[s.t] || rCard)(scr, s);
+}
+function renderWrongDone(){
+  hush();
+  var stage = document.getElementById('stage'); stage.innerHTML = '';
+  var tb = document.getElementById('mod-title'); if (tb) tb.textContent = '📒 错题本';
+  var left = wbCount();
+  var scr = el('div','screen finish');
+  scr.appendChild(el('div','t-emoji big', left ? '💪' : '🎉'));
+  scr.appendChild(el('div','q-title', left ? '这一轮错题练完啦!' : '错题本清空,全部掌握!'));
+  scr.appendChild(el('div','t-cap', left
+    ? ('还剩 ' + left + ' 道题没能一次答对,休息一下再来挑战吧!')
+    : '太厉害了!所有错题都一次答对,全部飞走咯 ✨'));
+  scr.appendChild(el('div','t-cap','本次共获得 🌟 ' + fixGet() + ' 颗订正星'));
+  var row = el('div','btn-row');
+  if (left){ var again = el('button','next-btn','📒 再练一轮'); again.onclick = startWrongBook; row.appendChild(again); }
+  var home = el('button', 'next-btn' + (left ? ' ghost' : ''), '回到大本营 ⛺'); home.onclick = renderHub; row.appendChild(home);
+  scr.appendChild(row); stage.appendChild(scr);
+}
+
+/* ====================== 覆盖:学习报告(v5 模式) ====================== */
+buildReport = function(){
+  var rep = {
+    报告类型:'艾伦学前衔接课件 学习报告', 版本:'v5', 孩子:'Alan(艾伦)',
+    导出时间:new Date().toLocaleString('zh-CN'),
+    说明:'金星=首次即答对(诚实掌握度);订正星=在错题本中一次答对获得;错题本剩余=尚未一次答对的题数。可据此定位薄弱屏型构建下一版。',
+    总首次正确星:0, 总满星:0, 总首次正确率:0,
+    总订正星:fixGet(), 错题本剩余总数:wbCount(),
+    总完成关卡:0, 总关卡:0, 模块:[]
+  };
+  ALL_MODS.forEach(function(mod){
+    var m = { 模块:mod.title, 模块id:mod.id, 关卡:[] };
+    mod.lessons.forEach(function(les, i){
+      var r = recOf(mod.id, i);
+      var max = les.screens.reduce(function(n,s){ return n + (STARRY[s.t]||0); }, 0);
+      var lw = wbForLesson(mod.id, i);
+      rep.总关卡++; rep.总满星 += max;
+      if (r){
+        rep.总首次正确星 += (r.s||0);
+        if ((r.p||0) > 0) rep.总完成关卡++;
+        m.关卡.push({
+          关卡:les.title, 首次正确星:(r.s||0), 满星:max,
+          首次正确率:max ? +((r.s||0)/max).toFixed(2) : 0,
+          错题本剩余:lw, 练习次数:(r.p||0),
+          最近一次错误总数:(r.e||0), 每屏错误分布:(r.sc||[]),
+          屏型:les.screens.map(function(s){ return s.t; }), 最近游玩日期:(r.d||'')
+        });
+      } else {
+        m.关卡.push({ 关卡:les.title, 首次正确星:0, 满星:max, 首次正确率:0, 错题本剩余:0, 练习次数:0, 状态:'未开始' });
+      }
+    });
+    rep.模块.push(m);
+  });
+  rep.总首次正确率 = rep.总满星 ? +(rep.总首次正确星 / rep.总满星).toFixed(2) : 0;
+  return rep;
+};
+exportReport = function(){
+  var rep = buildReport();
+  var txt = JSON.stringify(rep, null, 2);
+  var d = new Date();
+  var ymd = '' + d.getFullYear() + ('0'+(d.getMonth()+1)).slice(-2) + ('0'+d.getDate()).slice(-2);
+  var name = ymd + '_艾伦学习报告_v5.json';
+  var ok = false;
+  try{
+    var blob = new Blob([txt], {type:'application/json;charset=utf-8'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 800);
+    ok = true;
+  }catch(e){}
+  showReportModal(txt, name, ok);
+};
+
+/* ====================== 覆盖:大本营主页(v5) ====================== */
+renderHub = function(){
+  hush();
+  document.title = '艾伦的登山大冒险 · v5';
+  document.documentElement.style.setProperty('--accent', '#2563B8');
+  var tb = document.getElementById('mod-title'); if (tb) tb.textContent = '⛰️ 艾伦的登山大冒险';
+  var stage = document.getElementById('stage'); stage.innerHTML = '';
+
+  var g = grandTotals();
+  var progress = g.total ? g.done / g.total : 0;
+
+  var hero = el('div','hub-hero', trailSVG(progress));
+  var ht = el('div','hero-text');
+  ht.appendChild(el('h1','','🦝 艾伦的登山大冒险'));
+  ht.appendChild(el('p','','North Mounthill 一年级准备营 · v5'));
+  var d = null; try{ d = Math.ceil((new Date(2026,8,8) - new Date()) / 86400000); }catch(e){}
+  ht.appendChild(el('span','badge', (d != null && d > 0) ? ('⏰ 距开学还有 ' + d + ' 天') : '🎉 一年级,出发!'));
+  hero.appendChild(ht); stage.appendChild(hero);
+
+  stage.appendChild(el('div','hub-total','⭐ 一次答对 ' + g.star + ' 颗 · 🌟 订正 ' + fixGet() + ' 颗 · 已通关 ' + g.done + '/' + g.total + ' 关'));
+
+  // 错题本入口
+  var wbN = wbCount();
+  var wbBtn = el('button','export-btn');
+  wbBtn.style.margin = '16px auto 0';
+  wbBtn.style.background = wbN ? '#E2574C' : '#9AA7B8';
+  wbBtn.style.boxShadow = wbN ? '0 6px 0 #A8392F' : '0 6px 0 #6B7686';
+  wbBtn.textContent = wbN ? ('📒 错题本 · ' + wbN + ' 道题等你订正') : '📒 错题本 · 暂时没有错题';
+  wbBtn.onclick = function(){ if (wbN) startWrongBook(); };
+  stage.appendChild(wbBtn);
+
+  var grid = el('div','hub-grid');
+  ALL_MODS.forEach(function(mod){
+    var s = hubStats(mod);
+    var b = el('button','camp'); b.style.setProperty('--c', mod.accent);
+    b.innerHTML = '<span class="ico">' + mod.icon + '</span>'
+      + '<span class="tt"><b>' + mod.title + '</b><span>' + (mod.subtitle || '') + '(' + s.n + ' 关)</span></span>'
+      + '<span class="stars">' + (s.t > 0 ? '⭐ ' : '☆ ') + s.t + ' · ' + s.done + '/' + s.n + '</span>';
+    b.onclick = function(){ boot(mod); };
+    grid.appendChild(b);
+  });
+  stage.appendChild(grid);
+
+  var exp = el('button','export-btn','📤 导出学习报告(发给 Claude 看)');
+  exp.onclick = exportReport;
+  stage.appendChild(exp);
+
+  stage.appendChild(el('div','hub-tip',
+    '<b>v5 新机制「答错即停 + 错题本」:</b>点错答案会「先停一停」——正确答案变绿给你看,这道题进入 <b>📒 错题本</b>,这一题这次<b>不加星</b>;只有<b>第一次就答对</b>才得金色 ⭐。到错题本里把题<b>一次答对</b>,就拿到绿色的 🌟 订正星,题目也会「飞走」。'
+    + '<br><br><b>本版新增:</b>🇫🇷 法语启蒙模块(9 关);中文/英文/数学难度小幅进阶并补强弱项(应用题、两位数进退位、后鼻音、排序与分类)。'
+    + '<br><br><b>给爸爸妈妈:</b>金星 = 一次答对(诚实掌握度),订正星 = 改对的努力。建议先让艾伦正常闯关,再每天花几分钟清错题本;然后「📤 导出学习报告」发回给 Claude 做弱点分析与下一版调整。平板请用 <b>Edge</b> 打开(录音/描红/法语发音需要);法语若无声音,请在系统里安装法语语音包。'));
+
+  var ts = document.getElementById('topstars'); if (ts) ts.textContent = '⭐ ' + g.star;
+};
+
+/* ---------- 暴露给内联事件 & 重新绑定主页按钮(原绑定捕获的是旧 renderHub) ---------- */
+window.startWrongBook = startWrongBook;
+var hb = document.getElementById('home-btn'); if (hb) hb.onclick = renderHub;
+
+/* ---------- 用 v5 主页重新渲染(此前已渲染过旧版主页) ---------- */
+renderHub();
+
+})();
+
+/* ##################### v5 注入结束 ##################### */
+
+</script>
+</body>
+</html>
