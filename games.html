@@ -45,6 +45,8 @@
   .game .en{font-size:19px;font-weight:700;opacity:.6;margin-top:-2px;}
   .game .desc{font-size:17px;opacity:.7;line-height:1.5;margin-top:2px;}
   .game .foot{display:flex;align-items:center;gap:12px;margin-top:auto;padding-top:10px;flex-wrap:wrap;}
+  .game .stars{font-size:17px;font-weight:800;color:#B07A00;background:#FFF3CF;border-radius:14px;padding:8px 13px;white-space:nowrap;}
+  .game .stars.empty{color:#9A8A66;background:#F4EEDE;font-weight:700;}
   .game .play{margin-left:auto;font-size:20px;font-weight:800;color:#fff;background:var(--c);border-radius:16px;padding:10px 22px;box-shadow:0 5px 0 rgba(0,0,0,.14);white-space:nowrap;}
 
   /* 空状态 */
@@ -84,6 +86,9 @@
    配置区 —— 加游戏只改这里
    ------------------------------------------------------------
    命名规则:游戏文件名用【英文小写 + 连字符】,如 game-memory.html / game-maze.html
+   星级键规则:游戏须把最好星级写入 alan_game_<玩法>_stars
+     (<玩法> = 文件名去掉 game- 和 .html;如 game-number-line.html → alan_game_number-line_stars)
+     顶栏合计会自动扫描并计入,主页三页无需改动。
    往下面数组里加一个对象即可(多个游戏用逗号隔开):
      file : 游戏文件名(与本文件同目录;也可为外部网址 https://…)
      ico  : 图标 emoji      c : 卡片边框颜色(#十六进制)
@@ -91,9 +96,9 @@
    数组为空时,页面自动显示“敬请期待”。
    ============================================================ */
 var GAMES = [
-  { file:'game-memory.html', ico:'🧠', c:'#4CAF6D', zh:'记忆翻牌', en:'Memory Match', desc:'翻牌配对,练专注力' }
-  // ↓ 以后加更多游戏(用逗号隔开):
-  // { file:'game-maze.html', ico:'🌀', c:'#7A4FD0', zh:'走迷宫', en:'Maze', desc:'找到出口' }
+  { file:'game-memory.html',      ico:'🧠', c:'#4CAF6D', zh:'记忆翻牌', en:'Memory Match',     desc:'翻牌配对,练专注力' },
+  { file:'game-maze.html',        ico:'🐭', c:'#7A4FD0', zh:'走迷宫',   en:'Maze',             desc:'带小老鼠找到奶酪' },
+  { file:'game-number-line.html', ico:'🔢', c:'#2563B8', zh:'数字连线', en:'Connect the Dots', desc:'按数字顺序连出图案' }
 ];
 
 /* ---- 取星(仅用于顶栏合计,与学习共享)---- */
@@ -120,6 +125,22 @@ function starsKangaroo(){
   }catch(e){ return 0; }
 }
 function studyTotal(){ var t=0; try{t+=starsPrep();}catch(e){} try{t+=starsKangaroo();}catch(e){} return t; }
+/* ---- 游戏星:扫描所有 alan_game_*_stars 求和(每游戏 0–3),自动发现新游戏 ---- */
+function gameStars(){
+  var t=0;
+  try{
+    for(var i=0;i<localStorage.length;i++){
+      var k=localStorage.key(i); if(!k) continue;
+      if(/^alan_game_[a-z0-9_-]+_stars$/.test(k)){
+        var v=parseInt(localStorage.getItem(k),10);
+        if(!isNaN(v)) t+=Math.max(0,Math.min(3,v));
+      }
+    }
+  }catch(e){ return 0; }
+  return t;
+}
+function grandTotal(){ return studyTotal()+gameStars(); }
+function starsOf(file){ try{ var slug=file.replace(/^game-/,'').replace(/\.html$/,''); return parseInt(localStorage.getItem('alan_game_'+slug+'_stars'),10)||0; }catch(e){ return 0; } }
 
 /* ---- 渲染游戏卡 / 空状态 + 顶栏合计 ---- */
 (function(){
@@ -130,17 +151,20 @@ function studyTotal(){ var t=0; try{t+=starsPrep();}catch(e){} try{t+=starsKanga
     GAMES.forEach(function(game){
       var a=document.createElement('a');
       a.className='game'; a.href=game.file; a.style.setProperty('--c',game.c||'#7A4FD0');
+      var isUrl=/^https?:/.test(game.file);
+      var n=isUrl?0:starsOf(game.file);
+      var starHTML = n>0 ? ('<span class="stars">🏆 '+'⭐'.repeat(n)+'</span>') : '<span class="stars empty">开始收集 ⭐</span>';
       a.innerHTML =
         '<div class="ico">'+game.ico+'</div>'+
         '<div class="zh">'+game.zh+'</div>'+
         '<div class="en">'+(game.en||'')+'</div>'+
         '<div class="desc">'+(game.desc||'')+'</div>'+
-        '<div class="foot"><span class="play">开始 ▶</span></div>';
+        '<div class="foot">'+starHTML+'<span class="play">开始 ▶</span></div>';
       box.appendChild(a);
     });
   }
   if(empty) empty.style.display = GAMES.length ? 'none' : '';
-  var t=document.getElementById('total'); if(t) t.textContent='⭐ '+studyTotal();
+  var t=document.getElementById('total'); if(t) t.textContent='⭐ '+grandTotal();
 })();
 </script>
 </body>

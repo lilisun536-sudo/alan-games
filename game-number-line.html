@@ -1,0 +1,202 @@
+<!-- 20260701_游戏_数字连线_v1 -->
+<!-- 放仓库根目录。进度键前缀 alan_game_number-line_ ;最好星级写入 alan_game_number-line_stars(计入顶栏合计) -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2563B8">
+<title>数字连线 · Connect the Dots</title>
+<style>
+  :root{ --ink:#1B2A4A; --paper:#FFFFFF; --game:#2563B8; --game-dark:#1C4F97; --sun:#FFC233; --go:#4CAF6D; --no:#FF6B5A; --shadow:0 6px 0 rgba(27,42,74,.12); }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{font-family:"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;color:var(--ink);background:linear-gradient(180deg,#D9EEFF 0%,#F2FAFF 45%,#FFF9EC 100%);min-height:100vh;-webkit-user-select:none;user-select:none;}
+  a{color:inherit;text-decoration:none;}
+  .topbar{display:flex;align-items:center;gap:12px;padding:14px 20px;background:var(--game);color:#fff;font-size:23px;font-weight:800;}
+  .topbar .home-btn{color:#fff;background:rgba(255,255,255,.20);border:none;padding:8px 16px;border-radius:14px;font-size:18px;font-weight:800;white-space:nowrap;text-decoration:none;cursor:pointer;font-family:inherit;}
+  .topbar .home-btn:active{transform:translateY(1px);}
+  .topbar .logo{font-size:26px;line-height:1;}
+  .topbar .room{flex:1;line-height:1.1;}
+  .topbar .room small{display:block;font-size:14px;font-weight:600;opacity:.85;margin-top:2px;}
+  .topbar .best{background:rgba(255,255,255,.18);padding:8px 14px;border-radius:14px;font-size:18px;white-space:nowrap;font-weight:800;}
+  .wrap{max-width:560px;margin:0 auto;padding:16px 16px 40px;}
+  .hint{text-align:center;font-size:16px;font-weight:700;color:var(--game);opacity:.9;margin:2px 0 12px;}
+  .hint b{color:var(--sun);background:var(--game);padding:1px 8px;border-radius:8px;}
+  .controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;margin:0 4px 14px;}
+  .seg{display:flex;background:#fff;border:3px solid var(--game);border-radius:14px;overflow:hidden;}
+  .seg button{border:none;background:transparent;padding:8px 15px;font-size:16px;font-weight:800;color:var(--game);cursor:pointer;font-family:inherit;}
+  .seg button.on{background:var(--game);color:#fff;}
+  .pill{background:#fff;border:3px solid rgba(27,42,74,.12);border-radius:14px;padding:8px 14px;font-size:16px;font-weight:800;white-space:nowrap;}
+  .restart{background:var(--sun);border:none;border-radius:14px;padding:9px 16px;font-size:16px;font-weight:800;cursor:pointer;color:#5A4300;font-family:inherit;}
+
+  .stage{max-width:440px;margin:0 auto;background:#fff;border:5px solid var(--game);border-radius:24px;box-shadow:var(--shadow);padding:8px;}
+  svg{display:block;width:100%;height:auto;}
+  .link{fill:none;stroke:var(--game);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;}
+  .dotc{fill:#fff;stroke:var(--game);stroke-width:2;}
+  .dnum{fill:var(--ink);font-weight:800;text-anchor:middle;dominant-baseline:central;font-family:"Segoe UI",sans-serif;}
+  .dot.done .dotc{fill:var(--go);stroke:var(--go);}
+  .dot.done .dnum{fill:#fff;}
+  .dot.next .dotc{stroke:var(--sun);stroke-width:3.4;animation:pulse 1s ease-in-out infinite;}
+  .dot.wrong .dotc{fill:var(--no);stroke:var(--no);animation:shake .4s;}
+  .hit{fill:transparent;cursor:pointer;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-2px)}75%{transform:translateX(2px)}}
+
+  .overlay{position:fixed;inset:0;background:rgba(27,42,74,.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:100;}
+  .win{background:#fff;border-radius:28px;padding:30px 26px;max-width:420px;width:100%;text-align:center;box-shadow:0 10px 0 rgba(27,42,74,.18);border:6px solid var(--game);}
+  .win .stars{font-size:56px;letter-spacing:6px;line-height:1;animation:pop .5s;}
+  .win h2{margin:14px 0 4px;font-size:30px;}
+  .win .sub{font-size:19px;opacity:.6;}
+  .win .stat{font-size:19px;opacity:.8;margin:10px 0 0;}
+  .win .best-line{margin-top:10px;font-size:17px;font-weight:800;color:#B07A00;background:#FFF3CF;border-radius:14px;padding:8px 14px;display:inline-block;}
+  .win .best-line.newrec{color:#2F7A47;background:#EAF8EE;}
+  .win .btns{display:flex;gap:12px;justify-content:center;margin-top:22px;flex-wrap:wrap;}
+  .win .btn-again{font-size:19px;font-weight:800;border:none;border-radius:16px;padding:12px 22px;cursor:pointer;background:var(--go);color:#fff;box-shadow:0 5px 0 #2F7A47;font-family:inherit;}
+  .win .btn-again:active{transform:translateY(3px);box-shadow:none;}
+  .win .btn-back{font-size:19px;font-weight:800;border-radius:16px;padding:12px 22px;background:#fff;color:var(--ink);border:4px solid var(--game);text-decoration:none;}
+  @keyframes pop{0%{transform:scale(.5)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important}}
+  @media(max-width:720px){ .topbar{font-size:19px}.topbar .room small{font-size:12px} }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <a class="home-btn" href="games.html">← 返回</a>
+    <span class="logo">🔢</span>
+    <span class="room">数字连线<small>Connect the Dots</small></span>
+    <span class="best" id="bestPill">🏆 —</span>
+  </div>
+
+  <div class="wrap">
+    <div class="hint">按顺序点数字:下一个是 <b id="nextNum">1</b> · Tap the numbers in order!</div>
+    <div class="controls">
+      <div class="seg">
+        <button id="segA" class="on">1–10</button>
+        <button id="segB">1–20</button>
+      </div>
+      <span class="pill" id="wrong">❌ 0 次</span>
+      <span class="pill" id="time">⏱️ 0:00</span>
+      <button class="restart" id="restart">🔄 重玩</button>
+    </div>
+    <div class="stage">
+      <svg id="svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <polyline id="link" class="link" points=""></polyline>
+        <g id="dots"></g>
+      </svg>
+    </div>
+  </div>
+
+<script>
+var pts=[], next=1, total=10, wrong=0, started=false, t0=0, timer=null, won=false, finishSec=0, level=10, path=[];
+
+function $(id){ return document.getElementById(id); }
+function fmt(s){ var m=Math.floor(s/60), ss=s%60; return m+':'+(ss<10?'0':'')+ss; }
+
+/* ---- 生成星形点(2k 个顶点,按周边顺序编号 1..2k)---- */
+function genStar(k){
+  var out=[]; var cx=50, cy=50, Ro=(k>=10?42:40), Ri=(k>=10?19:17);
+  for(var i=0;i<2*k;i++){
+    var ang=-Math.PI/2 + i*Math.PI/k;
+    var R=(i%2===0)?Ro:Ri;
+    out.push({ x:+(cx+R*Math.cos(ang)).toFixed(2), y:+(cy+R*Math.sin(ang)).toFixed(2), n:i+1 });
+  }
+  return out;
+}
+
+/* ---- 渲染点 ---- */
+function render(){
+  $('link').setAttribute('points','');
+  var g=$('dots'); g.innerHTML='';
+  var rDot=(total>10)?4.6:5.4, fNum=(total>10)?5:6;
+  pts.forEach(function(p){
+    var el=document.createElementNS('http://www.w3.org/2000/svg','g');
+    el.setAttribute('class','dot'+(p.n===1?' next':''));
+    el.setAttribute('data-n', p.n);
+    el.innerHTML =
+      '<circle class="dotc" cx="'+p.x+'" cy="'+p.y+'" r="'+rDot+'"></circle>'+
+      '<text class="dnum" x="'+p.x+'" y="'+p.y+'" font-size="'+fNum+'">'+p.n+'</text>'+
+      '<circle class="hit" cx="'+p.x+'" cy="'+p.y+'" r="9"></circle>';
+    el.addEventListener('click', function(){ tap(p.n); });
+    g.appendChild(el);
+  });
+}
+function dotG(n){ return $('dots').querySelector('.dot[data-n="'+n+'"]'); }
+
+/* ---- 计时/计数 ---- */
+function startTimer(){ t0=Date.now(); timer=setInterval(function(){ updateTime(elapsed()); },500); }
+function stopTimer(){ if(timer){ clearInterval(timer); timer=null; } }
+function elapsed(){ return t0?Math.floor((Date.now()-t0)/1000):0; }
+function updateTime(s){ var el=$('time'); if(el) el.textContent='⏱️ '+fmt(s); }
+function updateWrong(){ var el=$('wrong'); if(el) el.textContent='❌ '+wrong+' 次'; }
+function updateNextLabel(){ var el=$('nextNum'); if(el) el.textContent = (next<=total)?next:'✓'; }
+
+/* ---- 最好记录 / 星级 ---- */
+function getBest(){ try{ var o=JSON.parse(localStorage.getItem('alan_game_number-line_best')); return (o&&typeof o==='object')?o:{}; }catch(e){ return {}; } }
+function setBest(o){ try{ localStorage.setItem('alan_game_number-line_best', JSON.stringify(o)); }catch(e){} }
+function getStars(){ try{ return parseInt(localStorage.getItem('alan_game_number-line_stars'),10)||0; }catch(e){ return 0; } }
+function saveStars(s){ try{ if(s>getStars()) localStorage.setItem('alan_game_number-line_stars', String(s)); }catch(e){} }
+function updateBestPill(){ var s=getStars(); var el=$('bestPill'); if(el) el.textContent = s>0 ? ('🏆 '+'⭐'.repeat(s)) : '🏆 —'; }
+function starsFor(w){ if(w===0) return 3; if(w<=2) return 2; return 1; }
+
+/* ---- 点击某个数字 ---- */
+function tap(n){
+  if(won) return;
+  if(n===next){
+    if(!started){ started=true; startTimer(); }
+    var g=dotG(n); if(g){ g.classList.remove('next'); g.classList.add('done'); }
+    var p=pts[n-1]; path.push(p.x+','+p.y); $('link').setAttribute('points', path.join(' '));
+    next++;
+    if(next<=total){ var ng=dotG(next); if(ng) ng.classList.add('next'); updateNextLabel(); }
+    else { // 全部连完:闭合回到 1 号点
+      path.push(pts[0].x+','+pts[0].y); $('link').setAttribute('points', path.join(' '));
+      updateNextLabel(); stopTimer(); finishSec=elapsed(); setTimeout(winGame, 450);
+    }
+  } else {
+    wrong++; updateWrong();
+    var gw=dotG(n);
+    if(gw){ gw.classList.add('wrong'); setTimeout(function(){ if(gw) gw.classList.remove('wrong'); }, 400); }
+  }
+}
+
+/* ---- 胜利 ---- */
+function winGame(){
+  won=true;
+  var st=starsFor(wrong); saveStars(st); updateBestPill();
+  var all=getBest(), key=String(level), prev=all[key], isNew=false;
+  if(!prev || wrong<prev.wrong || (wrong===prev.wrong && finishSec<prev.sec)){ all[key]={wrong:wrong, sec:finishSec}; setBest(all); isNew=true; prev=all[key]; }
+  var bestTxt = isNew ? '🎉 新纪录！New best!' : ('最好 Best: '+prev.wrong+' 次错 · '+fmt(prev.sec));
+  var ov=document.createElement('div'); ov.className='overlay'; ov.id='overlay';
+  ov.innerHTML =
+    '<div class="win">'+
+      '<div class="stars">'+ ('⭐'.repeat(st)+'☆'.repeat(3-st)) +'</div>'+
+      '<h2>连好啦！<div class="sub">Great job!</div></h2>'+
+      '<div class="stat">点错 '+wrong+' 次 · '+fmt(finishSec)+'</div>'+
+      '<div class="best-line'+(isNew?' newrec':'')+'">'+bestTxt+'</div>'+
+      '<div class="btns"><button class="btn-again" id="again">🔄 再玩一次</button><a class="btn-back" href="games.html">← 返回游戏</a></div>'+
+    '</div>';
+  document.body.appendChild(ov);
+  var ag=$('again'); if(ag) ag.addEventListener('click', function(){ newGame(level); });
+}
+
+/* ---- 新一局 ---- */
+function newGame(n){
+  level=n; total=n; var k=(n>=20)?10:5;
+  pts=genStar(k); total=pts.length;  // 2k = n
+  next=1; wrong=0; started=false; won=false; finishSec=0; path=[]; stopTimer(); t0=0;
+  updateWrong(); updateTime(0); updateNextLabel(); updateBestPill();
+  $('segA').classList.toggle('on', n===10);
+  $('segB').classList.toggle('on', n===20);
+  var ov=$('overlay'); if(ov) ov.parentNode.removeChild(ov);
+  render();
+}
+
+/* ---- 事件 ---- */
+$('segA').addEventListener('click', function(){ newGame(10); });
+$('segB').addEventListener('click', function(){ newGame(20); });
+$('restart').addEventListener('click', function(){ newGame(level); });
+
+newGame(10);
+</script>
+</body>
+</html>

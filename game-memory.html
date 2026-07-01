@@ -109,10 +109,9 @@ function fmt(s){ var m=Math.floor(s/60), ss=s%60; return m+':'+(ss<10?'0':'')+ss
 /* ---- 最佳记录(localStorage,全 try/catch)---- */
 function getBest(){ try{ var o=JSON.parse(localStorage.getItem('alan_game_memory_best')); return (o&&typeof o==='object')?o:{}; }catch(e){ return {}; } }
 function setBest(o){ try{ localStorage.setItem('alan_game_memory_best', JSON.stringify(o)); }catch(e){} }
-function updateBestPill(){
-  var b=getBest()[String(pairs)];
-  var el=$('bestPill'); if(el) el.textContent = b ? ('🏆 '+b.moves+' 步') : '🏆 —';
-}
+function getStars(){ try{ return parseInt(localStorage.getItem('alan_game_memory_stars'),10)||0; }catch(e){ return 0; } }
+function saveStars(s){ try{ if(s>getStars()) localStorage.setItem('alan_game_memory_stars', String(s)); }catch(e){} }
+function updateBestPill(){ var s=getStars(); var el=$('bestPill'); if(el) el.textContent = s>0 ? ('🏆 '+'⭐'.repeat(s)) : '🏆 —'; }
 
 /* ---- 计时 ---- */
 function startTimer(){ t0=Date.now(); timer=setInterval(function(){ updateTime(elapsed()); },500); }
@@ -181,7 +180,7 @@ function starsFor(p, mv){
 
 /* ---- 胜利 ---- */
 function win(){
-  var st=starsFor(pairs, moves);
+  var st=starsFor(pairs, moves); saveStars(st);
   var all=getBest(), key=String(pairs), prev=all[key], isNew=false;
   if(!prev || moves<prev.moves || (moves===prev.moves && finishSec<prev.sec)){
     all[key]={moves:moves, sec:finishSec}; setBest(all); isNew=true; prev=all[key];

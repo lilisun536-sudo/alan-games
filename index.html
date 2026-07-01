@@ -92,7 +92,7 @@
         <div class="en">Games</div>
         <div class="desc">好玩的小游戏,边玩边动脑</div>
         <div class="foot">
-          <span class="status soon">🚧 敬请期待 Coming soon</span>
+          <span class="status" id="gamesStatus">开始收集 ⭐</span>
           <span class="go">进入 ▶</span>
         </div>
       </a>
@@ -144,6 +144,20 @@ function starsKangaroo(){
   }catch(e){ return 0; }
 }
 function studyTotal(){ var t=0; try{t+=starsPrep();}catch(e){} try{t+=starsKangaroo();}catch(e){} return t; }
+/* ---- 游戏星:扫描所有 alan_game_*_stars 求和(每游戏 0–3),自动发现 ---- */
+function gameStars(){
+  var t=0;
+  try{
+    for(var i=0;i<localStorage.length;i++){
+      var k=localStorage.key(i); if(!k) continue;
+      if(/^alan_game_[a-z0-9_-]+_stars$/.test(k)){
+        var v=parseInt(localStorage.getItem(k),10);
+        if(!isNaN(v)) t+=Math.max(0,Math.min(3,v));
+      }
+    }
+  }catch(e){ return 0; }
+  return t;
+}
 
 /* ---- 按时段问候 ---- */
 (function(){
@@ -153,11 +167,12 @@ function studyTotal(){ var t=0; try{t+=starsPrep();}catch(e){} try{t+=starsKanga
   var en=document.getElementById('greetEn'); if(en) en.textContent=g[1]+', Alan!';
 })();
 
-/* ---- 合计星 + 学习卡状态 ---- */
+/* ---- 合计星(学习+游戏)+ 两卡各自星数 ---- */
 (function(){
-  var n=studyTotal();
-  var t=document.getElementById('total'); if(t) t.textContent='⭐ '+n;
-  var ss=document.getElementById('studyStatus'); if(ss) ss.textContent = n>0 ? ('⭐ 已得 '+n+' 颗') : '开始收集 ⭐';
+  var s=studyTotal(), gm=gameStars();
+  var t=document.getElementById('total'); if(t) t.textContent='⭐ '+(s+gm);
+  var ss=document.getElementById('studyStatus'); if(ss) ss.textContent = s>0 ? ('⭐ 已得 '+s+' 颗') : '开始收集 ⭐';
+  var gs=document.getElementById('gamesStatus'); if(gs) gs.textContent = gm>0 ? ('⭐ 已得 '+gm+' 颗') : '开始收集 ⭐';
 })();
 </script>
 </body>

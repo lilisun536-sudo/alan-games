@@ -111,6 +111,20 @@ function starsKangaroo(){
     return Object.keys(o).reduce(function(s,k){ var v=o[k]; return s+((v&&typeof v.stars==='number')?v.stars:0); },0);
   }catch(e){ return 0; }
 }
+/* ---- 游戏星:扫描所有 alan_game_*_stars 求和(每游戏 0–3)---- */
+function gameStars(){
+  var t=0;
+  try{
+    for(var i=0;i<localStorage.length;i++){
+      var k=localStorage.key(i); if(!k) continue;
+      if(/^alan_game_[a-z0-9_-]+_stars$/.test(k)){
+        var v=parseInt(localStorage.getItem(k),10);
+        if(!isNaN(v)) t+=Math.max(0,Math.min(3,v));
+      }
+    }
+  }catch(e){ return 0; }
+  return t;
+}
 
 /* ---- 渲染课程卡 + 合计星 ---- */
 (function(){
@@ -130,7 +144,7 @@ function starsKangaroo(){
       '<div class="foot">'+starHTML+'<span class="play">开始 ▶</span></div>';
     box.appendChild(a);
   });
-  var t=document.getElementById('total'); if(t) t.textContent='⭐ '+grand;
+  var t=document.getElementById('total'); if(t) t.textContent='⭐ '+(grand+gameStars());
 })();
 </script>
 </body>
