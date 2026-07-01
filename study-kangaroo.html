@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Alan · 袋鼠数学 L5 备赛馆 v1</title>
+<style>
+:root{
+  --cream:#FFF7EA; --paper:#FFFFFF; --ink:#3A3328; --ink2:#7A6F5C;
+  --orange:#F08A24; --orange-d:#C96E12; --orange-l:#FFE3C2;
+  --teal:#2FA8A0; --teal-d:#1F837C; --teal-l:#D6F3F0;
+  --gold:#FFC53D; --gold-d:#E0A415;
+  --coral:#FF6B6B; --coral-d:#D94A4A;
+  --green:#58B95C; --green-d:#3E9442;
+  --line:#EADFC8; --dim:#B9AE99;
+  --r:20px; --shadow:0 4px 14px rgba(95,70,20,.10);
+  --fd:"Arial Rounded MT Bold","Hiragino Maru Gothic ProN","Yuanti SC","PingFang SC","Microsoft YaHei",ui-rounded,system-ui,sans-serif;
+  --fb:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--cream);color:var(--ink);font-family:var(--fb)}
+body{min-height:100vh;background:
+  radial-gradient(circle at 12% 8%, #FFEFD2 0 140px, transparent 141px),
+  radial-gradient(circle at 88% 92%, #E8F6F0 0 170px, transparent 171px),
+  var(--cream);}
+button{font-family:inherit;cursor:pointer}
+#app{max-width:880px;margin:0 auto;padding:14px 14px 90px}
+.topbar{display:flex;align-items:center;gap:10px;padding:8px 2px;flex-wrap:wrap}
+.brand{font-family:var(--fd);font-size:22px;font-weight:800;letter-spacing:.5px;display:flex;align-items:center;gap:8px}
+.brand .roo{font-size:30px;transform:scaleX(-1)}
+.spacer{flex:1}
+.iconbtn{border:2px solid var(--line);background:var(--paper);border-radius:14px;padding:8px 12px;font-size:15px;font-weight:700;color:var(--ink);border-bottom-width:5px;transition:transform .06s}
+.iconbtn:active{transform:translateY(2px);border-bottom-width:3px}
+.iconbtn.on{background:var(--orange-l);border-color:var(--orange)}
+/* ---------------- 大厅 ---------------- */
+.hero{background:linear-gradient(120deg,#FFE9C8,#FFF7EA 60%);border:2px solid var(--line);border-radius:26px;padding:18px 20px;margin:8px 0 16px;display:flex;gap:14px;align-items:center;box-shadow:var(--shadow)}
+.hero .big{font-size:46px}
+.hero h1{font-family:var(--fd);font-size:24px;margin:0 0 4px}
+.hero p{margin:0;color:var(--ink2);font-size:14px;line-height:1.5}
+.pouch{margin-left:auto;text-align:center;background:#fff;border:2px solid var(--line);border-radius:18px;padding:10px 14px;min-width:96px}
+.pouch .n{font-family:var(--fd);font-size:26px;color:var(--gold-d)}
+.pouch .l{font-size:12px;color:var(--ink2)}
+.grid7{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.pcard{position:relative;background:var(--paper);border:2px solid var(--line);border-bottom-width:7px;border-radius:var(--r);padding:16px;text-align:left;transition:transform .08s;overflow:hidden}
+.pcard:not(.lock):hover{transform:translateY(-2px)}
+.pcard:not(.lock):active{transform:translateY(2px);border-bottom-width:3px}
+.pcard .yr{font-family:var(--fd);font-size:30px;font-weight:800}
+.pcard .nm{font-size:14px;color:var(--ink2);margin:2px 0 10px}
+.pcard .meta{display:flex;gap:8px;align-items:center;font-size:13px;font-weight:700}
+.tag{padding:3px 10px;border-radius:999px;font-size:12px;font-weight:800}
+.pcard.c-orange{border-color:#F4C892;border-bottom-color:#E8A856}.pcard.c-orange .yr{color:var(--orange-d)}.pcard.c-orange .tag{background:var(--orange-l);color:var(--orange-d)}
+.pcard.c-teal{border-color:#A8DBD7;border-bottom-color:#7CC6C0}.pcard.c-teal .yr{color:var(--teal-d)}.pcard.c-teal .tag{background:var(--teal-l);color:var(--teal-d)}
+.pcard.lock{filter:grayscale(.45);opacity:.75;cursor:not-allowed}
+.pcard .ribbon{position:absolute;top:12px;right:-34px;transform:rotate(38deg);background:var(--dim);color:#fff;font-size:11px;font-weight:800;padding:4px 40px;letter-spacing:1px}
+.pbar{height:10px;background:#F2EADA;border-radius:99px;margin-top:10px;overflow:hidden}
+.pbar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold),var(--orange));transition:width .4s}
+.startrow{display:flex;gap:6px;margin-top:8px;font-size:15px;min-height:20px;flex-wrap:wrap}
+/* ---------------- 答题页 ---------------- */
+.qtop{display:flex;align-items:center;gap:10px;margin:6px 0 10px;flex-wrap:wrap}
+.qback{border:none;background:none;font-size:15px;font-weight:800;color:var(--ink2);padding:6px}
+.qprog{flex:1;height:12px;background:#F2EADA;border-radius:99px;overflow:hidden;min-width:120px}
+.qprog i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--orange));border-radius:99px;transition:width .35s}
+.combo{font-family:var(--fd);font-weight:800;font-size:14px;color:var(--orange-d);background:var(--orange-l);border-radius:999px;padding:4px 12px;animation:pop .3s}
+.qcard{background:var(--paper);border:2px solid var(--line);border-radius:24px;box-shadow:var(--shadow);padding:18px 18px 22px;margin-bottom:14px}
+.qhead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.qnum{font-family:var(--fd);font-size:30px;font-weight:800;color:var(--orange-d)}
+.qpts{font-size:13px;font-weight:800;color:var(--teal-d);background:var(--teal-l);border-radius:999px;padding:3px 10px}
+.qstars{margin-left:auto;font-size:18px;letter-spacing:2px}
+.speak{border:2px solid var(--line);border-bottom-width:4px;background:#fff;border-radius:12px;font-size:18px;padding:4px 10px}
+.speak:active{transform:translateY(2px)}
+.qtext-en{font-size:19px;line-height:1.55;font-weight:700;margin:12px 2px 4px}
+.qtext-zh{font-size:16.5px;line-height:1.7;color:#5C5343;margin:2px 2px 4px}
+.qfig{margin:14px auto 6px;display:flex;justify-content:center}
+.qfig svg{max-width:100%;height:auto}
+.opts{display:grid;gap:12px;margin-top:16px}
+.opts.text{grid-template-columns:repeat(auto-fit,minmax(110px,1fr))}
+.opts.fig{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.opt{position:relative;background:#fff;border:3px solid var(--line);border-bottom-width:7px;border-radius:18px;padding:14px 10px;min-height:64px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:22px;font-weight:800;font-family:var(--fd);color:var(--ink);transition:transform .07s,border-color .15s,background .15s}
+.opt svg{max-width:100%;height:auto}
+.opt:not([disabled]):hover{border-color:#D9CBAA}
+.opt:not([disabled]):active{transform:translateY(3px);border-bottom-width:4px}
+.opt .k{position:absolute;top:-10px;left:-8px;width:30px;height:30px;border-radius:50%;background:var(--ink);color:#fff;font-size:15px;display:flex;align-items:center;justify-content:center;font-family:var(--fd)}
+.opt.fig{flex-direction:column;padding:18px 10px 12px}
+.opt.right{border-color:var(--green);background:#EDF9EE;animation:pop .35s}
+.opt.right .k{background:var(--green)}
+.opt.wrong{border-color:var(--coral);background:#FFF0F0;animation:shake .4s}
+.opt.wrong .k{background:var(--coral)}
+.opt.dim{opacity:.45}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+@keyframes pop{0%{transform:scale(.92)}60%{transform:scale(1.05)}100%{transform:scale(1)}}
+.feedback{min-height:34px;margin-top:14px;font-size:18px;font-weight:800;font-family:var(--fd);text-align:center}
+.feedback.good{color:var(--green-d)}
+.feedback.bad{color:var(--coral-d)}
+.nextbar{display:flex;gap:10px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+.bigbtn{font-family:var(--fd);font-size:18px;font-weight:800;color:#fff;background:var(--orange);border:none;border-bottom:6px solid var(--orange-d);border-radius:18px;padding:13px 30px;transition:transform .07s}
+.bigbtn:active{transform:translateY(3px);border-bottom-width:3px}
+.bigbtn.teal{background:var(--teal);border-bottom-color:var(--teal-d)}
+.bigbtn.gray{background:#B9AE99;border-bottom-color:#948A77}
+/* 星星爆裂 */
+.burst{position:fixed;pointer-events:none;font-size:22px;z-index:99;animation:fly 1s ease-out forwards}
+@keyframes fly{to{transform:translate(var(--dx),var(--dy)) rotate(var(--rot)) scale(.4);opacity:0}}
+/* ---------------- 讲解弹层 ---------------- */
+.veil{position:fixed;inset:0;background:rgba(58,51,40,.45);display:flex;align-items:center;justify-content:center;padding:14px;z-index:50}
+.modal{background:var(--paper);border-radius:24px;max-width:640px;width:100%;max-height:88vh;overflow:auto;padding:20px;border:2px solid var(--line);box-shadow:0 14px 40px rgba(60,40,0,.25)}
+.modal h3{font-family:var(--fd);margin:0 0 8px;font-size:21px;display:flex;align-items:center;gap:8px}
+.modal .exfig{display:flex;justify-content:center;margin:10px 0}
+.modal .exfig svg{max-width:100%;height:auto}
+.modal .ex-en{font-size:15.5px;line-height:1.6;font-weight:600}
+.modal .ex-zh{font-size:15px;line-height:1.75;color:#5C5343;margin-top:8px}
+.ansline{font-family:var(--fd);font-size:17px;margin:8px 0;color:var(--green-d)}
+/* ---------------- 结算 / 错题本 / 家长 ---------------- */
+.center{text-align:center}
+.resultcard{background:var(--paper);border:2px solid var(--line);border-radius:26px;padding:26px;box-shadow:var(--shadow)}
+.bign{font-family:var(--fd);font-size:52px;color:var(--orange-d)}
+.medal{font-size:64px;animation:pop .5s}
+table.ptable{width:100%;border-collapse:collapse;font-size:14px;background:#fff;border-radius:14px;overflow:hidden}
+.ptable th,.ptable td{border:1px solid var(--line);padding:7px 8px;text-align:center}
+.ptable th{background:var(--orange-l);font-family:var(--fd)}
+.ptable td.ok{color:var(--green-d);font-weight:800}
+.ptable td.no{color:var(--coral-d);font-weight:800}
+textarea.rep{width:100%;height:130px;border:2px solid var(--line);border-radius:12px;font-size:12px;padding:8px;font-family:ui-monospace,monospace}
+.note{font-size:13px;color:var(--ink2);line-height:1.6}
+.settrow{display:flex;align-items:center;gap:10px;padding:12px 4px;border-bottom:1px dashed var(--line);flex-wrap:wrap}
+.settrow .lab{font-weight:800;min-width:120px}
+.seg{display:flex;border:2px solid var(--line);border-radius:12px;overflow:hidden}
+.seg button{border:none;background:#fff;padding:8px 14px;font-size:14px;font-weight:700;color:var(--ink2)}
+.seg button.on{background:var(--orange);color:#fff}
+.wrongitem{display:flex;align-items:center;gap:10px;background:#fff;border:2px solid var(--line);border-radius:16px;padding:12px;margin-bottom:10px}
+.lockmsg{padding:40px 10px;text-align:center;color:var(--ink2);font-size:15px;line-height:1.8}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:520px){
+  .qtext-en{font-size:17px}.opts.fig{grid-template-columns:repeat(auto-fit,minmax(128px,1fr))}
+  .hero{flex-wrap:wrap}.pouch{margin-left:0}
+}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+</style>
+</head>
+<body>
+<div id="app" role="main"></div>
+<script>
+"use strict";
+/* =====================================================================
+   Alan L5 袋鼠备赛互动课件 v1 — 第一批:2025 + 2024 中国卷 共 23 题
+   存档前缀 alan_l5_ · 全部图形 SVG/emoji 矢量重绘 · 答案经官方key交叉验证
+===================================================================== */
+/* ---------------- 基础工具 ---------------- */
+const $=s=>document.querySelector(s);
+const APP=document.getElementById('app');
+const PFX='alan_l5_';
+const store={
+  get(k,d){try{const v=localStorage.getItem(PFX+k);return v?JSON.parse(v):d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem(PFX+k,JSON.stringify(v))}catch(e){}}
+};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------------- 音效(Web Audio 合成,零外部文件) ---------------- */
+const Sfx={
+  ctx:null, on:true,
+  init(){ if(!this.ctx){ try{ this.ctx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } if(this.ctx&&this.ctx.state==='suspended') this.ctx.resume(); },
+  tone(f,t0,dur,type,vol){ if(!this.ctx) return; const o=this.ctx.createOscillator(),g=this.ctx.createGain();
+    o.type=type||'sine'; o.frequency.value=f; o.connect(g); g.connect(this.ctx.destination);
+    const t=this.ctx.currentTime+t0; g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol||.18,t+.015);
+    g.gain.exponentialRampToValueAtTime(.001,t+dur); o.start(t); o.stop(t+dur+.05); },
+  ok(){ if(!this.on)return; this.init(); [523,659,784].forEach((f,i)=>this.tone(f,i*.09,.22,'triangle',.2)); },
+  combo(){ if(!this.on)return; this.init(); [659,784,988,1319].forEach((f,i)=>this.tone(f,i*.07,.18,'triangle',.2)); this.tone(1568,.3,.3,'sine',.12); },
+  bad(){ if(!this.on)return; this.init(); this.tone(196,0,.25,'sawtooth',.10); this.tone(147,.12,.3,'sawtooth',.10); },
+  fanfare(){ if(!this.on)return; this.init(); [523,659,784,1047].forEach((f,i)=>this.tone(f,i*.13,.3,'triangle',.2));
+    [659,784,988,1319].forEach((f,i)=>this.tone(f,.55+i*.1,.35,'sine',.14)); },
+  tap(){ if(!this.on)return; this.init(); this.tone(440,0,.07,'sine',.07); }
+};
+
+/* ---------------- 语音朗读 TTS ---------------- */
+const TTS={
+  on:true, voices:[],
+  load(){ this.voices=window.speechSynthesis?speechSynthesis.getVoices():[]; },
+  pick(lang,prefs){ const vs=this.voices; for(const p of prefs){ const v=vs.find(v=>v.lang===p); if(v) return v; }
+    return vs.find(v=>v.lang&&v.lang.startsWith(lang))||null; },
+  speak(en,zh){ if(!this.on||!window.speechSynthesis) return; speechSynthesis.cancel(); this.load();
+    const mode=S.settings.lang, parts=[];
+    if(mode!=='zh'&&en) parts.push(['en',en]);
+    if(mode!=='en'&&zh) parts.push(['zh',zh]);
+    parts.forEach(([lg,txt])=>{ const u=new SpeechSynthesisUtterance(txt);
+      if(lg==='en'){ u.lang='en-CA'; const v=this.pick('en',['en-CA','en-US','en-GB']); if(v)u.voice=v; u.rate=.92; }
+      else{ u.lang='zh-CN'; const v=this.pick('zh',['zh-CN','zh-TW','zh-HK']); if(v)u.voice=v; u.rate=.95; }
+      speechSynthesis.speak(u); }); },
+  stop(){ if(window.speechSynthesis) speechSynthesis.cancel(); }
+};
+if(window.speechSynthesis) speechSynthesis.onvoiceschanged=()=>TTS.load();
+
+/* ---------------- SVG 图形库(全部矢量重绘,等价保真) ---------------- */
+const NS='http://www.w3.org/2000/svg';
+const sv=(w,h,inner,maxw)=>`<svg viewBox="0 0 ${w} ${h}" xmlns="${NS}" style="width:100%;max-width:${maxw||Math.min(w,560)}px" role="img">${inner}</svg>`;
+const F={};
+
+/* === 2025 Q1 气球 × 6 === */
+F.balloons=()=>{
+  const cs=['#2FA8A0','#FF6FA5','#F08A24','#58B95C','#9B6BD3','#E84545'];
+  let s='';
+  cs.forEach((c,i)=>{ const x=44+i*48, y=52+(i%2)*16;
+    s+=`<path d="M${x} ${y+34} q${(i%2?8:-8)} 26 0 52" stroke="#B9AE99" fill="none" stroke-width="2"/>
+        <ellipse cx="${x}" cy="${y}" rx="22" ry="27" fill="${c}"/>
+        <ellipse cx="${x-7}" cy="${y-9}" rx="6" ry="9" fill="#fff" opacity=".45"/>
+        <path d="M${x-5} ${y+26} l5 9 5-9z" fill="${c}"/>`; });
+  return sv(330,150,s,330);
+};
+F.balloonsEx=()=>{
+  const cs=['#2FA8A0','#FF6FA5','#F08A24','#58B95C','#9B6BD3','#E84545'];
+  let s='';
+  cs.forEach((c,i)=>{ const x=44+i*48, y=58, gone=i<4;
+    s+=`<g opacity="${gone?'.30':'1'}"><ellipse cx="${x}" cy="${y}" rx="22" ry="27" fill="${c}"/>
+        <path d="M${x-5} ${y+26} l5 9 5-9z" fill="${c}"/></g>
+        ${gone?`<text x="${x}" y="${y+6}" font-size="30" text-anchor="middle">✖</text>`
+              :`<text x="${x}" y="${y-36}" font-size="22" text-anchor="middle">✔</text>`}`; });
+  s+=`<text x="165" y="138" font-size="20" font-weight="800" text-anchor="middle" fill="#3E9442">6 − 4 = 2</text>`;
+  return sv(330,150,s,330);
+};
+
+/* === 2025 Q2 袋鼠拼图:整图共用部件 === */
+F.kEars=()=>`
+  <g><ellipse cx="56" cy="66" rx="12" ry="25" fill="#F08A24" stroke="#C96E12" stroke-width="2.5" transform="rotate(-34 56 66)"/>
+  <ellipse cx="56" cy="68" rx="6" ry="15" fill="#FFCF9E" transform="rotate(-34 56 68)"/>
+  <ellipse cx="103" cy="55" rx="14" ry="30" fill="#F08A24" stroke="#C96E12" stroke-width="2.5" transform="rotate(13 103 55)"/>
+  <ellipse cx="103" cy="58" rx="7" ry="19" fill="#FFCF9E" transform="rotate(13 103 58)"/></g>`;
+F.kEyes=()=>`
+  <g><ellipse cx="74" cy="95" rx="9" ry="11" fill="#fff" stroke="#3A3328" stroke-width="2"/>
+  <circle cx="76" cy="97" r="4" fill="#3A3328"/>
+  <ellipse cx="96" cy="92" rx="9" ry="11" fill="#fff" stroke="#3A3328" stroke-width="2"/>
+  <circle cx="94" cy="94" r="4" fill="#3A3328"/></g>`;
+F.kHeadFill=()=>`<circle cx="86" cy="129" r="44" fill="#F08A24" stroke="#C96E12" stroke-width="2.5"/>`;
+F.kSnout=()=>`
+  <path d="M50 116 Q30 116 24 124 Q30 133 52 132 Q60 126 50 116 Z" fill="#F08A24" stroke="#C96E12" stroke-width="2.5"/>
+  <ellipse cx="27" cy="123" rx="6.5" ry="5" fill="#7A4A12"/>
+  <path d="M58 134 q10 8 22 6" stroke="#C96E12" stroke-width="2.5" fill="none"/>`;
+F.kBodyArms=()=>`
+  <path d="M86 168 q-26 6 -26 32 l80 0 q4 -34 -18 -42" fill="#F08A24" stroke="#C96E12" stroke-width="2.5"/>
+  <path d="M118 132 Q138 110 142 78" stroke="#C96E12" stroke-width="3" fill="none"/>
+  <path d="M120 138 Q146 120 150 86" stroke="#F08A24" stroke-width="11" fill="none" stroke-linecap="round"/>
+  <path d="M152 70 c-7-10 -22-5 -20 7 c1 8 12 13 20 19 c8-6 19-11 20-19 c2-12 -13-17 -20-7 Z"
+        fill="#F08A24" stroke="#C96E12" stroke-width="2.5"/>`;
+F.kHeadTop=()=>F.kEars()+`<path d="M52.9 100 A44 44 0 0 1 119.1 100 Z" fill="#F08A24"/><path d="M52.9 100 A44 44 0 0 1 119.1 100" fill="none" stroke="#C96E12" stroke-width="2.5"/>`+F.kEyes();
+F.kScene=(missing)=>{
+  let inner=`<rect x="0" y="0" width="200" height="200" fill="#fff"/>`+
+    F.kBodyArms()+F.kHeadFill()+F.kSnout()+F.kHeadTop();
+  if(missing) inner+=`<rect x="0" y="0" width="100" height="100" fill="#fff" stroke="none"/>
+    <text x="50" y="70" font-size="52" font-weight="800" text-anchor="middle" fill="#3A3328">?</text>`;
+  inner+=`<g stroke="#3A3328" stroke-width="3" fill="none">
+    <rect x="1.5" y="1.5" width="197" height="197"/><line x1="100" y1="0" x2="100" y2="200"/><line x1="0" y1="100" x2="200" y2="100"/></g>`;
+  return sv(200,200,inner,300);
+};
+F.kPiece=(v)=>{
+  const clip=`<clipPath id="kc${v}"><rect x="0" y="0" width="100" height="100"/></clipPath>`;
+  let g='';
+  if(v==='E') g=F.kHeadTop();
+  if(v==='A') g=`<g transform="translate(2,-17)">${F.kHeadTop()}</g>`;
+  if(v==='B') g=`<g transform="translate(100,0) scale(-1,1)">${F.kHeadTop()}</g>`;
+  if(v==='C') g=`<g transform="translate(10,-30) scale(.92)">${F.kHeadFill()}${F.kSnout()}${F.kHeadTop()}</g>`;
+  if(v==='D') g=`<g transform="translate(96,-26) scale(-.92,.92)">${F.kHeadFill()}${F.kSnout()}${F.kHeadTop()}</g>`;
+  return sv(100,100,`${clip}<rect x="0" y="0" width="100" height="100" fill="#fff"/><g clip-path="url(#kc${v})">${g}</g><rect x="1.5" y="1.5" width="97" height="97" fill="none" stroke="#3A3328" stroke-width="3"/>`,150);
+};
+
+/* === 2025 Q3 形状田:15个形状,6个三角形 === */
+F.shapeItems=[
+  {t:'tri', d:'M48 58 L86 30 L92 66 Z', f:'#5B2D8E', s:'#5B2D8E', tri:1},
+  {t:'spark', d:'M126 16 q6 12 18 14 q-12 4 -16 16 q-4-12 -16-14 q12-4 14-16 Z', f:'none', s:'#B07CE8'},
+  {t:'quad', d:'M176 26 L216 32 L210 64 L172 56 Z', f:'#F9B8C8', s:'#E0526F'},
+  {t:'tri', d:'M236 26 L272 44 L240 70 Z', f:'#DCE2F7', s:'#2D4FC0', tri:1},
+  {t:'tri', d:'M292 44 L334 52 L296 72 Z', f:'#EFE5D8', s:'#A4502A', tri:1},
+  {t:'circ', d:'', cx:22, cy:88, r:11, f:'#D4708F', s:'#B04568'},
+  {t:'tri', d:'M104 86 L142 76 L138 108 Z', f:'#F0E8DC', s:'#A4502A', tri:1},
+  {t:'spark', d:'M196 78 q4 14 18 16 q-14 4 -16 20 q-4-16 -20-16 q16-4 18-20 Z', f:'none', s:'#E64FA0'},
+  {t:'quad', d:'M252 84 L272 98 L252 112 L232 98 Z', f:'#AEB8EF', s:'#4A5BD0'},
+  {t:'circ', d:'', cx:316, cy:98, r:17, f:'none', s:'#2D4FC0'},
+  {t:'tri', d:'M34 122 L52 176 L26 182 Z', f:'#F2F2F0', s:'#3A3328', tri:1},
+  {t:'tri', d:'M108 138 L126 178 L90 178 Z', f:'#D9F7D4', s:'#27C427', tri:1},
+  {t:'circ', d:'', cx:176, cy:154, r:19, f:'none', s:'#E8B43A'},
+  {t:'cres', d:'M242 138 a 20 20 0 1 0 12 34 a 15 15 0 1 1 -12 -34 Z', f:'none', s:'#E0526F'},
+  {t:'quad', d:'M276 162 L338 162 L338 178 L276 178 Z', f:'none', s:'#A4502A'}
+];
+F.shapes15=(hl)=>{
+  let s='', n=0;
+  F.shapeItems.forEach(it=>{
+    const dim=hl&&!it.tri;
+    let el='';
+    if(it.t==='circ') el=`<circle cx="${it.cx}" cy="${it.cy}" r="${it.r}" fill="${it.f}" stroke="${it.s}" stroke-width="2.5"/>`;
+    else el=`<path d="${it.d}" fill="${it.f}" stroke="${it.s}" stroke-width="2.5" stroke-linejoin="round"/>`;
+    s+=`<g opacity="${dim?'.22':'1'}">${el}</g>`;
+    if(hl&&it.tri){ n++;
+      const bb={'M48 ':[66,46],'M236':[250,46],'M292':[308,56],'M104':[122,92],'M34 ':[40,150],'M108':[108,162]}[it.d.slice(0,4)]||[0,0];
+      s+=`<circle cx="${bb[0]}" cy="${bb[1]}" r="11" fill="#FFC53D"/><text x="${bb[0]}" y="${bb[1]+5}" font-size="14" font-weight="800" text-anchor="middle">${n}</text>`;}
+  });
+  return sv(352,196,s,420);
+};
+
+/* === 2025 Q4 铅笔堆 × 8 === */
+F.pencilDefs=[
+  {x:175,y:70, a:64},{x:185,y:118,a:88},{x:205,y:96, a:34},{x:175,y:128,a:8},
+  {x:180,y:140,a:-22},{x:168,y:150,a:118},{x:208,y:138,a:140},{x:196,y:160,a:103}
+];
+F.pencil=(cx,cy,ang,hue,num)=>{
+  const body=hue||'#F2A33C';
+  return `<g transform="translate(${cx},${cy}) rotate(${ang})">
+    <rect x="-78" y="-7" width="130" height="14" rx="2" fill="${body}" stroke="#B5751E" stroke-width="1.5"/>
+    <rect x="-78" y="-2.5" width="130" height="5" fill="#fff" opacity=".25"/>
+    <polygon points="52,-7 74,0 52,7" fill="#F6D9A8" stroke="#B5751E" stroke-width="1.5"/>
+    <polygon points="66,-2.6 74,0 66,2.6" fill="#4A3A28"/>
+    <rect x="-86" y="-7" width="8" height="14" fill="#BFC4CC"/>
+    <rect x="-98" y="-7" width="12" height="14" rx="3" fill="#F58E8E" stroke="#C96868" stroke-width="1.5"/>
+    ${num?`<circle cx="-104" cy="0" r="10" fill="#fff" stroke="#3A3328" stroke-width="2"/><text x="-104" y="5" font-size="12" font-weight="800" text-anchor="middle">${num}</text>`:''}
+  </g>`;
+};
+F.pencils=(ex)=>{
+  const hues=['#F2A33C','#E8845A','#F2C53C','#9FCB5A','#6BBFB2','#9B8AE0','#F08AB8','#C8A06A'];
+  let s='';
+  F.pencilDefs.forEach((p,i)=> s+=F.pencil(p.x,p.y,p.a, ex?hues[i]:null, ex?(i+1):0));
+  if(ex) s+=`<text x="190" y="240" font-size="18" font-weight="800" text-anchor="middle" fill="#3E9442">一支一支数:8 支 ✓ Count one by one: 8</text>`;
+  return sv(400,ex?252:230,s,430);
+};
+
+/* === 2025 Q5 路径网格 === */
+F.PATHS={
+  A:{r:[[0,5],[2,5],[2,4],[5,4],[5,5],[9,5],[9,6],[13,6]], v:3},
+  B:{r:[[0,5],[3,5],[3,7],[8,7],[8,4],[13,4]], v:5},
+  C:{r:[[0,6],[3,6],[3,2],[8,2],[8,6],[13,6]], v:8},
+  D:{r:[[0,3],[3,3],[3,6],[9,6],[9,5],[13,5]], v:4},
+  E:{r:[[0,3],[2,3],[2,4],[6,4],[6,7],[10,7],[10,3],[13,3]], v:8}
+};
+F.pathGrid=(k)=>{
+  const c=15, W=13*c, H=10*c, p=F.PATHS[k];
+  let g='';
+  for(let i=0;i<=13;i++) g+=`<line x1="${i*c}" y1="0" x2="${i*c}" y2="${H}"/>`;
+  for(let j=0;j<=10;j++) g+=`<line x1="0" y1="${j*c}" x2="${W}" y2="${j*c}"/>`;
+  const pts=p.r.map(([x,y])=>`${x*c},${y*c}`).join(' ');
+  const end=p.r[p.r.length-1], st=p.r[0];
+  return sv(W+74,H+8,`<g transform="translate(36,4)">
+    <rect x="0" y="0" width="${W}" height="${H}" fill="#FFF3DC"/>
+    <g stroke="#E2CFA4" stroke-width="1">${g}</g>
+    <polyline points="${pts}" fill="none" stroke="#E33A3A" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+    <text x="-30" y="${st[1]*c+8}" font-size="22">🦘</text>
+    <text x="${W+2}" y="${end[1]*c+10}" font-size="30">🦘</text></g>`,250);
+};
+F.pathEx=()=>{
+  const data=[['A',3,'#58B95C'],['D',4,'#9FCB5A'],['B',5,'#F2C53C'],['C',8,'#F08A8A'],['E',8,'#F08A8A']];
+  let s='<text x="10" y="22" font-size="15" font-weight="800">横向格数都一样,比"上上下下"多走几格 ↕ Extra up/down squares:</text>';
+  data.forEach((d,i)=>{ const y=46+i*34;
+    s+=`<text x="22" y="${y+15}" font-size="18" font-weight="800" font-family="inherit">${d[0]}</text>
+        <rect x="48" y="${y}" width="${d[1]*30}" height="20" rx="8" fill="${d[2]}"/>
+        <text x="${58+d[1]*30}" y="${y+15}" font-size="15" font-weight="800">${d[1]} 格</text>`; });
+  s+='<text x="22" y="230" font-size="16" font-weight="800" fill="#3E9442">A 只多走 3 格 → 最短 shortest ✓</text>';
+  return sv(380,240,s,400);
+};
+
+/* === 2025 Q6 4×4 缺格 === */
+F.GRAY=[[1,2],[1,3],[1,4],[2,3],[2,4],[3,1],[3,4],[4,1],[4,2],[4,4]];
+F.grid16=(ex)=>{
+  const c=42; let s=`<rect x="0" y="0" width="${4*c}" height="${4*c}" fill="none" stroke="#3A3328" stroke-width="2.5" stroke-dasharray="7 6"/>`;
+  let n=0;
+  for(let r=1;r<=4;r++)for(let col=1;col<=4;col++){
+    const gray=F.GRAY.some(g=>g[0]===r&&g[1]===col);
+    const x=(col-1)*c,y=(r-1)*c;
+    if(gray) s+=`<rect x="${x}" y="${y}" width="${c}" height="${c}" fill="#C9C9C9" stroke="#3A3328" stroke-width="2.5"/>`;
+    else if(ex){ n++; s+=`<rect x="${x+3}" y="${y+3}" width="${c-6}" height="${c-6}" rx="6" fill="#FFE3C2" stroke="#F08A24" stroke-width="2.5" stroke-dasharray="5 4"/>
+      <text x="${x+c/2}" y="${y+c/2+7}" font-size="19" font-weight="800" text-anchor="middle" fill="#C96E12">${n}</text>`; }
+  }
+  if(ex) s+=`<text x="${2*c}" y="${4*c+26}" font-size="15" font-weight="800" text-anchor="middle" fill="#3E9442">留下 10 块 → 16 − 10 = 6 missing</text>`;
+  return sv(4*c, 4*c+(ex?34:4), s, 240);
+};
+
+/* === 2025 Q7 纽扣 === */
+F.btnDeco=()=>`
+  <g class="deco">
+    <path transform="translate(-19,-19) scale(1.05)" d="M0 3 c-3-6 -12-3 -11 3 c1 5 7 7 11 11 c4-4 10-6 11-11 c1-6 -8-9 -11-3 Z" fill="#5C5C66"/>
+    <circle cx="19" cy="19" r="6.5" fill="#5C5C66"/>
+    <g transform="translate(-18,17)"><path d="M-7 -2 a9 9 0 1 0 13 8 a7 7 0 1 1 -13 -8 Z" fill="#5C5C66"/></g>
+    <g fill="#fff" stroke="#5C5C66" stroke-width="2">
+      <circle cx="2" cy="-7" r="3.6"/><circle cx="14" cy="-7" r="3.6"/>
+      <circle cx="-4" cy="6" r="3.6"/><circle cx="8" cy="6" r="3.6"/>
+    </g>
+  </g>`;
+F.btnDecoVar=(v)=>{
+  if(v==='orig'||v==='E') return F.btnDeco();
+  if(v==='A') return `<g transform="scale(-1,1)">${F.btnDeco()}</g>`;
+  if(v==='B') return F.btnDeco().replace('translate(-19,-19) scale(1.05)','translate(-19,-19) scale(1.05) rotate(125 5.5 7)');
+  if(v==='C') return F.btnDeco().replace('<g transform="translate(-18,17)">','<g transform="translate(-18,17) rotate(180 0 2)">');
+  if(v==='D') return F.btnDeco().replace('translate(-19,-19) scale(1.05)','translate(19,-19) scale(1.05)').replace('<circle cx="19" cy="19" r="6.5"','<circle cx="14" cy="22" r="6.5"');
+  return F.btnDeco();
+};
+F.button25=(v,rot,big)=>{
+  const R=big?52:42;
+  return sv(R*2+12,R*2+12,`<g transform="translate(${R+6},${R+6})">
+    <circle r="${R}" fill="#C9C9C9" stroke="#7A7A82" stroke-width="2.5"/>
+    <circle r="${R-5}" fill="#D6D6D8" stroke="#9A9AA2" stroke-width="1.5"/>
+    <g transform="rotate(${rot||0}) scale(${big?1.25:1})">${F.btnDecoVar(v)}</g>
+  </g>`, big?170:130);
+};
+F.buttonEx=()=>sv(420,170,`
+  <g transform="translate(80,84)"><circle r="56" fill="#D6D6D8" stroke="#7A7A82" stroke-width="2.5"/>
+    <g transform="scale(1.3)">${F.btnDeco()}</g>
+    <text y="78" font-size="14" font-weight="800" text-anchor="middle">原扣 original</text></g>
+  <g transform="translate(208,84)"><text font-size="26" text-anchor="middle" y="8">↻ 转90°</text><text font-size="12" text-anchor="middle" y="28" fill="#7A6F5C">只转圈,不翻面</text></g>
+  <g transform="translate(338,84)"><circle r="56" fill="#D6D6D8" stroke="#3E9442" stroke-width="4"/>
+    <g transform="rotate(-90) scale(1.3)">${F.btnDeco()}</g>
+    <text y="78" font-size="14" font-weight="800" text-anchor="middle" fill="#3E9442">= 选项 E ✓</text></g>`,440);
+
+/* === 2025 Q8 玩具架 === */
+F.shelf=(animals)=>{
+  let s=animals.map((a,i)=>`<text x="${36+i*54}" y="44" font-size="36" text-anchor="middle">${a}</text>`).join('');
+  s+=`<rect x="4" y="52" width="160" height="10" rx="4" fill="#B07840"/><rect x="10" y="62" width="10" height="14" fill="#8E5E30"/><rect x="148" y="62" width="10" height="14" fill="#8E5E30"/>`;
+  return sv(168,80,s,180);
+};
+
+/* === 2025 Q11 锁与钥匙 === */
+F.holeShapes=`<rect x="-9" y="-30" width="18" height="16" fill="#2B2620"/>
+  <polygon points="0,-12 11,4 -11,4" fill="#2B2620"/>
+  <circle cy="14" r="10" fill="#2B2620"/>`;
+F.lock=()=>sv(150,170,`
+  <path d="M45 64 v-18 a30 30 0 0 1 60 0 v18" fill="none" stroke="#9AA0A8" stroke-width="13"/>
+  <rect x="20" y="60" width="110" height="100" rx="16" fill="#FFC53D" stroke="#E0A415" stroke-width="3"/>
+  <g transform="translate(75,116)">${F.holeShapes}</g>`,170);
+F.keyBit=(sh,i)=>{
+  const y=-26+i*19;
+  if(sh==='sq') return `<rect x="-34" y="${y}" width="17" height="16" fill="#FFC53D" stroke="#C8941A" stroke-width="2"/>`;
+  if(sh==='triU') return `<polygon points="-25.5,${y} -16,${y+16} -35,${y+16}" fill="#FFC53D" stroke="#C8941A" stroke-width="2"/>`;
+  if(sh==='triD') return `<polygon points="-35,${y} -16,${y} -25.5,${y+16}" fill="#FFC53D" stroke="#C8941A" stroke-width="2"/>`;
+  return `<circle cx="-25.5" cy="${y+8}" r="8.6" fill="#FFC53D" stroke="#C8941A" stroke-width="2"/>`;
+};
+F.key=(shapes)=>{
+  let bit=shapes.map((s,i)=>F.keyBit(s,i)).join('');
+  return sv(150,76,`<g transform="translate(48,38)">
+    <rect x="-18" y="-6" width="60" height="12" rx="4" fill="#FFC53D" stroke="#C8941A" stroke-width="2"/>
+    <circle cx="62" cy="0" r="24" fill="#FFC53D" stroke="#C8941A" stroke-width="2.5"/>
+    <circle cx="70" cy="-4" r="5" fill="#FFF7EA" stroke="#C8941A" stroke-width="2"/>
+    ${bit}</g>`,170);
+};
+F.KEYSETS={A:['sq','triD','sq'],B:['sq','triD','cir'],C:['cir','triU','sq'],D:['sq','triU','cir'],E:['triU','sq','cir']};
+F.keyEx=()=>sv(360,160,`
+  <g transform="translate(70,80)">${F.holeShapes.replace(/#2B2620/g,'#3A3328')}
+    <text y="62" font-size="13" font-weight="800" text-anchor="middle">锁孔 ■ ▲ ●</text></g>
+  <text x="160" y="86" font-size="26" text-anchor="middle">→</text>
+  <g transform="translate(258,80) scale(1.15)"><g transform="translate(26,0)">
+    <rect x="-18" y="-6" width="52" height="12" rx="4" fill="#FFC53D" stroke="#3E9442" stroke-width="2"/>
+    <circle cx="54" cy="0" r="20" fill="#FFC53D" stroke="#3E9442" stroke-width="2.5"/>
+    ${F.KEYSETS.D.map((s,i)=>F.keyBit(s,i)).join('')}</g>
+    <text y="62" font-size="13" font-weight="800" text-anchor="middle" fill="#3E9442">D 也是 ■ ▲ ● ✓</text></g>`,400);
+
+/* === 2025 Q12 天平称狗 === */
+F.scaleOne=(pups,kg)=>`
+  <text x="64" y="48" font-size="44" text-anchor="middle">🐕</text>
+  ${pups>=1?'<text x="116" y="50" font-size="28" text-anchor="middle">🐶</text>':''}
+  ${pups>=2?'<text x="146" y="50" font-size="28" text-anchor="middle">🐶</text>':''}
+  <rect x="14" y="56" width="160" height="16" rx="5" fill="#C2C8D0" stroke="#8A929C" stroke-width="2"/>
+  <rect x="58" y="72" width="72" height="26" rx="6" fill="#3A3F46"/>
+  <rect x="66" y="78" width="56" height="14" rx="3" fill="#B8F2B0"/>
+  <text x="94" y="90" font-size="12" font-weight="800" text-anchor="middle" fill="#1C4A1C">${kg} kg</text>`;
+F.scales=()=>sv(420,110,`<g>${F.scaleOne(1,14)}</g><g transform="translate(225,0)">${F.scaleOne(2,18)}</g>`,440);
+F.scalesEx=()=>sv(420,150,`
+  <text x="210" y="30" font-size="17" font-weight="800" text-anchor="middle">两次只差 1 只小狗:18 − 14 = 4 kg</text>
+  <text x="120" y="72" font-size="34" text-anchor="middle">🐶</text><text x="178" y="70" font-size="18" font-weight="800">= 4 kg</text>
+  <text x="92" y="120" font-size="40" text-anchor="middle">🐕</text>
+  <text x="262" y="116" font-size="18" font-weight="800">= 14 − 4 = 10 kg ✓</text>`,440);
+
+/* === 2025 Q21 瓢虫数独 === */
+F.ladybird=(n,sc)=>{
+  const dots={1:[[7,1]],2:[[-7,-3],[7,3]],3:[[-7,1],[7,-5],[7,5]],4:[[-7,-5],[-7,5],[7,-5],[7,5]]}[n]||[];
+  return `<g transform="scale(${sc||1})">
+    <path d="M-13 -14 a17 12 0 0 1 26 0" fill="none" stroke="#3A3328" stroke-width="2"/>
+    <line x1="-9" y1="-19" x2="-13" y2="-25" stroke="#3A3328" stroke-width="2"/><line x1="9" y1="-19" x2="13" y2="-25" stroke="#3A3328" stroke-width="2"/>
+    <line x1="-15" y1="-4" x2="-22" y2="-9" stroke="#3A3328" stroke-width="2"/><line x1="15" y1="-4" x2="22" y2="-9" stroke="#3A3328" stroke-width="2"/>
+    <line x1="-15" y1="6" x2="-22" y2="10" stroke="#3A3328" stroke-width="2"/><line x1="15" y1="6" x2="22" y2="10" stroke="#3A3328" stroke-width="2"/>
+    <ellipse rx="16" ry="18" fill="#F08080" stroke="#3A3328" stroke-width="2.5"/>
+    <line x1="0" y1="-18" x2="0" y2="18" stroke="#3A3328" stroke-width="2"/>
+    ${dots.map(d=>`<circle cx="${d[0]}" cy="${d[1]}" r="3.6" fill="#1E1B16"/>`).join('')}
+  </g>`;
+};
+F.lbRefRow=()=>sv(280,60,[1,2,3,4].map((n,i)=>`<g transform="translate(${40+i*66},32)">${F.ladybird(n,1.05)}</g>`).join(''),300);
+F.LBSOL=[[4,2,3,1],[1,3,4,2],[3,1,2,4],[2,4,1,3]];
+F.LBGIVEN={'2,3':4,'3,1':3,'4,2':4,'4,3':1};
+F.lbGrid=(sol)=>{
+  const c=58; let s='';
+  for(let r=1;r<=4;r++)for(let col=1;col<=4;col++){
+    const x=(col-1)*c,y=(r-1)*c, gv=F.LBGIVEN[r+','+col];
+    s+=`<rect x="${x}" y="${y}" width="${c}" height="${c}" fill="${sol&&r===1?'#FFF1D2':'#fff'}" stroke="#3A3328" stroke-width="2.5"/>`;
+    if(gv) s+=`<g transform="translate(${x+c/2},${y+c/2+2})">${F.ladybird(gv,.92)}</g>`;
+    else if(sol) s+=`<g transform="translate(${x+c/2},${y+c/2+2})" opacity=".92">${F.ladybird(F.LBSOL[r-1][col-1],.92)}</g>
+      <circle cx="${x+c-11}" cy="${y+12}" r="8" fill="#FFC53D"/><text x="${x+c-11}" y="${y+16}" font-size="11" font-weight="800" text-anchor="middle">${F.LBSOL[r-1][col-1]}</text>`;
+  }
+  return sv(4*c+4,4*c+4,`<g transform="translate(2,2)">${s}</g>`,250);
+};
+F.lbRow=(seq)=>{
+  const c=52;
+  return sv(4*c+4,c+4,`<g transform="translate(2,2)">`+seq.map((n,i)=>
+    `<rect x="${i*c}" y="0" width="${c}" height="${c}" fill="#fff" stroke="#3A3328" stroke-width="2.5"/>
+     <g transform="translate(${i*c+c/2},${c/2+2})">${F.ladybird(n,.84)}</g>`).join('')+`</g>`,220);
+};
+
+/* ============ 2024 卷图形 ============ */
+
+/* === 2024 Q1 三形套数字 === */
+F.vennNums=[[3,168,44,'c'],[1,118,64,'c'],[10,140,108,'cs'],[8,86,128,'s'],[4,196,120,'ct'],[5,160,142,'cst'],[2,150,172,'st'],[6,88,190,'s'],[7,168,196,'st'],[9,232,208,'t']];
+F.venn=(ex)=>{
+  let s=`<circle cx="150" cy="82" r="64" fill="none" stroke="${ex?'#2D4FC0':'#3A3328'}" stroke-width="2.5"/>
+    <rect x="66" y="98" width="124" height="118" fill="none" stroke="${ex?'#3E9442':'#3A3328'}" stroke-width="2.5"/>
+    <polygon points="186,90 104,238 268,238" fill="none" stroke="${ex?'#E0526F':'#3A3328'}" stroke-width="2.5"/>`;
+  F.vennNums.forEach(([n,x,y,z])=>{
+    const star=z==='cst';
+    if(ex&&star) s+=`<circle cx="${x}" cy="${y-6}" r="15" fill="#FFE3A0" stroke="#E0A415" stroke-width="2.5"/>`;
+    s+=`<text x="${x}" y="${y}" font-size="17" font-weight="${star?'800':'600'}" text-anchor="middle" ${ex&&!star?'opacity=".35"':''}>${n}</text>`;
+  });
+  if(ex) s+=`<text x="150" y="262" font-size="14" font-weight="800" text-anchor="middle" fill="#3E9442">只有 5 同时在 ⭕ + ⬜ + 🔺 里 ✓</text>`;
+  return sv(300,ex?270:250,s,320);
+};
+
+/* === 2024 Q2 玻璃叠加 === */
+F.gPent=(cx,cy,r)=>{let p='';for(let i=0;i<5;i++){const a=-Math.PI/2+i*2*Math.PI/5;p+=`${(cx+r*Math.cos(a)).toFixed(1)},${(cy+r*Math.sin(a)).toFixed(1)} `;}return `<polygon points="${p}" fill="none" stroke="#E8A040" stroke-width="2.5"/>`;};
+F.gTri=(cx,cy,s2,up)=>up?`<polygon points="${cx},${cy-s2} ${cx+s2},${cy+s2*0.8} ${cx-s2},${cy+s2*0.8}" fill="none" stroke="#E8A040" stroke-width="2.5"/>`
+  :`<polygon points="${cx-s2},${cy-s2*0.8} ${cx+s2},${cy-s2*0.8} ${cx},${cy+s2}" fill="none" stroke="#E8A040" stroke-width="2.5"/>`;
+F.gTrap=(cx,cy,flip)=>flip?`<polygon points="${cx-20},${cy-13} ${cx+20},${cy-13} ${cx+10},${cy+13} ${cx-10},${cy+13}" fill="none" stroke="#E8A040" stroke-width="2.5"/>`
+  :`<polygon points="${cx-10},${cy-13} ${cx+10},${cy-13} ${cx+20},${cy+13} ${cx-20},${cy+13}" fill="none" stroke="#E8A040" stroke-width="2.5"/>`;
+F.gFrame=(inner,w)=>`<rect x="2" y="2" width="${w-4}" height="${w-4}" fill="#fff" stroke="#E8A040" stroke-width="3"/>${inner}`;
+F.glassPair=()=>{
+  const p1=F.gFrame(F.gTri(140,32,17,true)+`<circle cx="85" cy="85" r="24" fill="none" stroke="#E8A040" stroke-width="2.5"/>`+F.gTri(30,140,17,false),170);
+  const p2=F.gFrame(F.gPent(32,34,19)+F.gTrap(85,84,false)+F.gPent(140,140,19),170);
+  return sv(366,176,`<g transform="translate(2,3)">${p1}</g><g transform="translate(194,3)">${p2}</g>`,400);
+};
+F.overlay=(v)=>{
+  const mir=(v==='D'||v==='E');
+  let s='';
+  s+= mir? F.gTri(32,32,17,true)+F.gPent(140,34,19) : F.gPent(32,34,19)+F.gTri(140,32,17,v!=='C');
+  s+= `<circle cx="85" cy="85" r="24" fill="none" stroke="#E8A040" stroke-width="2.5"/>`+F.gTrap(85,84,(v==='B'||v==='D'));
+  s+= mir? F.gPent(32,140,19)+F.gTri(140,140,17,false) : F.gTri(30,140,17,false)+F.gPent(140,140,19);
+  return sv(170,170,F.gFrame(s,170),150);
+};
+F.glassEx=()=>sv(420,200,`
+  <g transform="translate(4,8) scale(.62)">${F.gFrame(F.gTri(140,32,17,true)+'<circle cx="85" cy="85" r="24" fill="none" stroke="#E8A040" stroke-width="2.5"/>'+F.gTri(30,140,17,false),170)}</g>
+  <text x="124" y="66" font-size="22" font-weight="800">+</text>
+  <g transform="translate(142,8) scale(.62)">${F.gFrame(F.gPent(32,34,19)+F.gTrap(85,84,false)+F.gPent(140,140,19),170)}</g>
+  <text x="262" y="66" font-size="22" font-weight="800">=</text>
+  <g transform="translate(282,8) scale(.74)">${F.overlay('A').replace('<svg','<g').replace(/<\/svg>/,'</g>').replace(/viewBox[^>]*>/,'>')}</g>
+  <text x="210" y="160" font-size="14.5" font-weight="800" text-anchor="middle" fill="#3E9442">不转动 = 直接叠起来:梯形上窄下宽,套在圆里 → A ✓</text>
+  <text x="210" y="184" font-size="13" text-anchor="middle" fill="#7A6F5C">B 梯形翻倒了 · C 右上角三角朝下 · D/E 四个角对调了</text>`,440);
+
+/* === 2024 Q3 四个怪形(每形恰含3点) === */
+F.blobPath=(cx,cy,rx,ry,seed,rot)=>{
+  const n=9, pts=[];
+  for(let i=0;i<n;i++){ const a=rot+(i/n)*Math.PI*2;
+    const w=0.74+0.38*((Math.sin(seed*97.3+i*13.7)*43758.5)%1+1)%1;
+    pts.push([cx+Math.cos(a)*rx*w, cy+Math.sin(a)*ry*w]); }
+  const mid=(p,q)=>((p[0]+q[0])/2).toFixed(1)+' '+((p[1]+q[1])/2).toFixed(1);
+  let d='M'+mid(pts[0],pts[1]);
+  for(let i=1;i<=n;i++){ const a=pts[i%n], b=pts[(i+1)%n];
+    d+=` Q ${a[0].toFixed(1)} ${a[1].toFixed(1)} ${mid(a,b)}`; }
+  return d+' Z';
+};
+F.BLOBS=[
+  {cx:100,cy:78, rx:95,ry:62, seed:3, rot:0.4, col:'#4A5BD0', dots:[[62,62],[98,112],[140,58]]},
+  {cx:272,cy:84, rx:92,ry:60, seed:7, rot:1.2, col:'#E0526F', dots:[[238,66],[272,114],[310,62]]},
+  {cx:118,cy:182,rx:95,ry:58, seed:11,rot:2.1, col:'#3E9442', dots:[[80,170],[118,214],[156,166]]},
+  {cx:262,cy:180,rx:96,ry:60, seed:17,rot:5.0, col:'#C8941A', dots:[[228,168],[262,216],[300,170]]}
+];
+F.blobs=(ex)=>{
+  let s='';
+  F.BLOBS.forEach((b,i)=>{ const d=F.blobPath(b.cx,b.cy,b.rx,b.ry,b.seed,b.rot);
+    const c= ex? b.col : '#2B3A55';
+    s+=`<path d="${d}" fill="${ex?b.col:'none'}" fill-opacity="${ex?'.10':'0'}" stroke="${c}" stroke-width="6.5"/>
+        <path d="${d}" fill="none" stroke="#fff" stroke-width="3"/>
+        <path d="${d}" fill="none" stroke="${c}" stroke-width="1.2"/>`;
+    if(ex) s+=`<circle cx="${b.cx}" cy="${b.cy<130?b.cy-46:b.cy+46}" r="0"/>`; });
+  F.BLOBS.forEach(b=>{ b.dots.forEach(d=> s+=`<circle cx="${d[0]}" cy="${d[1]}" r="6" fill="#1E1B16"/>`); });
+  if(ex) F.BLOBS.forEach((b,i)=> s+=`<circle cx="${b.cx}" cy="${b.cy}" r="14" fill="#fff" stroke="${b.col}" stroke-width="3"/><text x="${b.cx}" y="${b.cy+6}" font-size="15" font-weight="800" text-anchor="middle" fill="${b.col}">3</text>`);
+  return sv(380,262,s,420);
+};
+
+/* === 2024 Q4 旋转图 === */
+F.rShape=(t,x,y)=>{
+  const k=13;
+  if(t==='cir') return `<circle cx="${x}" cy="${y}" r="${k}" fill="none" stroke="#3A3328" stroke-width="2.5"/>`;
+  const P={triR:[[x-k,y-k],[x+k,y],[x-k,y+k]], triL:[[x+k,y-k],[x-k,y],[x+k,y+k]],
+           triU:[[x,y-k],[x+k,y+k],[x-k,y+k]], triD:[[x-k,y-k],[x+k,y-k],[x,y+k]]}[t];
+  return `<polygon points="${P.map(p=>p.join(',')).join(' ')}" fill="none" stroke="#3A3328" stroke-width="2.5"/>`;
+};
+F.rBox=(items)=>`<rect x="2" y="2" width="106" height="106" rx="4" fill="#fff" stroke="#3A3328" stroke-width="2.5"/>`+items.map(it=>F.rShape(it[0],it[1],it[2])).join('');
+F.ROT={ orig:[['triR',32,32],['cir',78,32],['triD',58,84]],
+        mid:[['triD',78,34],['triL',32,60],['cir',78,80]],
+        A:[['cir',32,30],['triL',78,30],['triD',32,80]],
+        B:[['cir',32,30],['triR',78,30],['triU',32,82]],
+        C:[['triU',38,32],['cir',36,82],['triL',78,82]],
+        D:[['triD',36,30],['cir',36,82],['triL',74,82]],
+        E:[['triU',36,32],['cir',36,82],['triR',78,82]] };
+F.rotQ=()=>sv(420,124,`
+  <g transform="translate(2,6)">${F.rBox(F.ROT.orig)}</g>
+  <path d="M126 30 q18 -16 34 0" fill="none" stroke="#3A3328" stroke-width="2.5" marker-end="url(#arr)"/>
+  <defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#3A3328"/></marker></defs>
+  <g transform="translate(168,6)">${F.rBox(F.ROT.mid)}</g>
+  <path d="M292 30 q18 -16 34 0" fill="none" stroke="#3A3328" stroke-width="2.5" marker-end="url(#arr)"/>
+  <g transform="translate(334,6)"><rect x="2" y="2" width="106" height="106" rx="4" fill="#fff" stroke="#3A3328" stroke-width="2.5"/><text x="55" y="74" font-size="46" font-weight="800" text-anchor="middle">?</text></g>`,460);
+F.rotEx=()=>sv(420,170,`
+  <g transform="translate(40,16)">${F.rBox(F.ROT.orig)}</g>
+  <g transform="translate(160,46)"><text font-size="17" font-weight="800">转 ¼ 圈 × 2</text><text y="24" font-size="17" font-weight="800">= 转半圈 ↺180°</text><text y="50" font-size="13" fill="#7A6F5C">上下颠倒、左右互换</text></g>
+  <g transform="translate(300,16)">${F.rBox(F.ROT.C)}</g>
+  <text x="355" y="148" font-size="15" font-weight="800" text-anchor="middle" fill="#3E9442">= 选项 C ✓</text>`,440);
+
+/* === 2024 Q5 脸谱 === */
+F.face=(p)=>{
+  let s=`<circle r="22" fill="#fff" stroke="#3A3328" stroke-width="2.6"/>`;
+  if(p.ears) s=`<circle cx="-24" cy="2" r="6" fill="#fff" stroke="#3A3328" stroke-width="2.4"/><circle cx="24" cy="2" r="6" fill="#fff" stroke="#3A3328" stroke-width="2.4"/>`+s;
+  if(p.top==='hat') s+=`<path d="M-17 -14 Q-14 -31 4 -29 Q19 -27 17 -14 Z" fill="#fff" stroke="#3A3328" stroke-width="2.6"/><line x1="-26" y1="-13" x2="26" y2="-13" stroke="#3A3328" stroke-width="3"/>`;
+  else s+=`<path d="M-14 -18 l-6 -10 M-6 -21 l-3 -12 M3 -22 l1 -12 M11 -20 l6 -11 M17 -16 l8 -8" stroke="#3A3328" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
+  if(p.eyes==='gl') s+=`<circle cx="-9" cy="-2" r="6.5" fill="none" stroke="#3A3328" stroke-width="2.2"/><circle cx="9" cy="-2" r="6.5" fill="none" stroke="#3A3328" stroke-width="2.2"/><line x1="-2.5" y1="-2" x2="2.5" y2="-2" stroke="#3A3328" stroke-width="2.2"/>`;
+  else s+=`<circle cx="-8" cy="-3" r="2.8" fill="#3A3328"/><circle cx="8" cy="-3" r="2.8" fill="#3A3328"/>`;
+  if(p.mouth==='sm') s+=`<path d="M-9 10 Q0 17 9 10" fill="none" stroke="#3A3328" stroke-width="2.4" stroke-linecap="round"/>`;
+  else s+=`<ellipse cy="11" rx="5.5" ry="4.2" fill="none" stroke="#3A3328" stroke-width="2.4"/>`;
+  return s;
+};
+F.FACES15=[
+  {top:'hat',ears:0,eyes:'dot',mouth:'sm',pair:1},{top:'hair',ears:1,eyes:'gl',mouth:'sm',pair:2},{top:'hat',ears:1,eyes:'gl',mouth:'sm',pair:3},{top:'hair',ears:0,eyes:'gl',mouth:'sm',pair:4},{top:'hat',ears:0,eyes:'gl',mouth:'ov',pair:5},
+  {top:'hair',ears:1,eyes:'dot',mouth:'ov',pair:6},{top:'hat',ears:0,eyes:'gl',mouth:'ov',pair:5},{top:'hair',ears:1,eyes:'gl',mouth:'sm',pair:2},{top:'hat',ears:1,eyes:'dot',mouth:'sm',pair:0},{top:'hat',ears:0,eyes:'gl',mouth:'sm',pair:7},
+  {top:'hat',ears:0,eyes:'gl',mouth:'sm',pair:7},{top:'hat',ears:0,eyes:'dot',mouth:'sm',pair:1},{top:'hat',ears:1,eyes:'gl',mouth:'sm',pair:3},{top:'hair',ears:0,eyes:'gl',mouth:'sm',pair:4},{top:'hair',ears:1,eyes:'dot',mouth:'ov',pair:6}
+];
+F.PAIRCOL=['#FFC53D','#9FCB5A','#7CC6C0','#B08CE0','#F0A0A8','#E8A040','#8AB6E8','#D49AC0'];
+F.faceGrid=(ex)=>{
+  let s='';
+  F.FACES15.forEach((p,i)=>{ const x=46+(i%5)*70, y=44+Math.floor(i/5)*70;
+    if(ex){ if(p.pair===0) s+=`<circle cx="${x}" cy="${y}" r="32" fill="#FFF1C2" stroke="#E0A415" stroke-width="3.5"/>`;
+      else s+=`<circle cx="${x}" cy="${y}" r="30" fill="none" stroke="${F.PAIRCOL[p.pair-1]}" stroke-width="3" opacity=".75"/>`; }
+    s+=`<g transform="translate(${x},${y})" ${ex&&p.pair!==0?'opacity=".55"':''}>${F.face(p)}</g>`;
+    if(ex&&p.pair===0) s+=`<text x="${x}" y="${y-36}" font-size="17" text-anchor="middle">⭐</text>`;
+  });
+  if(ex) s+=`<text x="198" y="232" font-size="14" font-weight="800" text-anchor="middle" fill="#3E9442">同色圈两两配对 · 金色这张找不到同伴 → 只出现一次</text>`;
+  return sv(396,ex?244:228,s,430);
+};
+F.faceOne=(p)=>sv(64,64,`<g transform="translate(32,33)">${F.face(p)}</g>`,86);
+F.FACEOPTS={A:{top:'hair',ears:1,eyes:'dot',mouth:'ov'},B:{top:'hat',ears:0,eyes:'gl',mouth:'sm'},C:{top:'hat',ears:1,eyes:'dot',mouth:'sm'},D:{top:'hair',ears:0,eyes:'gl',mouth:'sm'},E:{top:'hat',ears:1,eyes:'gl',mouth:'sm'}};
+
+/* === 2024 Q6 三角瓷砖 === */
+F.triBig=(ex)=>{
+  const u=50, h=u*0.866, cx=2*u+6;
+  const P=(r,k)=>[cx+(k-r/2)*u, 6+r*h];
+  const white=['1U1','2U1','2D1','3D1','3U2','3D2'];
+  let s='', n=0;
+  for(let r=0;r<4;r++){
+    for(let i=0;i<=r;i++){ const a=P(r,i),b=P(r+1,i),c=P(r+1,i+1), id=r+'U'+i, w=white.includes(id);
+      s+=`<polygon points="${a} ${b} ${c}" fill="${w?'#fff':'#F08A24'}" stroke="#3A3328" stroke-width="2.4"/>`;
+      if(w&&ex){ n++; const mx=(a[0]+b[0]+c[0])/3, my=(a[1]+b[1]+c[1])/3+5; s+=`<text x="${mx}" y="${my}" font-size="17" font-weight="800" text-anchor="middle" fill="#C96E12">${n}</text>`; } }
+    for(let i=0;i<r;i++){ const a=P(r,i),b=P(r,i+1),c=P(r+1,i+1), id=r+'D'+i, w=white.includes(id);
+      s+=`<polygon points="${a} ${b} ${c}" fill="${w?'#fff':'#F08A24'}" stroke="#3A3328" stroke-width="2.4"/>`;
+      if(w&&ex){ n++; const mx=(a[0]+b[0]+c[0])/3, my=(a[1]+b[1]+c[1])/3+2; s+=`<text x="${mx}" y="${my}" font-size="17" font-weight="800" text-anchor="middle" fill="#C96E12">${n}</text>`; } }
+  }
+  if(ex) s+=`<text x="${cx}" y="${4*h+34}" font-size="15" font-weight="800" text-anchor="middle" fill="#3E9442">一共 1+3+5+7=16 块 · 已铺 10 块 → 缺 6 块</text>`;
+  return sv(4*u+12, 4*h+(ex?44:14), s, 320);
+};
+
+/* === 2024 Q7 丝带数字 === */
+F.RIB=[
+  {col:'#B08CE0', pts:[[0,0.5],[1,0.5],[1,5.5]], len:6, name:'1'},
+  {col:'#C7E05A', pts:[[0,2.5],[2,2.5],[2,3.5],[0,3.5],[0,5.5],[2,5.5]], len:9, name:'2'},
+  {col:'#7CC6C0', pts:[[2,1.5],[0,1.5],[0,3.5],[2,3.5],[2,5.5],[0,5.5]], len:10, name:'5'},
+  {col:'#F0A0A8', pts:[[2,0.5],[0,0.5],[0,5.5],[2,5.5],[2,3.5],[1,3.5]], len:11, name:'6'}
+];
+F.ribbons=(ex)=>{
+  const c=27, ox=[0.5,3.6,6.7,9.8];
+  let g='';
+  for(let i=0;i<=13;i++) g+=`<line x1="${i*c}" y1="0" x2="${i*c}" y2="${6.5*c}"/>`;
+  for(let j=0;j<=6;j++) g+=`<line x1="0" y1="${j*c}" x2="${13*c}" y2="${j*c}"/>`;
+  let s=`<g stroke="#CFC4AC" stroke-width="1">${g}</g>`;
+  F.RIB.forEach((d,di)=>{
+    const pp=d.pts.map(p=>`${((p[0]+ox[di])*c).toFixed(1)},${(p[1]*c).toFixed(1)}`).join(' ');
+    s+=`<polyline points="${pp}" fill="none" stroke="#3A3328" stroke-width="${c*0.82}" stroke-linejoin="miter" stroke-linecap="butt"/>
+        <polyline points="${pp}" fill="none" stroke="${d.col}" stroke-width="${c*0.66}" stroke-linejoin="miter" stroke-linecap="butt"/>`;
+    if(ex){
+      let n=0;
+      for(let k=0;k<d.pts.length-1;k++){ const a=d.pts[k],b=d.pts[k+1];
+        const steps=Math.abs(b[0]-a[0])+Math.abs(b[1]-a[1]);
+        for(let t=0;t<steps;t++){ n++;
+          const fx=a[0]+(b[0]-a[0])*(t+0.5)/steps, fy=a[1]+(b[1]-a[1])*(t+0.5)/steps;
+          s+=`<text x="${((fx+ox[di])*c).toFixed(1)}" y="${(fy*c+4).toFixed(1)}" font-size="11" font-weight="800" text-anchor="middle" fill="#3A3328">${n}</text>`; } }
+      s+=`<text x="${(ox[di]+1)*c}" y="${6.5*c+22}" font-size="15" font-weight="800" text-anchor="middle" fill="${d.len===11?'#3E9442':'#7A6F5C'}">${d.name} = ${d.len} 格${d.len===11?' ✓最长':''}</text>`;
+    }
+  });
+  return sv(13*c, 6.5*c+(ex?32:6), s, 430);
+};
+
+/* === 2024 Q8 印章猫 === */
+F.cat=(tail,earL,patch,sc)=>{
+  const ts=tail==='R'?1:-1, es=earL==='R'?1:-1, ps=patch==='R'?1:-1;
+  return `<g transform="scale(${sc||1})">
+    <path d="M ${ts*10} 26 Q ${ts*40} 30 ${ts*42} 4 Q ${ts*43} -12 ${ts*30} -11 Q ${ts*20} -10 ${ts*21} -1 Q ${ts*22} 7 ${ts*30} 5"
+      fill="none" stroke="#B5722F" stroke-width="7.5" stroke-linecap="round"/>
+    <path d="M0,-16 C15,-12 19,12 13,28 Q0,37 -13,28 C-19,12 -15,-12 0,-16 Z" fill="#B5722F"/>
+    <ellipse cx="${ps*7}" cy="17" rx="8.5" ry="11.5" fill="#E0C9A8"/>
+    <polygon points="-16,-34 -5,-26 -17,-22" fill="#B5722F"/>
+    <polygon points="16,-34 5,-26 17,-22" fill="#B5722F"/>
+    <polygon points="${es*13.5},-31.5 ${es*7},-26.5 ${es*14.5},-23.5" fill="#E0C9A8"/>
+    <circle cy="-16" r="14.5" fill="#B5722F"/>
+    <path d="M-14 -18 l-10 -4 M-14 -14 l-11 0 M-14 -10 l-10 3 M14 -18 l10 -4 M14 -14 l11 0 M14 -10 l10 3" stroke="#B5722F" stroke-width="2" stroke-linecap="round"/>
+  </g>`;
+};
+F.stampFig=()=>sv(300,180,`
+  <polygon points="40,30 218,18 226,140 48,154" fill="#fff" stroke="#B5722F" stroke-width="4"/>
+  <polygon points="218,18 232,26 240,146 226,140" fill="#C99A66" stroke="#B5722F" stroke-width="2"/>
+  <ellipse cx="258" cy="92" rx="22" ry="28" fill="#C99A66" stroke="#9A6B36" stroke-width="3"/>
+  <ellipse cx="258" cy="92" rx="12" ry="16" fill="none" stroke="#9A6B36" stroke-width="2"/>
+  <g transform="translate(132,88) scale(1.18)">${F.cat('L','L','R',1)}</g>`,330);
+F.catOpt=(v)=>{
+  const V={A:['L','L','R'],B:['L','R','R'],C:['R','L','L'],D:['R','L','R'],E:['R','R','L']}[v];
+  return sv(110,110,`<g transform="translate(55,58)">${F.cat(V[0],V[1],V[2],1.05)}</g>`,130);
+};
+F.catEx=()=>sv(420,180,`
+  <g transform="translate(90,86) scale(1.2)">${F.cat('L','L','R',1)}</g>
+  <text x="90" y="170" font-size="13.5" font-weight="800" text-anchor="middle">印章上 on stamp</text>
+  <g transform="translate(210,80)"><text font-size="30" text-anchor="middle">🪞</text><text y="26" font-size="13" font-weight="800" text-anchor="middle">盖下去=照镜子</text><text y="44" font-size="12" text-anchor="middle" fill="#7A6F5C">左右全部换边</text></g>
+  <g transform="translate(330,86) scale(1.2)">${F.cat('R','R','L',1)}</g>
+  <text x="330" y="170" font-size="13.5" font-weight="800" text-anchor="middle" fill="#3E9442">印出来 = E ✓</text>`,440);
+
+/* === 2024 Q9 积木 === */
+F.CUBESETS={
+  A:[[0,0,0],[1,0,0],[2,0,0],[0,1,0],[1,1,0],[2,1,0],[0,0,1],[2,1,1]],
+  B:[[0,0,0],[1,0,0],[2,0,0],[0,1,0],[1,1,0],[2,1,0],[0,2,0],[1,2,0]],
+  C:[[0,0,0],[1,0,0],[0,1,0],[1,1,0],[0,0,1],[1,0,1],[0,1,1],[1,1,1]],
+  D:[[0,0,0],[1,0,0],[0,1,0],[1,1,0],[2,0,0],[0,0,1],[1,0,1],[0,1,1]],
+  E:[[0,0,0],[1,0,0],[0,0,1],[1,0,1],[0,0,2],[1,0,2],[0,0,3],[1,0,3]]
+};
+F.cubeFig=(name,checker)=>{
+  const set=F.CUBESETS[name], w=19, hh=9.5, dz=20;
+  const pts=set.map(([x,y,z])=>({x,y,z,px:(x-y)*w,py:(x+y)*hh-z*dz}));
+  const xs=pts.flatMap(p=>[p.px-w,p.px+w]), ys=pts.flatMap(p=>[p.py-2*hh-dz,p.py]);
+  const minx=Math.min(...xs), maxx=Math.max(...xs), miny=Math.min(...ys), maxy=Math.max(...ys);
+  pts.sort((a,b)=>(a.x+a.y)-(b.x+b.y)||a.z-b.z);
+  let s='';
+  pts.forEach(p=>{
+    const X=p.px-minx+6, Y=p.py-miny+6;
+    let ct='#FDF6E8', cl='#E8D5AE', cr='#CBB083';
+    if(checker){ const dk=(p.x+p.y+p.z)%2===0; ct=dk?'#9A7C52':'#FBEFD6'; cl=dk?'#86683F':'#EEDCB4'; cr=dk?'#705430':'#DBC493'; }
+    s+=`<g stroke="#3A3328" stroke-width="1.6" stroke-linejoin="round">
+      <polygon points="${X},${Y} ${X+w},${Y-hh} ${X+w},${Y-hh-dz} ${X},${Y-dz}" fill="${cr}"/>
+      <polygon points="${X},${Y} ${X-w},${Y-hh} ${X-w},${Y-hh-dz} ${X},${Y-dz}" fill="${cl}"/>
+      <polygon points="${X},${Y-dz} ${X+w},${Y-hh-dz} ${X},${Y-2*hh-dz} ${X-w},${Y-hh-dz}" fill="${ct}"/></g>`;
+  });
+  return sv(maxx-minx+12, maxy-miny+12, s, Math.min(180,(maxx-minx)+12));
+};
+F.blocksFig=()=>{
+  const dom=(ox)=>{ const w=17,hh=8.5,dz=18; let s='';
+    [[0,0,0],[1,0,0]].forEach(([x,y,z])=>{ const X=ox+(x-y)*w+w+2, Y=46+(x+y)*hh-z*dz;
+      s+=`<g stroke="#3A3328" stroke-width="1.6" stroke-linejoin="round">
+        <polygon points="${X},${Y} ${X+w},${Y-hh} ${X+w},${Y-hh-dz} ${X},${Y-dz}" fill="#CBB083"/>
+        <polygon points="${X},${Y} ${X-w},${Y-hh} ${X-w},${Y-hh-dz} ${X},${Y-dz}" fill="#E8D5AE"/>
+        <polygon points="${X},${Y-dz} ${X+w},${Y-hh-dz} ${X},${Y-2*hh-dz} ${X-w},${Y-hh-dz}" fill="#FDF6E8"/></g>`; });
+    return s; };
+  return sv(330,62,[0,84,168,252].map(dom).join(''),340);
+};
+F.cubeEx=()=>{
+  const fig=F.cubeFig('D',true);
+  return sv(430,200,`
+  <g transform="translate(20,30)"><g transform="scale(1.25)">${fig.replace(/<svg[^>]*>/,'').replace('</svg>','')}</g></g>
+  <g transform="translate(190,40)">
+    <text font-size="15" font-weight="800">把方块深浅相间染色:</text>
+    <text y="26" font-size="14.5">每块积木(2连方块)必须盖住</text>
+    <text y="46" font-size="14.5">1 个深色 + 1 个浅色。</text>
+    <text y="78" font-size="15" font-weight="800" fill="#C96E12">D 有 5 个深色、3 个浅色,</text>
+    <text y="100" font-size="15" font-weight="800" fill="#C96E12">不成对 → 怎么拼都拼不出!</text>
+    <text y="132" font-size="13.5" fill="#7A6F5C">A、B、C、E 都能正好分成 4 对 ✓</text>
+  </g>`,450);
+};
+
+/* === 2024 Q10 篮子与散落玩具 === */
+F.BASKETS={A:['🐸','🦆','🦆','🐞'],B:['🐞','🐸','🐞','🐮'],C:['🦆','🐮','🐸','🐮'],D:['🐞','🐞','🐮','🦆'],E:['🐸','🦆','🐮','🦆']};
+F.basket=(letter)=>{
+  const t=F.BASKETS[letter];
+  return sv(120,116,`
+    <text x="38" y="32" font-size="26" text-anchor="middle">${t[0]}</text><text x="82" y="32" font-size="26" text-anchor="middle">${t[1]}</text>
+    <text x="38" y="62" font-size="26" text-anchor="middle">${t[2]}</text><text x="82" y="62" font-size="26" text-anchor="middle">${t[3]}</text>
+    <path d="M16 70 L104 70 L94 108 L26 108 Z" fill="#D8A55C" stroke="#9A6B36" stroke-width="2.5"/>
+    <path d="M30 70 L38 108 M52 70 L56 108 M74 70 L72 108 M94 70 L88 108 M20 84 L98 84 M24 97 L95 97" stroke="#B5824A" stroke-width="1.6"/>
+    <rect x="13" y="64" width="94" height="9" rx="4.5" fill="#C8924C" stroke="#9A6B36" stroke-width="2"/>`,128);
+};
+F.PILE=[['🐞',120,40],['🦆',170,30],['🐞',225,42],['🐮',285,30],['🦆',330,45],['🦆',95,85],['🐮',255,85],['🦆',190,95],['🐸',70,130],['🐮',150,130],['🐸',235,128],['🦆',115,165],['🐞',195,165],['🦆',290,150],['🐮',255,185],['🐸',330,180]];
+F.pile=(ex)=>{
+  let s=F.PILE.map(p=>`<text x="${p[1]}" y="${p[2]}" font-size="28" text-anchor="middle">${p[0]}</text>`).join('');
+  if(ex){
+    const C={'🦆':'#E0A415','🐞':'#E0526F','🐮':'#4A5BD0','🐸':'#3E9442'};
+    s=F.PILE.map(p=>`<circle cx="${p[1]}" cy="${p[2]-9}" r="17" fill="none" stroke="${C[p[0]]}" stroke-width="2.5" opacity=".7"/><text x="${p[1]}" y="${p[2]}" font-size="28" text-anchor="middle">${p[0]}</text>`).join('');
+    s+=`<text x="200" y="216" font-size="14.5" font-weight="800" text-anchor="middle" fill="#3E9442">地上:🐸3 🦆6 🐞3 🐮4 · 五篮总:🐸4 🦆6 🐞5 🐮5 → 差 🐸1 🐞2 🐮1 = B 篮 ✓</text>`;
+  }
+  return sv(400,ex?226:200,s,430);
+};
+
+/* === 2024 Q11 图形算式 === */
+F.shapeEq=(ex)=>{
+  const c=52, ox=44, oy=34;
+  const cell=(x,y,t,total)=>`<rect x="${ox+x*c}" y="${oy+y*c}" width="${c-4}" height="${c-4}" rx="7" fill="${total?'#5BC8D8':'#fff'}" stroke="${total?'#2E96A6':'#C9BFA8'}" stroke-width="2.4"/>
+    <text x="${ox+x*c+(c-4)/2}" y="${oy+y*c+(c-4)/2+9}" font-size="${total?22:26}" font-weight="800" text-anchor="middle" ${total?'fill="#0E3A42"':''}>${t}</text>`;
+  let s=`<path d="M${ox+6} ${oy-12} h${3*c-8}" stroke="#3A3328" stroke-width="2.4" marker-end="url(#arr2)"/>
+    <text x="${ox-16}" y="${oy-6}" font-size="18" font-weight="800">+</text>
+    <path d="M${ox-12} ${oy+6} v${2*c-8}" stroke="#3A3328" stroke-width="2.4" marker-end="url(#arr2)"/>
+    <defs><marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#3A3328"/></marker></defs>`;
+  s+=cell(0,0,'😊')+cell(1,0,'💜')+cell(2,0,'💜')+cell(3,0,'9',1);
+  s+=cell(0,1,'😊')+cell(1,1,'⭐')+cell(2,1,'💜')+cell(3,1,'10',1);
+  s+=cell(0,2,'10',1)+cell(1,2,'5',1)+cell(2,2,'4',1);
+  if(ex) s+=`<text x="${ox+3.9*c}" y="${oy+2*c+28}" font-size="0"> </text>
+    <text x="${ox}" y="${oy+3*c+26}" font-size="15.5" font-weight="800" fill="#3E9442">① 第1列:😊+😊=10 → 😊=5</text>
+    <text x="${ox}" y="${oy+3*c+50}" font-size="15.5" font-weight="800" fill="#3E9442">② 第1行:5+💜+💜=9 → 💜=2</text>
+    <text x="${ox}" y="${oy+3*c+74}" font-size="15.5" font-weight="800" fill="#3E9442">③ 第2行:5+⭐+2=10 → ⭐=3 ✓</text>`;
+  return sv(290,oy+3*c+(ex?86:14),s,310);
+};
+
+/* === 2024 Q12 迷宫 === */
+F.MAZE={
+  sums:[['3 + 4','1 + 6','4 + 2','4 + 3'],['2 + 5','2 + 5','4 + 3','1 + 6'],['5 + 2','6 + 0','7 + 0','6 + 1'],['4 + 3','2 + 3','0 + 7','5 + 2']],
+  blocked:[[1,3],[3,2],[4,2]],
+  wallsV:[[3,2]], wallsH:[[2,1],[2,4]],
+  openL:[1,3], openR:[2,4], openT:[3], openB:[2],
+  path:[[1,1],[2,1],[2,2],[2,3],[3,3],[4,3],[4,4]]
+};
+F.maze=(ex)=>{
+  const c=76, M=F.MAZE, W=4*c, H=4*c, sw=6;
+  let s='';
+  for(let r=1;r<=4;r++)for(let col=1;col<=4;col++){
+    const x=(col-1)*c,y=(r-1)*c, blk=M.blocked.some(b=>b[0]===r&&b[1]===col);
+    if(ex&&blk) s+=`<rect x="${x+3}" y="${y+3}" width="${c-6}" height="${c-6}" fill="#FFE0E0"/>`;
+    s+=`<text x="${x+c/2}" y="${y+c/2+6}" font-size="17.5" font-weight="600" text-anchor="middle" ${ex&&blk?'fill="#D94A4A"':''}>${M.sums[r-1][col-1]}</text>`;
+    if(ex&&blk) s+=`<text x="${x+c/2}" y="${y+c-12}" font-size="13" font-weight="800" text-anchor="middle" fill="#D94A4A">≠7 ✗</text>`;
+  }
+  const seg=(x1,y1,x2,y2)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#1E1B16" stroke-width="${sw}" stroke-linecap="square"/>`;
+  const doorH=(x,y)=>seg(x,y,x+c*0.26,y)+seg(x+c*0.74,y,x+c,y);
+  const doorV=(x,y)=>seg(x,y,x,y+c*0.26)+seg(x,y+c*0.74,x,y+c);
+  for(let col=1;col<=4;col++){ const x=(col-1)*c;
+    s+= M.openT.includes(col)? doorH(x,0):seg(x,0,x+c,0);
+    s+= M.openB.includes(col)? doorH(x,H):seg(x,H,x+c,H); }
+  for(let r=1;r<=4;r++){ const y=(r-1)*c;
+    s+= M.openL.includes(r)? doorV(0,y):seg(0,y,0,y+c);
+    s+= M.openR.includes(r)? doorV(W,y):seg(W,y,W,y+c); }
+  for(let cb=1;cb<=3;cb++)for(let r=1;r<=4;r++){
+    const x=cb*c,y=(r-1)*c, solid=M.wallsV.some(w=>w[0]===cb&&w[1]===r);
+    s+= solid? seg(x,y,x,y+c) : doorV(x,y); }
+  for(let rb=1;rb<=3;rb++)for(let col=1;col<=4;col++){
+    const y=rb*c,x=(col-1)*c, solid=M.wallsH.some(w=>w[0]===rb&&w[1]===col);
+    s+= solid? seg(x,y,x+c,y) : doorH(x,y); }
+  if(ex){
+    const pts=M.path.map(([r,col])=>`${(col-0.5)*c},${(r-0.5)*c}`).join(' ')+` ${4*c+26},${3.5*c}`;
+    s+=`<polyline points="${pts}" fill="none" stroke="#3E9442" stroke-width="6" stroke-dasharray="12 8" stroke-linecap="round" opacity=".85" marker-end="url(#arr3)"/>
+        <defs><marker id="arr3" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#3E9442"/></marker></defs>`;
+  }
+  const em=(t,x,y,fs)=>`<text x="${x}" y="${y}" font-size="${fs||30}" text-anchor="middle">${t}</text>`;
+  s+=em('👧',-26,0.5*c+10)+em('🍐',2.5*c,-12,28)+em('🍎',W+27,1.5*c+10)+em('🍊',-26,2.5*c+10)+em('🍌',W+28,3.5*c+10)+em('🥕',1.5*c,H+30,28);
+  return sv(W+110,H+62,`<g transform="translate(52,26)">${s}</g>`,430);
+};
+
+/* ---------------- 题库:2025 中国卷 Level A(11题) ---------------- */
+const Q2025=[
+{n:1,pts:3,
+ en:"Pablo has 6 balloons. He gives away 4 of the balloons. How many balloons will Pablo then have?",
+ zh:"小帕有 6 个气球。他送出去 4 个气球。请问小帕现在还有多少个气球?",
+ fig:()=>F.balloons(),
+ opts:[{k:'A',t:'2'},{k:'B',t:'3'},{k:'C',t:'4'},{k:'D',t:'5'},{k:'E',t:'6'}], ans:'A',
+ exEn:"Start with 6 balloons. Cross out 4 that he gives away — only 2 are left. 6 − 4 = 2.",
+ exZh:"先有 6 个气球,送出去的 4 个画上 ✖,剩下的就是 2 个。算式:6 − 4 = 2。",
+ exFig:()=>F.balloonsEx()},
+{n:2,pts:3,
+ en:"Which of these puzzle pieces completes the picture?",
+ zh:"请问下面哪个拼图碎片可以补全这幅拼图?",
+ fig:()=>F.kScene(true),
+ opts:['A','B','C','D','E'].map(k=>({k,f:()=>F.kPiece(k)})), ans:'E',
+ exEn:"The missing corner must join the picture: the eyes sit right at its bottom-right, the big ear stands in the middle, and the head line touches the bottom edge. Only E lines up. A floats too high, B is mirrored, C shows the nose (that part is already below!), D faces the wrong way.",
+ exZh:"缺的是左上角,要能和旁边\u201c接得上\u201d:眼睛要贴在这一块的右下角,大耳朵立在中间,头顶的弧线要碰到下边线。只有 E 全都对得上。A 整体浮起来接不上;B 是镜子里反过来的;C 多画了鼻子(鼻子在下面那块里!);D 朝向反了。",
+ exFig:()=>F.kScene(false)},
+{n:3,pts:3,
+ en:"How many of the shapes shown are triangles?",
+ zh:"请问在图中这些形状里,有多少个是三角形?",
+ fig:()=>F.shapes15(false),
+ opts:[{k:'A',t:'2'},{k:'B',t:'3'},{k:'C',t:'4'},{k:'D',t:'5'},{k:'E',t:'6'}], ans:'E',
+ exEn:"A triangle has exactly 3 straight sides and 3 corners. Hunt one by one: purple, blue, the small tan one, the brown one, the thin grey one and the green one — 6 triangles. Stars, moons, circles and squares don't count!",
+ exZh:"三角形有 3 条直直的边、3 个角。一个一个找:紫色的、蓝色的、右上角棕色的小三角、中间棕色的、灰色细细长长的、绿色的——一共 6 个。星星、月亮、圆形、方块都不算哦!",
+ exFig:()=>F.shapes15(true)},
+{n:4,pts:3,
+ en:"How many pencils are shown in the picture?",
+ zh:"请问图中有多少支铅笔?",
+ fig:()=>F.pencils(false),
+ opts:[{k:'A',t:'7'},{k:'B',t:'8'},{k:'C',t:'9'},{k:'D',t:'14'},{k:'E',t:'16'}], ans:'B',
+ exEn:"Follow each pencil from its eraser to its tip and count it once. Colouring them helps: 1, 2, 3 … 8. There are 8 pencils. (Careful: don't count both ends — that gives 16!)",
+ exZh:"从橡皮头沿着笔身找到笔尖,一支只数一次。把每支涂上不同颜色就清楚啦:1、2、3……一共 8 支。(小心:两头都数会数成 16,那就错啦!)",
+ exFig:()=>F.pencils(true)},
+{n:5,pts:3,
+ en:"5 baby kangaroos are hopping to their mothers along the paths shown below. Which path is the shortest?",
+ zh:"5 只袋鼠宝宝沿着下方所示的路径跳向它们的妈妈。请问哪条路径最短?",
+ fig:()=>null,
+ opts:['A','B','C','D','E'].map(k=>({k,f:()=>F.pathGrid(k)})), ans:'A',
+ exEn:"Every path crosses the same number of squares going right. So just compare the extra up-and-down squares: A only 3, D 4, B 5, C and E 8 each. A is the shortest!",
+ exZh:"每条路向右走的格数都一样多,所以只要比\u201c上上下下\u201d多走了几格:A 只多 3 格,D 多 4 格,B 多 5 格,C 和 E 各多 8 格。A 最短!",
+ exFig:()=>F.pathEx()},
+{n:6,pts:3,
+ en:"A large square is formed from 16 small squares of the same size. Then some of the small squares are removed. How many small squares are missing?",
+ zh:"一个大正方形由 16 个完全相同的小正方形组成。然后移除一些小正方形,形成如图所示的形状,请问移除了多少个小正方形?",
+ fig:()=>F.grid16(false),
+ opts:[{k:'A',t:'4'},{k:'B',t:'5'},{k:'C',t:'6'},{k:'D',t:'7'},{k:'E',t:'8'}], ans:'C',
+ exEn:"Count the grey squares that are left, row by row: 3 + 2 + 2 + 3 = 10. The big square needs 16, so 16 − 10 = 6 are missing.",
+ exZh:"一行一行数留下的灰色方块:3 + 2 + 2 + 3 = 10 块。大正方形要 16 块,16 − 10 = 6,所以移除了 6 块。",
+ exFig:()=>F.grid16(true)},
+{n:7,pts:3,
+ en:"All the buttons on Carola's sweater look like this. Which one of these buttons could be from her sweater?",
+ zh:"小卡毛衣上的所有纽扣均为如图所示的样式。请问以下哪个纽扣可能是她毛衣上的?",
+ fig:()=>F.button25('orig',0,true),
+ opts:['A','B','C','D','E'].map(k=>({k,f:()=>F.button25(k, k==='E'?-90:0,false)})), ans:'E',
+ exEn:"A button can spin around, but it can never flip over! Turn the original a quarter turn: the heart moves to the bottom-left, the dot to the top-right, the moon to the bottom-right — exactly button E. A is a mirror image; B, C and D each moved or twisted just one decoration, so they can't be the same button.",
+ exZh:"纽扣可以\u201c转圈\u201d,但不能\u201c翻面\u201d!把原扣转四分之一圈:爱心转到左下,圆点转到右上,小月牙转到右下——和 E 一模一样。A 是镜子里的样子;B、C、D 都只是挪动或转动了其中一个小图案,对不上。",
+ exFig:()=>F.buttonEx()},
+{n:8,pts:3,
+ en:"On Michael's toy shelf, there are no dogs, no rabbits and no turtles. Which of these shelves could be Michael's shelf?",
+ zh:"小迈的玩具架上没有小狗、没有兔子,也没有乌龟。请问以下哪个架子可能是小迈的?",
+ fig:()=>null,
+ opts:[{k:'A',f:()=>F.shelf(['🧸','🐰','🐼'])},{k:'B',f:()=>F.shelf(['🐴','🧸','🐶'])},{k:'C',f:()=>F.shelf(['🐢','🤖','🚂'])},{k:'D',f:()=>F.shelf(['🐴','🤖','🐼'])},{k:'E',f:()=>F.shelf(['🐢','🐰','🐶'])}], ans:'D',
+ exEn:"Check shelf by shelf: A has a rabbit ✗, B has a dog ✗, C has a turtle ✗, E has all three ✗. D has a horse, a robot and a panda — none of the forbidden toys, so D could be Michael's!",
+ exZh:"一个架子一个架子检查:A 有兔子 ✗,B 有小狗 ✗,C 有乌龟 ✗,E 三样全有 ✗。D 是小马、机器人、熊猫——都不在\u201c禁止名单\u201d里,所以是 D!"},
+{n:11,pts:4,
+ en:"Which of these keys fits the lock shown in the picture?",
+ zh:"请问以下哪把钥匙能打开图中的锁?",
+ fig:()=>F.lock(),
+ opts:['A','B','C','D','E'].map(k=>({k,f:()=>F.key(F.KEYSETS[k])})), ans:'D',
+ exEn:"Read the keyhole from top to bottom: square ■, triangle pointing UP ▲, circle ●. Only key D shows the same three shapes in the same order. B's triangle points down, C is upside-down, E has the wrong order, A has no circle at all.",
+ exZh:"看锁孔从上到下:方块 ■、朝上的三角 ▲、圆 ●。只有 D 的钥匙齿也是\u201c方块—朝上三角—圆\u201d。B 的三角朝下,C 上下颠倒,E 顺序不对,A 根本没有圆。",
+ exFig:()=>F.keyEx()},
+{n:12,pts:4,
+ en:"A dog has 2 puppies that weigh the same. The dog and 1 puppy together weigh 14 kilograms. The dog and both puppies together weigh 18 kilograms. How much does the dog weigh?",
+ zh:"一条狗有 2 只体重相同的幼崽。这条狗和 1 只幼崽的总重量是 14 千克,这条狗和 2 只幼崽的总重量是 18 千克。请问这条狗有多重?",
+ fig:()=>F.scales(),
+ opts:[{k:'A',t:'9 kg'},{k:'B',t:'10 kg'},{k:'C',t:'11 kg'},{k:'D',t:'12 kg'},{k:'E',t:'13 kg'}], ans:'B',
+ exEn:"The two weighings differ by exactly one puppy: 18 − 14 = 4, so a puppy weighs 4 kg. Then the dog weighs 14 − 4 = 10 kg.",
+ exZh:"两次称重只差 1 只小狗:18 − 14 = 4,所以小狗 4 千克。再算狗妈妈:14 − 4 = 10 千克。",
+ exFig:()=>F.scalesEx()},
+{n:21,pts:5,
+ en:"Each ladybird sticker has 1, 2, 3 or 4 dots. Amit wants to fill the grid with stickers so that in each row and in each column there are ladybirds with different numbers of dots. When Amit is finished, what will the top row of the grid look like?",
+ zh:"每个瓢虫贴纸上有 1、2、3 或 4 个点。小艾想用贴纸填满如图所示的网格,使得每行和每列中的瓢虫贴纸上的点数各不相同。请问贴满后网格的顶行是什么样子?",
+ fig:()=>F.lbGrid(false),
+ figTop:()=>F.lbRefRow(),
+ opts:[{k:'A',f:()=>F.lbRow([4,2,3,1])},{k:'B',f:()=>F.lbRow([1,3,2,4])},{k:'C',f:()=>F.lbRow([3,1,2,4])},{k:'D',f:()=>F.lbRow([2,1,3,4])},{k:'E',f:()=>F.lbRow([1,2,3,4])}], ans:'A',
+ exEn:"Solve it like sudoku, cell by cell. Bottom row already has 4 and 1, and its first column already holds a 3 — so bottom-left is 2 and bottom-right is 3. Keep going up and the whole grid locks into place. The top row must be 4, 2, 3, 1 — option A.",
+ exZh:"像数独一样一格格推:最下面一行已有 4 和 1,而第一列已经有 3,所以左下只能是 2、右下是 3……一路往上推,整张网格只有一种填法。顶行就是 4、2、3、1——选 A。",
+ exFig:()=>F.lbGrid(true)}
+];
+
+/* ---------------- 题库:2024 中国卷 Level A(12题) ---------------- */
+const Q2024=[
+{n:1,pts:3,
+ en:"Which number is inside the triangle, the square and the circle?",
+ zh:"请问哪个数字同时位于三角形、正方形和圆形中?",
+ fig:()=>F.venn(false),
+ opts:[{k:'A',t:'1'},{k:'B',t:'4'},{k:'C',t:'5'},{k:'D',t:'9'},{k:'E',t:'12'}], ans:'C',
+ exEn:"Look for the spot covered by ALL three shapes at once. Only the number 5 sits inside the circle AND the square AND the triangle.",
+ exZh:"找三个图形\u201c叠在一起\u201d的地方——只有数字 5 同时在圆里、方框里、三角形里。",
+ exFig:()=>F.venn(true)},
+{n:2,pts:3,
+ en:"Some shapes are printed on 2 pieces of glass. Anna places one on top of the other, without turning either piece. What does she see?",
+ zh:"如图所示,2 块玻璃上印有一些图案。小安把其中一块玻璃放在另一块的上面。如果不转动玻璃,请问小安会看到什么图案?",
+ fig:()=>F.glassPair(),
+ opts:['A','B','C','D','E'].map(k=>({k,f:()=>F.overlay(k)})), ans:'A',
+ exEn:"Glass is see-through! Without turning, just stack the two pictures: pentagon top-left, triangle top-right, the trapezoid (narrow side up) lands inside the circle, triangle-down bottom-left, pentagon bottom-right — that is A. In B the trapezoid is upside-down, in C the top-right triangle flipped, in D and E the corners swapped sides.",
+ exZh:"玻璃是透明的!不转动,就是把两幅画直接\u201c叠\u201d起来:左上五边形、右上三角形、中间的梯形(上窄下宽)正好套在圆里、左下倒三角、右下五边形——就是 A。B 的梯形翻倒了;C 右上角的三角朝下了;D 和 E 把四个角的图形对调了。",
+ exFig:()=>F.glassEx()},
+{n:3,pts:3,
+ en:"The picture shows 4 strange shapes. How many shapes have 3 dots inside?",
+ zh:"图中有 4 个奇怪的图形,请问有几个图形里面包含 3 个点?",
+ fig:()=>F.blobs(false),
+ opts:[{k:'A',t:'0'},{k:'B',t:'1'},{k:'C',t:'2'},{k:'D',t:'3'},{k:'E',t:'4'}], ans:'E',
+ exEn:"Trace each closed loop slowly with your finger and count the dots in its tummy. Surprise: every single one of the 4 shapes holds exactly 3 dots — so the answer is 4!",
+ exZh:"用手指沿着每条封闭的曲线慢慢描一圈,数数它\u201c肚子里\u201d有几个点。惊喜:4 个图形每个里面都正好有 3 个点——所以答案是 4 个!",
+ exFig:()=>F.blobs(true)},
+{n:4,pts:3,
+ en:"Kevin the kangaroo puts a picture on the table. He rotates the picture through a quarter turn, as shown. He then does the same rotation again. What does Kevin see now?",
+ zh:"袋鼠小凯把一幅画放在桌子上。如图所示,他将这幅画旋转了四分之一圈。然后他又做了一次同样的旋转。请问小凯现在看到的是下列哪个选项?",
+ fig:()=>F.rotQ(),
+ opts:['A','B','C','D','E'].map(k=>({k,f:()=>sv(110,110,F.rBox(F.ROT[k]),130)})), ans:'C',
+ exEn:"Two quarter turns make one half turn — the picture goes upside-down! The right-pointing triangle (top-left) becomes a left-pointing triangle at the bottom-right; the circle moves to the bottom-left; the down-triangle becomes an up-triangle at the top. That is C.",
+ exZh:"转两次四分之一圈 = 转半圈,整幅画上下颠倒!左上的\u201c朝右三角\u201d跑到右下、还变成朝左;圆从右上跑到左下;底下的倒三角跑到上面、变成正三角。就是 C。",
+ exFig:()=>F.rotEx()},
+{n:5,pts:3,
+ en:"In the picture, there are 8 different faces. Each face appears twice, except for one. Which face appears only once?",
+ zh:"图中有 8 张不同的脸。除了其中一张脸,其余的脸都各出现了两次。请问哪张脸只出现了一次?",
+ fig:()=>F.faceGrid(false),
+ opts:['A','B','C','D','E'].map(k=>({k,f:()=>F.faceOne(F.FACEOPTS[k])})), ans:'C',
+ exEn:"Play matching pairs! Link every face with its twin — check the hat or hair, ears, glasses and mouth. One face is left without a partner: the one with a hat, ears, dot eyes and a smile. That is C.",
+ exZh:"玩\u201c连连看\u201d!把一样的脸两两连起来——看帽子还是刺刺头、有没有耳朵、戴不戴眼镜、嘴巴什么样。最后剩下一张没同伴的:戴帽子、有耳朵、点点眼、微笑——就是 C。",
+ exFig:()=>F.faceGrid(true)},
+{n:6,pts:3,
+ en:"Bruno is making this large triangle using identical small triangular tiles. How many more tiles does Bruno need to complete the large triangle?",
+ zh:"小布正在用相同的小三角形瓷砖拼一个大三角形。请问小布还需要几块瓷砖才能拼成这个大三角形?",
+ fig:()=>F.triBig(false),
+ opts:[{k:'A',t:'3'},{k:'B',t:'4'},{k:'C',t:'5'},{k:'D',t:'6'},{k:'E',t:'7'}], ans:'D',
+ exEn:"Row by row the big triangle holds 1 + 3 + 5 + 7 = 16 small tiles. Bruno has laid 10 orange ones, so 16 − 10 = 6 white gaps are still empty.",
+ exZh:"大三角形从上到下每行有 1、3、5、7 块,一共 16 块。橙色已经铺了 10 块,16 − 10 = 6,白色的缺口正好 6 块。",
+ exFig:()=>F.triBig(true)},
+{n:7,pts:3,
+ en:"Each number below is made using a piece of ribbon. Which piece of ribbon is the longest?",
+ zh:"下方每个数字都是用一条丝带制作而成的。请问哪条丝带最长?",
+ fig:()=>F.ribbons(false),
+ opts:[{k:'A',t:'1'},{k:'B',t:'2'},{k:'C',t:'5'},{k:'D',t:'6'},{k:'E',t:'一样长 same'}], ans:'D',
+ exEn:"Measure each ribbon with the grid squares: the 1 covers 6 squares, the 2 covers 9, the 5 covers 10 and the 6 covers 11. The ribbon for 6 is the longest!",
+ exZh:"用小方格当尺子,一格一格数:数字 1 占 6 格,2 占 9 格,5 占 10 格,6 占 11 格。做数字 6 的丝带最长!",
+ exFig:()=>F.ribbons(true)},
+{n:8,pts:3,
+ en:"Elena uses the stamp shown to make a picture. Which picture does she make?",
+ zh:"小艾用下图所示的印章盖章,请问哪个是她得到的图案?",
+ fig:()=>F.stampFig(),
+ opts:['A','B','C','D','E'].map(k=>({k,f:()=>F.catOpt(k)})), ans:'E',
+ exEn:"A stamp prints a MIRROR image — everything swaps sides! The tail jumps from left to right, the light ear swaps to the right, and the light patch on the body swaps to the left. Only E swaps everything. C and D moved the tail but forgot the patches; A and B didn't swap at all.",
+ exZh:"印章盖下去,印出来的是\u201c照镜子\u201d的图——所有东西都要换边!尾巴从左边换到右边,浅色的耳朵也换到右边,身上的浅色斑换到左边。全部都换边的只有 E。C、D 只换了尾巴忘了斑点;A、B 根本没换边。",
+ exFig:()=>F.catEx()},
+{n:9,pts:4,
+ en:"A student has 4 blocks, as shown. Which of the following shapes cannot be made using these 4 blocks?",
+ zh:"如图所示,一名学生有 4 块积木。请问用这 4 块积木不能搭成下列哪种形状?",
+ fig:()=>F.blocksFig(),
+ opts:['A','B','C','D','E'].map(k=>({k,f:()=>F.cubeFig(k,false)})), ans:'D',
+ exEn:"Each block is 2 little cubes stuck together. Try splitting every shape into pairs of touching cubes: A, B, C and E split perfectly into 4 pairs. In D, one cube is always left alone, no matter how you pair them — so D cannot be built.",
+ exZh:"每块积木都是\u201c两个小方块连在一起\u201d。试着把每个形状两两分组:A、B、C、E 都能正好分成 4 对;只有 D,不管怎么分,总会剩下一个落单的小方块——所以 D 搭不出来。",
+ exFig:()=>F.cubeEx()},
+{n:10,pts:4,
+ en:"Chen has 5 baskets, each containing 4 toys. He dropped 4 of the baskets and the toys were mixed up. Which basket did he not drop?",
+ zh:"小陈有 5 个篮子,每个篮子里有 4 个玩具。他碰掉了其中 4 个篮子,里面的玩具也混在了一起。请问他没有碰掉哪个篮子?",
+ fig:()=>F.pile(false),
+ opts:['A','B','C','D','E'].map(k=>({k,f:()=>F.basket(k)})), ans:'B',
+ exEn:"Count the toys on the floor: 3 frogs, 6 ducks, 3 ladybirds, 4 cows. All five baskets together hold 4 frogs, 6 ducks, 5 ladybirds, 5 cows. What's missing from the floor — 1 frog, 2 ladybirds, 1 cow — is exactly basket B. So B never fell!",
+ exZh:"先数地上的玩具:青蛙 3、鸭子 6、瓢虫 3、小牛 4。再数 5 个篮子加起来:青蛙 4、鸭子 6、瓢虫 5、小牛 5。地上\u201c少\u201d的那份——1 只青蛙、2 只瓢虫、1 头小牛——正好就是 B 篮里的!所以没掉的是 B。",
+ exFig:()=>F.pile(true)},
+{n:11,pts:4,
+ en:"In the following diagram, each shape represents a different value. What is the value of the star ⭐?",
+ zh:"下图中,每种图形代表一个不同的数字。请问星星 ⭐ 代表的数字是几?",
+ fig:()=>F.shapeEq(false),
+ opts:[{k:'A',t:'2'},{k:'B',t:'3'},{k:'C',t:'4'},{k:'D',t:'5'},{k:'E',t:'6'}], ans:'B',
+ exEn:"Column 1: 😊 + 😊 = 10, so 😊 = 5. Row 1: 5 + 💜 + 💜 = 9, so 💜 = 2. Row 2: 5 + ⭐ + 2 = 10, so ⭐ = 3.",
+ exZh:"第 1 列:😊+😊=10,所以 😊=5。第 1 行:5+💜+💜=9,所以 💜=2。第 2 行:5+⭐+2=10,所以 ⭐=3。",
+ exFig:()=>F.shapeEq(true)},
+{n:12,pts:4,
+ en:"Catrina wants to walk through the maze so that she visits only rooms where the answer to the sum is 7. Which object can Catrina reach?",
+ zh:"小卡想要穿过迷宫,并且她只能经过和为 7 的房间。请问小卡最终可以获得哪种食物?",
+ fig:()=>F.maze(false),
+ opts:[{k:'A',t:'🍌'},{k:'B',t:'🍊'},{k:'C',t:'🥕'},{k:'D',t:'🍐'},{k:'E',t:'🍎'}], ans:'A',
+ exEn:"First paint out the rooms that are NOT 7 (4+2, 6+0, 2+3). The pear and the carrot sit behind those rooms — blocked. The apple's and orange's rooms are sealed off by walls. From the girl, walk down, right, right, down, down, right — every room equals 7 — and grab the banana!",
+ exZh:"先把不等于 7 的房间涂掉(4+2、6+0、2+3)。梨和胡萝卜门口正好是这些房间——过不去;苹果和橙子的房间被墙封住了。从女孩出发:下、右、右、下、下、右,一路全是 7,走到右下角拿到香蕉!",
+ exFig:()=>F.maze(true)}
+];
+
+/* ---------------- 七套卷配置 ---------------- */
+const PAPERS=[
+ {id:'p2025', yr:'2025', nm:'Math Kangaroo 中国卷 · Level A', col:'c-orange', qs:Q2025, emoji:'🦘'},
+ {id:'p2024', yr:'2024', nm:'Math Kangaroo 中国卷 · Level A', col:'c-teal', qs:Q2024, emoji:'🌟'},
+ {id:'p2023', yr:'2023', nm:'香港袋鼠 PreEcolier(9题)', lock:1},
+ {id:'p2021', yr:'2021', nm:'香港袋鼠 PreEcolier(9题)', lock:1},
+ {id:'p2020', yr:'2020', nm:'香港袋鼠 PreEcolier(8题)', lock:1},
+ {id:'p2019', yr:'2019', nm:'香港袋鼠 PreEcolier(12题)', lock:1},
+ {id:'p2018', yr:'2018', nm:'Kangaroo PreEcolier 马来版(5题)', lock:1}
+];
+PAPERS.forEach(p=>{ if(p.qs) p.qs.forEach(q=>{ q.id=p.id+'_q'+q.n; q.paper=p.id; }); });
+
+/* ---------------- 应用状态 ---------------- */
+const S={
+  screen:'home', paperIdx:0, qIdx:0, tries:0, locked:false, combo:0, mode:'paper', queue:[],
+  settings: store.get('settings',{lang:'both', sfx:true, tts:true}),
+  prog: store.get('prog',{}),
+  wrong: store.get('wrong',[])
+};
+Sfx.on=S.settings.sfx; TTS.on=S.settings.tts;
+const saveAll=()=>{ store.set('settings',S.settings); store.set('prog',S.prog); store.set('wrong',S.wrong); };
+const findQ=id=>{ for(const p of PAPERS){ if(p.qs){ const q=p.qs.find(q=>q.id===id); if(q) return q; } } return null; };
+const starsOf=p=>p.qs.reduce((s,q)=>s+((S.prog[q.id]||{}).stars||0),0);
+const maxStars=p=>p.qs.reduce((s,q)=>s+(q.pts-2),0);
+const answered=p=>p.qs.filter(q=>S.prog[q.id]).length;
+const totalStars=()=>PAPERS.filter(p=>p.qs).reduce((s,p)=>s+starsOf(p),0);
+
+/* ---------------- 渲染辅助 ---------------- */
+const langBlock=(en,zh,ce,cz)=>{
+  const L=S.settings.lang; let s='';
+  if(L!=='zh') s+=`<div class="${ce}">${en}</div>`;
+  if(L!=='en') s+=`<div class="${cz}">${zh}</div>`;
+  return s;
+};
+const starStr=n=>'⭐'.repeat(n)||'';
+function burst(x,y,big){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const ems=big?['⭐','🌟','✨','🎉','⭐','🌟','✨','🎊','⭐','✨']:['⭐','✨','🌟','⭐','✨','🌟'];
+  ems.forEach(e=>{ const el=document.createElement('span'); el.className='burst'; el.textContent=e;
+    el.style.left=x+'px'; el.style.top=y+'px';
+    el.style.setProperty('--dx',(Math.random()*220-110)+'px');
+    el.style.setProperty('--dy',(-60-Math.random()*160)+'px');
+    el.style.setProperty('--rot',(Math.random()*360-180)+'deg');
+    document.body.appendChild(el); setTimeout(()=>el.remove(),1050); });
+}
+
+/* ---------------- 大厅 ---------------- */
+function renderHome(){
+  S.screen='home'; TTS.stop();
+  const cards=PAPERS.map((p,i)=>{
+    if(p.lock) return `<div class="pcard lock" aria-disabled="true">
+      <div class="ribbon">第二批更新中</div>
+      <div class="yr">${p.yr}</div><div class="nm">${p.nm}</div>
+      <div class="meta"><span class="tag" style="background:#EEE;color:#888">即将上线 Coming soon</span></div>
+      <div class="lockmsg" style="padding:10px 0 0">🔒 验收第一批后解锁</div></div>`;
+    const st=starsOf(p), mx=maxStars(p), an=answered(p), pct=Math.round(an/p.qs.length*100);
+    return `<button class="pcard ${p.col}" data-act="paper" data-i="${i}">
+      <div class="yr">${p.emoji} ${p.yr}</div><div class="nm">${p.nm}</div>
+      <div class="meta"><span class="tag">${p.qs.length} 题</span><span>${an}/${p.qs.length} 已练</span></div>
+      <div class="pbar"><i style="width:${pct}%"></i></div>
+      <div class="startrow">${st>0?starStr(Math.min(st,12))+(st>12?' +'+(st-12):''):'<span style="color:#B9AE99">点我开始 Tap to start!</span>'}</div>
+      <div class="startrow" style="color:#7A6F5C;font-size:13px">${st}/${mx} ⭐</div></button>`;
+  }).join('');
+  const wrongN=S.wrong.length;
+  APP.innerHTML=`
+  <div class="topbar">
+    <div class="brand"><span class="roo">🦘</span>Alan 的袋鼠备赛馆 <span style="font-size:12px;color:#B9AE99;font-weight:600">L5 · v1</span></div>
+    <div class="spacer"></div>
+    <button class="iconbtn ${wrongN?'on':''}" data-act="wrongbook">📒 错题本${wrongN?' '+wrongN:''}</button>
+    <button class="iconbtn" data-act="parent">👨‍👩‍👦 家长</button>
+    <button class="iconbtn" data-act="settings">⚙️ 设置</button>
+  </div>
+  <div class="hero">
+    <div class="big">🦘</div>
+    <div><h1>你好,Alan!Hello, Alan!</h1>
+      <p>选一套真题卷开始闯关吧!答对就有星星掉进袋鼠口袋。<br>Pick a paper and start hopping — every correct answer drops stars into the pouch!</p></div>
+    <div class="pouch"><div class="n">⭐ ${totalStars()}</div><div class="l">口袋里的星星</div></div>
+  </div>
+  <div class="grid7">${cards}</div>
+  <p class="note" style="text-align:center;margin-top:18px">第一批:2025 + 2024 中国卷共 23 题 · 其余 5 卷(43 题)第二批更新 · 进度自动保存在这台设备</p>`;
+}
+
+/* ---------------- 答题 ---------------- */
+function curPaper(){ return PAPERS[S.paperIdx]; }
+function curQ(){ return S.mode==='wrong'? findQ(S.queue[S.qIdx]) : curPaper().qs[S.qIdx]; }
+function qTotal(){ return S.mode==='wrong'? S.queue.length : curPaper().qs.length; }
+
+function renderQuiz(){
+  S.screen='quiz'; S.tries=0; S.locked=false; TTS.stop();
+  const q=curQ(); if(!q){ renderHome(); return; }
+  const total=qTotal(), idx=S.qIdx;
+  const isFig=q.opts.some(o=>o.f);
+  const optHtml=q.opts.map(o=>{
+    const inner=o.f?`<span class="k">${o.k}</span>${o.f()}`:`<span class="k">${o.k}</span><span>${esc(o.t)}</span>`;
+    return `<button class="opt ${o.f?'fig':''}" data-act="opt" data-k="${o.k}" aria-label="选项${o.k}">${inner}</button>`;
+  }).join('');
+  const earned=(S.prog[q.id]||{}).stars||0;
+  APP.innerHTML=`
+  <div class="qtop">
+    <button class="qback" data-act="quitquiz">← ${S.mode==='wrong'?'错题本':'大厅'}</button>
+    <div class="qprog" aria-label="进度"><i style="width:${(idx)/total*100}%"></i></div>
+    <span style="font-weight:800;color:#7A6F5C;font-size:14px">${idx+1} / ${total}</span>
+    ${S.combo>=2?`<span class="combo">🔥 连对 ×${S.combo}</span>`:''}
+  </div>
+  <div class="qcard">
+    <div class="qhead">
+      <span class="qnum">${S.mode==='wrong'?'📒 ':''}Q${q.n}</span>
+      <span class="qpts">${q.pts} 分 → ${'⭐'.repeat(q.pts-2)}</span>
+      <button class="speak" data-act="speak" title="读题 Read aloud">🔊</button>
+      <span class="qstars">${starStr(earned)}</span>
+    </div>
+    ${langBlock(esc(q.en),esc(q.zh),'qtext-en','qtext-zh')}
+    ${q.figTop?`<div class="qfig">${q.figTop()}</div>`:''}
+    ${q.fig&&q.fig()?`<div class="qfig">${q.fig()}</div>`:''}
+    <div class="opts ${isFig?'fig':'text'}">${optHtml}</div>
+    <div class="feedback" id="fb" aria-live="polite"></div>
+    <div class="nextbar" id="nb"></div>
+  </div>`;
+  if(S.settings.tts) setTimeout(()=>TTS.speak(q.en,q.zh),350);
+}
+
+function onOpt(btn){
+  if(S.locked) return;
+  const q=curQ(), k=btn.dataset.k, fb=$('#fb'), nb=$('#nb');
+  if(k===q.ans){
+    S.locked=true;
+    btn.classList.add('right');
+    document.querySelectorAll('.opt').forEach(b=>{ if(b!==btn) b.classList.add('dim'); b.disabled=true; });
+    const first=S.tries===0;
+    const stars=first?(q.pts-2):1;
+    const prev=S.prog[q.id]||{};
+    S.prog[q.id]={a:S.tries+1, r:first?'first':'second', stars:Math.max(stars,prev.stars||0), wrong:prev.wrong||[], t:Date.now()};
+    if(first){ S.combo++; if(S.combo>=3) Sfx.combo(); else Sfx.ok(); }
+    else { S.combo=0; Sfx.ok(); }
+    if(S.mode==='wrong'&&first){ S.wrong=S.wrong.filter(id=>id!==q.id); }
+    saveAll();
+    const r=btn.getBoundingClientRect();
+    burst(r.left+r.width/2, r.top+r.height/2, first&&q.pts===5);
+    fb.className='feedback good';
+    fb.textContent= first? `太棒了!Correct! +${stars} ⭐${S.combo>=3?'  🔥连对 ×'+S.combo:''}` : `答对啦!Got it! +1 ⭐`;
+    nb.innerHTML=`<button class="bigbtn gray" data-act="explain">💡 看讲解</button>
+      <button class="bigbtn" data-act="next">${S.qIdx+1>=qTotal()?'🏁 完成':'下一题 Next →'}</button>`;
+  }else{
+    S.tries++;
+    btn.classList.add('wrong'); btn.disabled=true;
+    Sfx.bad();
+    const prev=S.prog[q.id]||{a:0,wrong:[]};
+    prev.wrong=(prev.wrong||[]).concat(k);
+    if(S.tries===1){
+      S.prog[q.id]=Object.assign({},S.prog[q.id]||{},{wrong:prev.wrong});
+      fb.className='feedback bad'; fb.textContent='再想一想,试一次!Not yet — try once more! 💪';
+      setTimeout(()=>btn.classList.remove('wrong'),450); btn.classList.add('dim');
+    }else{
+      S.locked=true; S.combo=0;
+      S.prog[q.id]={a:2, r:'fail', stars:S.prog[q.id]&&S.prog[q.id].r&&S.prog[q.id].r!=='fail'?S.prog[q.id].stars:0, wrong:prev.wrong, t:Date.now()};
+      if(!S.wrong.includes(q.id)) S.wrong.push(q.id);
+      saveAll();
+      document.querySelectorAll('.opt').forEach(b=>{ b.disabled=true; if(b.dataset.k===q.ans) b.classList.add('right'); else if(!b.classList.contains('wrong')) b.classList.add('dim'); });
+      fb.className='feedback bad'; fb.textContent=`正确答案是 ${q.ans}。一起看看为什么吧!`;
+      nb.innerHTML=`<button class="bigbtn" data-act="next">${S.qIdx+1>=qTotal()?'🏁 完成':'下一题 Next →'}</button>`;
+      setTimeout(openExplain,650);
+    }
+  }
+}
+
+/* ---------------- 讲解弹层 ---------------- */
+function openExplain(){
+  const q=curQ(); if(!q) return;
+  const ansOpt=q.opts.find(o=>o.k===q.ans);
+  const ansShow=ansOpt&&ansOpt.t?` — ${esc(ansOpt.t)}`:'';
+  const veil=document.createElement('div');
+  veil.className='veil'; veil.id='veil';
+  veil.innerHTML=`<div class="modal" role="dialog" aria-label="讲解">
+    <h3>💡 Q${q.n} 分步图解 <button class="speak" data-act="speakex" style="margin-left:auto">🔊</button></h3>
+    <div class="ansline">✓ 正确答案 Answer:${q.ans}${ansShow}</div>
+    ${q.exFig?`<div class="exfig">${q.exFig()}</div>`:''}
+    ${langBlock(esc(q.exEn),esc(q.exZh),'ex-en','ex-zh')}
+    <div class="nextbar" style="margin-top:16px"><button class="bigbtn teal" data-act="closeveil">明白啦 Got it!</button></div>
+  </div>`;
+  veil.addEventListener('click',e=>{ if(e.target===veil) closeVeil(); });
+  document.body.appendChild(veil);
+}
+function closeVeil(){ const v=$('#veil'); if(v) v.remove(); TTS.stop(); }
+
+function nextQ(){
+  closeVeil(); TTS.stop();
+  if(S.qIdx+1>=qTotal()){ S.mode==='wrong'? renderWrongDone() : renderResults(); }
+  else{ S.qIdx++; renderQuiz(); }
+}
+
+/* ---------------- 结算 ---------------- */
+function renderResults(){
+  S.screen='results'; const p=curPaper();
+  const st=starsOf(p), mx=maxStars(p);
+  const firsts=p.qs.filter(q=>(S.prog[q.id]||{}).r==='first').length;
+  const fails=p.qs.filter(q=>(S.prog[q.id]||{}).r==='fail').length;
+  const medal= firsts===p.qs.length?'🏆': fails===0?'🥈':'🎖️';
+  const word= firsts===p.qs.length?'全部一次答对!满分袋鼠!Perfect hop!': fails===0?'全部答对!真厉害!All correct!':'闯关完成!继续加油!Paper complete!';
+  Sfx.fanfare(); setTimeout(()=>burst(innerWidth/2,180,true),250);
+  APP.innerHTML=`
+  <div class="resultcard center" style="margin-top:30px">
+    <div class="medal">${medal}</div>
+    <h2 style="font-family:var(--fd);margin:8px 0">${p.yr} 卷完成!</h2>
+    <p style="font-size:17px;font-weight:700">${word}</p>
+    <div class="bign">⭐ ${st} <span style="font-size:22px;color:#B9AE99">/ ${mx}</span></div>
+    <p class="note">一次答对 ${firsts} 题 · 第二次答对 ${p.qs.length-firsts-fails} 题 · 需要再练 ${fails} 题</p>
+    <div class="nextbar" style="margin-top:14px">
+      ${S.wrong.some(id=>id.startsWith(p.id))?'<button class="bigbtn teal" data-act="wrongbook">📒 错题再练</button>':''}
+      <button class="bigbtn" data-act="home">🏠 回大厅</button>
+    </div>
+  </div>`;
+}
+function renderWrongDone(){
+  Sfx.fanfare();
+  APP.innerHTML=`<div class="resultcard center" style="margin-top:40px">
+    <div class="medal">🧹✨</div><h2 style="font-family:var(--fd)">错题练完啦!</h2>
+    <p class="note">一次答对的题已经从错题本里飞走咯。</p>
+    <div class="nextbar"><button class="bigbtn" data-act="home">🏠 回大厅</button>
+    ${S.wrong.length?'<button class="bigbtn teal" data-act="wrongbook">📒 还有 '+S.wrong.length+' 题</button>':''}</div></div>`;
+}
+
+/* ---------------- 错题本 ---------------- */
+function renderWrongbook(){
+  S.screen='wrong'; TTS.stop();
+  const items=S.wrong.map(id=>{ const q=findQ(id); if(!q) return '';
+    const p=PAPERS.find(p=>p.id===q.paper);
+    return `<div class="wrongitem"><span style="font-family:var(--fd);font-size:18px;font-weight:800;color:#C96E12">${p.yr} · Q${q.n}</span>
+      <span style="flex:1;font-size:14px;color:#5C5343">${esc((S.settings.lang==='en'?q.en:q.zh).slice(0,40))}…</span>
+      <span class="tag" style="background:#FFE3C2;color:#C96E12">${q.pts}分</span></div>`; }).join('');
+  APP.innerHTML=`
+  <div class="topbar"><button class="qback" data-act="home">← 大厅</button><div class="brand">📒 错题本</div></div>
+  ${S.wrong.length?`
+    <p class="note">这些题上次没有完全答对。再练一遍,一次答对就把它从本子里擦掉!</p>
+    ${items}
+    <div class="nextbar"><button class="bigbtn" data-act="wrongstart">🚀 开始再练(${S.wrong.length} 题)</button></div>`
+   :`<div class="lockmsg">🎉 错题本是空的,太棒了!<br>去大厅再刷一套卷吧。</div>
+    <div class="nextbar"><button class="bigbtn" data-act="home">🏠 回大厅</button></div>`}`;
+}
+
+/* ---------------- 家长模式 + 导出报告 ---------------- */
+function buildReport(){
+  const qrows=[]; 
+  PAPERS.filter(p=>p.qs).forEach(p=>p.qs.forEach(q=>{ const g=S.prog[q.id]||null;
+    qrows.push({id:q.id, paper:p.yr, n:q.n, pts:q.pts, answer:q.ans,
+      result:g?g.r:null, stars:g?g.stars:0, attempts:g?g.a:0, wrongPicks:g?(g.wrong||[]):[], ts:g?g.t:null}); }));
+  const done=qrows.filter(r=>r.result);
+  return {version:'alan_l5_v1', batch:'第一批 2025+2024 共23题', exportedAt:new Date().toISOString(),
+    settings:S.settings,
+    totals:{stars:totalStars(), answered:done.length, of:qrows.length,
+      firstTry:done.filter(r=>r.result==='first').length,
+      secondTry:done.filter(r=>r.result==='second').length,
+      fail:done.filter(r=>r.result==='fail').length},
+    wrongbook:S.wrong.slice(), questions:qrows};
+}
+function renderParent(){
+  S.screen='parent'; TTS.stop();
+  const rows=PAPERS.filter(p=>p.qs).map(p=>p.qs.map(q=>{ const g=S.prog[q.id];
+    const stat=!g?'—': g.r==='first'?'✓ 一次答对': g.r==='second'?'✓ 二次答对':'✗ 待巩固';
+    const cls=!g?'': g.r==='fail'?'no':'ok';
+    const wrongs=g&&g.wrong&&g.wrong.length?` <span style="color:#B9AE99">(误选 ${g.wrong.join(',')})</span>`:'';
+    return `<tr><td>${p.yr}</td><td>Q${q.n}</td><td>${q.pts}</td><td><b>${q.ans}</b></td><td class="${cls}">${stat}${wrongs}</td><td>${starStr(g?g.stars:0)}</td></tr>`;
+  }).join('')).join('');
+  const rep=JSON.stringify(buildReport(),null,2);
+  APP.innerHTML=`
+  <div class="topbar"><button class="qback" data-act="home">← 大厅</button><div class="brand">👨‍👩‍👦 家长模式</div></div>
+  <p class="note">答案总表(官方 key 交叉验证)与 Alan 的作答记录。导出 JSON 后发回给 Claude,可做精准水平分析。</p>
+  <div style="overflow:auto"><table class="ptable">
+    <tr><th>卷</th><th>题号</th><th>分值</th><th>答案</th><th>Alan 作答</th><th>得星</th></tr>${rows}</table></div>
+  <div class="nextbar" style="margin:16px 0 10px">
+    <button class="bigbtn" data-act="dl">⬇️ 下载学习报告 JSON</button>
+    <button class="bigbtn teal" data-act="copy">📋 复制报告</button>
+  </div>
+  <textarea class="rep" id="repbox" readonly>${esc(rep)}</textarea>
+  <p class="note">文件名:alan_l5_report_日期.json · 也可直接全选文本框内容粘贴给 Claude。</p>`;
+}
+function dlReport(){
+  const rep=JSON.stringify(buildReport(),null,2);
+  const d=new Date(), pad=n=>String(n).padStart(2,'0');
+  const fn=`alan_l5_report_${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}.json`;
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([rep],{type:'application/json'})); a.download=fn;
+  document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},300);
+}
+function copyReport(){
+  const box=$('#repbox'); box.select(); box.setSelectionRange(0,999999);
+  try{ navigator.clipboard?navigator.clipboard.writeText(box.value):document.execCommand('copy'); alert('已复制!可直接粘贴给 Claude。'); }
+  catch(e){ alert('请手动全选文本框后复制。'); }
+}
+
+/* ---------------- 设置 ---------------- */
+function renderSettings(){
+  S.screen='settings'; TTS.stop();
+  const L=S.settings.lang;
+  APP.innerHTML=`
+  <div class="topbar"><button class="qback" data-act="home">← 大厅</button><div class="brand">⚙️ 设置</div></div>
+  <div class="qcard">
+    <div class="settrow"><span class="lab">语言 Language</span>
+      <div class="seg">
+        <button class="${L==='both'?'on':''}" data-act="lang" data-v="both">双语</button>
+        <button class="${L==='en'?'on':''}" data-act="lang" data-v="en">English</button>
+        <button class="${L==='zh'?'on':''}" data-act="lang" data-v="zh">中文</button>
+      </div></div>
+    <div class="settrow"><span class="lab">音效 Sound</span>
+      <button class="iconbtn ${S.settings.sfx?'on':''}" data-act="sfx">${S.settings.sfx?'🔔 开':'🔕 关'}</button></div>
+    <div class="settrow"><span class="lab">自动读题 TTS</span>
+      <button class="iconbtn ${S.settings.tts?'on':''}" data-act="tts">${S.settings.tts?'🗣️ 开':'🤐 关'}</button>
+      <span class="note">英文 en-CA 优先,其次中文</span></div>
+    <div class="settrow"><span class="lab">数据 Data</span>
+      <button class="iconbtn" data-act="reset">🗑️ 清空全部进度</button>
+      <span class="note">进度保存在本机浏览器(前缀 alan_l5_)</span></div>
+  </div>`;
+}
+
+/* ---------------- 事件委托 ---------------- */
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-act]'); if(!t) return;
+  const act=t.dataset.act; Sfx.init();
+  if(act==='paper'){ Sfx.tap(); S.paperIdx=+t.dataset.i; S.mode='paper'; S.qIdx=0; renderQuiz(); }
+  else if(act==='opt') onOpt(t);
+  else if(act==='next') nextQ();
+  else if(act==='explain'){ Sfx.tap(); openExplain(); }
+  else if(act==='closeveil') closeVeil();
+  else if(act==='home'){ Sfx.tap(); renderHome(); }
+  else if(act==='quitquiz'){ TTS.stop(); S.mode==='wrong'?renderWrongbook():renderHome(); }
+  else if(act==='wrongbook'){ Sfx.tap(); renderWrongbook(); }
+  else if(act==='wrongstart'){ S.mode='wrong'; S.queue=S.wrong.slice(); S.qIdx=0; renderQuiz(); }
+  else if(act==='parent'){ Sfx.tap(); renderParent(); }
+  else if(act==='settings'){ Sfx.tap(); renderSettings(); }
+  else if(act==='lang'){ S.settings.lang=t.dataset.v; saveAll(); renderSettings(); }
+  else if(act==='sfx'){ S.settings.sfx=!S.settings.sfx; Sfx.on=S.settings.sfx; saveAll(); renderSettings(); }
+  else if(act==='tts'){ S.settings.tts=!S.settings.tts; TTS.on=S.settings.tts; if(!TTS.on)TTS.stop(); saveAll(); renderSettings(); }
+  else if(act==='reset'){ if(confirm('确定清空 Alan 的全部进度与错题本吗?此操作不可恢复。')){ S.prog={}; S.wrong=[]; S.combo=0; saveAll(); alert('已清空。'); renderHome(); } }
+  else if(act==='dl') dlReport();
+  else if(act==='copy') copyReport();
+  else if(act==='speak'){ const q=curQ(); if(q) TTS.speak(q.en,q.zh); }
+  else if(act==='speakex'){ const q=curQ(); if(q) TTS.speak(q.exEn,q.exZh); }
+});
+
+/* ---------------- 启动 ---------------- */
+renderHome();
+</script>
+</body>
+</html>
