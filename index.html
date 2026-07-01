@@ -1,5 +1,6 @@
-<!-- 20260630_艾伦游戏主页_v1 -->
-<!-- GitHub Pages 入口文件,文件名必须保持为 index.html,放在仓库根目录 -->
+<!-- 20260701_艾伦游戏厅主页_v3 -->
+<!-- GitHub Pages 入口,文件名必须保持 index.html,放仓库根目录 -->
+<!-- 三文件结构:index.html(本页)→ study.html / games.html。全部平铺在根目录 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -11,81 +12,59 @@
   :root{
     --ink:#1B2A4A; --paper:#FFFFFF;
     --accent:#2563B8; --sun:#FFC233; --go:#4CAF6D; --no:#FF8A7A;
-    --shadow:0 6px 0 rgba(27,42,74,.12);
-    --radius:26px;
+    --shadow:0 6px 0 rgba(27,42,74,.12); --radius:26px;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   html,body{margin:0;padding:0;}
   body{
-    font-family:"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;
-    color:var(--ink);
+    font-family:"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;color:var(--ink);
     background:linear-gradient(180deg,#D9EEFF 0%,#F2FAFF 45%,#FFF9EC 100%);
-    min-height:100vh; -webkit-user-select:none; user-select:none;
+    min-height:100vh;-webkit-user-select:none;user-select:none;
   }
   a{color:inherit;text-decoration:none;}
 
-  /* ---------- 顶栏 ---------- */
-  .topbar{
-    display:flex;align-items:center;gap:12px;
-    padding:14px 22px;background:var(--accent);color:#fff;
-    font-size:24px;font-weight:800;letter-spacing:.5px;
-  }
+  /* 顶栏 */
+  .topbar{display:flex;align-items:center;gap:12px;padding:14px 20px;background:var(--accent);color:#fff;font-size:23px;font-weight:800;letter-spacing:.5px;}
   .topbar .logo{font-size:26px;line-height:1;}
   .topbar .room{flex:1;line-height:1.1;}
   .topbar .room small{display:block;font-size:14px;font-weight:600;opacity:.85;letter-spacing:0;margin-top:2px;}
-  .topbar .total{
-    background:rgba(255,255,255,.18);padding:8px 16px;border-radius:14px;
-    font-size:20px;white-space:nowrap;font-weight:800;
-  }
+  .topbar .total{background:rgba(255,255,255,.18);padding:8px 14px;border-radius:14px;font-size:19px;white-space:nowrap;font-weight:800;}
 
   .wrap{max-width:980px;margin:0 auto;padding:22px 18px 56px;}
 
-  /* ---------- 问候 ---------- */
+  /* 问候 */
   .hello{display:flex;align-items:center;gap:16px;margin:8px 4px 22px;}
   .hello .mascot{font-size:64px;line-height:1;filter:drop-shadow(0 4px 0 rgba(27,42,74,.15));animation:bob 2.6s ease-in-out infinite;}
   .hello h1{margin:0;font-size:34px;line-height:1.18;}
   .hello h1 small{display:block;font-size:18px;font-weight:700;opacity:.55;margin-top:4px;}
   .hello .pick{margin:8px 0 0;font-size:20px;font-weight:700;color:var(--accent);}
 
-  /* ---------- 游戏卡 ---------- */
-  .games{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
-  @media(max-width:760px){.games{grid-template-columns:1fr;}}
-  .game{
-    display:flex;flex-direction:column;gap:8px;
-    background:var(--paper);border:5px solid var(--c);border-radius:var(--radius);
-    padding:24px 24px 20px;box-shadow:var(--shadow);
-    transition:transform .12s;min-height:236px;
-  }
-  .game:hover{transform:translateY(-2px);}
-  .game:active{transform:scale(.97);}
-  .game:focus-visible{outline:4px solid var(--sun);outline-offset:3px;}
-  .game .ico{font-size:60px;line-height:1;}
-  .game .zh{font-size:28px;font-weight:800;}
-  .game .en{font-size:19px;font-weight:700;opacity:.6;margin-top:-2px;}
-  .game .desc{font-size:17px;opacity:.7;line-height:1.5;margin-top:2px;}
-  .game .foot{display:flex;align-items:center;gap:12px;margin-top:auto;padding-top:10px;flex-wrap:wrap;}
-  .game .stars{
-    font-size:18px;font-weight:800;color:#B07A00;background:#FFF3CF;
-    border-radius:14px;padding:8px 14px;white-space:nowrap;
-  }
-  .game .stars.empty{color:#9A8A66;background:#F4EEDE;font-weight:700;}
-  .game .play{
-    margin-left:auto;font-size:20px;font-weight:800;color:#fff;background:var(--c);
-    border-radius:16px;padding:10px 22px;box-shadow:0 5px 0 rgba(0,0,0,.14);white-space:nowrap;
-  }
+  /* 两个大分类卡 */
+  .cats{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+  @media(max-width:760px){.cats{grid-template-columns:1fr;}}
+  .cat{display:flex;flex-direction:column;gap:10px;background:var(--paper);border:6px solid var(--c);border-radius:30px;padding:30px 28px 24px;box-shadow:0 8px 0 rgba(27,42,74,.12);transition:transform .12s;min-height:262px;}
+  .cat:hover{transform:translateY(-3px);}
+  .cat:active{transform:scale(.97);}
+  .cat:focus-visible{outline:5px solid var(--sun);outline-offset:3px;}
+  .cat .ico{font-size:76px;line-height:1;}
+  .cat .zh{font-size:34px;font-weight:800;}
+  .cat .en{font-size:20px;font-weight:700;opacity:.6;margin-top:-2px;}
+  .cat .desc{font-size:17px;opacity:.7;line-height:1.5;}
+  .cat .foot{display:flex;align-items:center;gap:12px;margin-top:auto;padding-top:12px;flex-wrap:wrap;}
+  .cat .status{font-size:17px;font-weight:800;color:#B07A00;background:#FFF3CF;border-radius:14px;padding:8px 14px;}
+  .cat .status.soon{color:#6B5AA6;background:#EFEAFB;}
+  .cat .go{margin-left:auto;font-size:21px;font-weight:800;color:#fff;background:var(--c);border-radius:16px;padding:11px 24px;box-shadow:0 5px 0 rgba(0,0,0,.14);white-space:nowrap;}
 
-  /* ---------- 家长提示 ---------- */
-  .tip{margin-top:26px;background:#fff;border:4px dashed var(--accent);border-radius:20px;
-    padding:14px 18px;font-size:16px;line-height:1.55;color:var(--ink);box-shadow:0 6px 0 rgba(27,42,74,.08);}
+  .tip{margin-top:26px;background:#fff;border:4px dashed var(--accent);border-radius:20px;padding:14px 18px;font-size:16px;line-height:1.55;color:var(--ink);box-shadow:0 6px 0 rgba(27,42,74,.08);}
   .tip b{color:var(--accent);}
-  .ver{text-align:center;margin-top:18px;font-size:13px;opacity:.4;letter-spacing:.5px;}
+  .ver{text-align:center;margin-top:20px;font-size:13px;opacity:.4;letter-spacing:.5px;}
 
   @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
   @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
   @media(max-width:720px){
-    .topbar{font-size:20px}.topbar .room small{font-size:12px}
-    .hello h1{font-size:27px}.hello .mascot{font-size:52px}.hello .pick{font-size:17px}
-    .game .zh{font-size:24px}.game .ico{font-size:52px}
+    .topbar{font-size:19px}.topbar .room small{font-size:12px}
+    .hello h1{font-size:26px}.hello .mascot{font-size:52px}.hello .pick{font-size:17px}
+    .cat .zh{font-size:28px}.cat .ico{font-size:64px}.cat{min-height:230px;padding:24px 22px 20px}
   }
 </style>
 </head>
@@ -101,32 +80,47 @@
       <span class="mascot">🌟</span>
       <div>
         <h1 id="greet">你好，艾伦！<small id="greetEn">Hi Alan!</small></h1>
-        <p class="pick">选一个游戏开始吧 · Pick a game to play</p>
+        <p class="pick">想做什么？· What would you like to do?</p>
       </div>
     </div>
 
-    <div class="games" id="games"></div>
+    <div class="cats">
+      <!-- 左：游戏 -->
+      <a class="cat" href="games.html" style="--c:#7A4FD0">
+        <div class="ico">🕹️</div>
+        <div class="zh">游戏</div>
+        <div class="en">Games</div>
+        <div class="desc">好玩的小游戏,边玩边动脑</div>
+        <div class="foot">
+          <span class="status soon">🚧 敬请期待 Coming soon</span>
+          <span class="go">进入 ▶</span>
+        </div>
+      </a>
+
+      <!-- 右：学习 -->
+      <a class="cat" href="study.html" style="--c:#2563B8">
+        <div class="ico">📚</div>
+        <div class="zh">学习</div>
+        <div class="en">Study</div>
+        <div class="desc">学前衔接 · 袋鼠数学</div>
+        <div class="foot">
+          <span class="status" id="studyStatus">开始收集 ⭐</span>
+          <span class="go">进入 ▶</span>
+        </div>
+      </a>
+    </div>
 
     <div class="tip">
       <b>给家长：</b>进度自动保存在这台设备的同一个浏览器里;换设备、换浏览器或清除浏览数据会丢失,请勿用无痕模式。建议把本页加入主屏书签,一点即玩。<br>
       <span style="opacity:.72">Progress is saved in this browser on this device. Add to your home screen for one-tap play.</span>
     </div>
-    <div class="ver">20260630 · 游戏主页 v1</div>
+    <div class="ver">20260701 · 游戏厅 v3</div>
   </div>
 
 <script>
-/* ============================================================
-   配置区 —— 换课件版本 / 调整名称,只需改这里
-   · file 必须与课件 HTML 文件名【完全一致】(含中文与下划线)
-   · 课件文件需与本 index.html 放在【同一目录】(仓库根目录)
-     若放进子文件夹,请写成相对路径,如 '学前衔接/xxx.html'
-   ============================================================ */
-
-/* ---- 取星函数:全部 try/catch,读不到一律返回 0,绝不影响页面 ---- */
+/* ---- 取星:全部 try/catch,读不到一律 0,绝不影响页面 ---- */
 function safeParse(raw){ try{ return JSON.parse(raw); }catch(e){ return null; } }
-
-// 学前衔接:键形如 alan_vN_<模块>_<关>,值 {s:星数,...}
-// 跨版本(v3/v4/v5…)只取“最高版本组”的合计,避免历史版本数据重复计数
+// 学前衔接:键 alan_vN_<模块>_<关>,值 {s:星};跨版本只取最高版本组
 function starsPrep(){
   var g={};
   try{
@@ -141,75 +135,29 @@ function starsPrep(){
   var vs=Object.keys(g).map(Number);
   return vs.length ? (g[Math.max.apply(null,vs)]||0) : 0;
 }
-
-// 袋鼠数学:键 alan_l5_prog,值 {题号:{stars:N,...}}
+// 袋鼠:键 alan_l5_prog,值 {题号:{stars:N}}
 function starsKangaroo(){
   try{
     var o=safeParse(localStorage.getItem('alan_l5_prog'));
-    if(!o || typeof o!=='object') return 0;
-    return Object.keys(o).reduce(function(s,k){
-      var v=o[k]; return s+((v&&typeof v.stars==='number')?v.stars:0);
-    },0);
+    if(!o||typeof o!=='object') return 0;
+    return Object.keys(o).reduce(function(s,k){ var v=o[k]; return s+((v&&typeof v.stars==='number')?v.stars:0); },0);
   }catch(e){ return 0; }
 }
-
-/* ---- 游戏清单 ---- */
-var GAMES = [
-  {
-    file: '20260622_艾伦学前衔接课件_一体版_v5.html',  // ← 学前衔接课件:换版本改这里
-    ico:  '🏔️',
-    c:    '#2563B8',
-    zh:   '学前衔接闯关',
-    en:   'School-Ready Adventure',
-    desc: '语文 · 英文 · 数学 · 习惯 · 法语',
-    stars: starsPrep
-  },
-  {
-    file: '20260611_Alan_L5袋鼠备赛_互动课件_v2.html', // ← 袋鼠数学:换版本改这里
-    ico:  '🦘',
-    c:    '#C96F0A',
-    zh:   '袋鼠数学 · L5',
-    en:   'Math Kangaroo',
-    desc: '历年真题闯关 · 答对赢星',
-    stars: starsKangaroo
-  }
-];
+function studyTotal(){ var t=0; try{t+=starsPrep();}catch(e){} try{t+=starsKangaroo();}catch(e){} return t; }
 
 /* ---- 按时段问候 ---- */
 (function(){
   var h=new Date().getHours();
-  var g = h<5  ? ['夜深啦','Late night']
-        : h<11 ? ['早上好','Good morning']
-        : h<14 ? ['中午好','Hello']
-        : h<18 ? ['下午好','Good afternoon']
-        :        ['晚上好','Good evening'];
-  document.getElementById('greet').firstChild.nodeValue = g[0]+'，艾伦！';
-  document.getElementById('greetEn').textContent = g[1]+', Alan!';
+  var g = h<5?['夜深啦','Late night'] : h<11?['早上好','Good morning'] : h<14?['中午好','Hello'] : h<18?['下午好','Good afternoon'] : ['晚上好','Good evening'];
+  var el=document.getElementById('greet'); if(el&&el.firstChild) el.firstChild.nodeValue=g[0]+'，艾伦！';
+  var en=document.getElementById('greetEn'); if(en) en.textContent=g[1]+', Alan!';
 })();
 
-/* ---- 渲染卡片 + 合计星星 ---- */
+/* ---- 合计星 + 学习卡状态 ---- */
 (function(){
-  var box=document.getElementById('games');
-  var grand=0;
-  GAMES.forEach(function(game){
-    var n=0; try{ n=game.stars()|0; }catch(e){ n=0; }
-    grand+=n;
-    var a=document.createElement('a');
-    a.className='game';
-    a.href=game.file;                 // 同目录相对链接,中文文件名浏览器会自动编码
-    a.style.setProperty('--c',game.c);
-    var starHTML = n>0
-      ? '<span class="stars">⭐ 已得 '+n+' 颗</span>'
-      : '<span class="stars empty">开始收集第一颗 ⭐</span>';
-    a.innerHTML =
-      '<div class="ico">'+game.ico+'</div>'+
-      '<div class="zh">'+game.zh+'</div>'+
-      '<div class="en">'+game.en+'</div>'+
-      '<div class="desc">'+game.desc+'</div>'+
-      '<div class="foot">'+starHTML+'<span class="play">开始 ▶</span></div>';
-    box.appendChild(a);
-  });
-  document.getElementById('total').textContent='⭐ '+grand;
+  var n=studyTotal();
+  var t=document.getElementById('total'); if(t) t.textContent='⭐ '+n;
+  var ss=document.getElementById('studyStatus'); if(ss) ss.textContent = n>0 ? ('⭐ 已得 '+n+' 颗') : '开始收集 ⭐';
 })();
 </script>
 </body>

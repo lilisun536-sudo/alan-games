@@ -1,0 +1,137 @@
+<!-- 20260701_艾伦学习页_v1 -->
+<!-- 放仓库根目录,与 index.html 及课件文件同级 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2563B8">
+<title>学习 · Study — 艾伦的游戏厅</title>
+<style>
+  :root{
+    --ink:#1B2A4A; --paper:#FFFFFF;
+    --accent:#2563B8; --sun:#FFC233; --go:#4CAF6D; --no:#FF8A7A;
+    --shadow:0 6px 0 rgba(27,42,74,.12); --radius:26px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;color:var(--ink);
+    background:linear-gradient(180deg,#D9EEFF 0%,#F2FAFF 45%,#FFF9EC 100%);
+    min-height:100vh;-webkit-user-select:none;user-select:none;
+  }
+  a{color:inherit;text-decoration:none;}
+
+  /* 顶栏 */
+  .topbar{display:flex;align-items:center;gap:12px;padding:14px 20px;background:var(--accent);color:#fff;font-size:23px;font-weight:800;letter-spacing:.5px;}
+  .topbar .home-btn{color:#fff;background:rgba(255,255,255,.20);border:none;padding:8px 16px;border-radius:14px;font-size:18px;font-weight:800;white-space:nowrap;text-decoration:none;cursor:pointer;}
+  .topbar .home-btn:active{transform:translateY(1px);}
+  .topbar .logo{font-size:26px;line-height:1;}
+  .topbar .room{flex:1;line-height:1.1;}
+  .topbar .room small{display:block;font-size:14px;font-weight:600;opacity:.85;letter-spacing:0;margin-top:2px;}
+  .topbar .total{background:rgba(255,255,255,.18);padding:8px 14px;border-radius:14px;font-size:19px;white-space:nowrap;font-weight:800;}
+
+  .wrap{max-width:980px;margin:0 auto;padding:22px 18px 56px;}
+
+  /* 课程卡 */
+  .games{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  @media(max-width:760px){.games{grid-template-columns:1fr;}}
+  .game{display:flex;flex-direction:column;gap:8px;background:var(--paper);border:5px solid var(--c);border-radius:var(--radius);padding:24px 24px 20px;box-shadow:var(--shadow);transition:transform .12s;min-height:236px;}
+  .game:hover{transform:translateY(-2px);}
+  .game:active{transform:scale(.97);}
+  .game:focus-visible{outline:4px solid var(--sun);outline-offset:3px;}
+  .game .ico{font-size:60px;line-height:1;}
+  .game .zh{font-size:28px;font-weight:800;}
+  .game .en{font-size:19px;font-weight:700;opacity:.6;margin-top:-2px;}
+  .game .desc{font-size:17px;opacity:.7;line-height:1.5;margin-top:2px;}
+  .game .foot{display:flex;align-items:center;gap:12px;margin-top:auto;padding-top:10px;flex-wrap:wrap;}
+  .game .stars{font-size:18px;font-weight:800;color:#B07A00;background:#FFF3CF;border-radius:14px;padding:8px 14px;white-space:nowrap;}
+  .game .stars.empty{color:#9A8A66;background:#F4EEDE;font-weight:700;}
+  .game .play{margin-left:auto;font-size:20px;font-weight:800;color:#fff;background:var(--c);border-radius:16px;padding:10px 22px;box-shadow:0 5px 0 rgba(0,0,0,.14);white-space:nowrap;}
+
+  .ver{text-align:center;margin-top:20px;font-size:13px;opacity:.4;letter-spacing:.5px;}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  @media(max-width:720px){
+    .topbar{font-size:19px}.topbar .room small{font-size:12px}
+    .game .zh{font-size:24px}.game .ico{font-size:52px}
+  }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <a class="home-btn" href="index.html">← 返回主页</a>
+    <span class="logo">📚</span>
+    <span class="room">学习<small>Study</small></span>
+    <span class="total" id="total">⭐ —</span>
+  </div>
+
+  <div class="wrap">
+    <div class="games" id="studyGames"></div>
+    <div class="ver">20260701 · 学习 v1</div>
+  </div>
+
+<script>
+/* ============================================================
+   配置区 —— 换课件版本 / 加课程,只改这里
+   file 必须与课件 HTML 文件名【完全一致】,且与本页同目录(仓库根目录)
+   ============================================================ */
+var STUDY = [
+  {
+    file: '20260622_艾伦学前衔接课件_一体版_v5.html',  // ← 学前衔接:换版本改这里
+    ico:'🏔️', c:'#2563B8', zh:'学前衔接闯关', en:'School-Ready Adventure',
+    desc:'语文 · 英文 · 数学 · 习惯 · 法语', stars: starsPrep
+  },
+  {
+    file: '20260611_Alan_L5袋鼠备赛_互动课件_v2.html', // ← 袋鼠数学:换版本改这里
+    ico:'🦘', c:'#C96F0A', zh:'袋鼠数学 · L5', en:'Math Kangaroo',
+    desc:'历年真题闯关 · 答对赢星', stars: starsKangaroo
+  }
+];
+
+/* ---- 取星:全部 try/catch,读不到一律 0,绝不影响页面 ---- */
+function safeParse(raw){ try{ return JSON.parse(raw); }catch(e){ return null; } }
+function starsPrep(){
+  var g={};
+  try{
+    for(var i=0;i<localStorage.length;i++){
+      var key=localStorage.key(i); if(!key) continue;
+      var m=key.match(/^alan_v(\d+)_.+/); if(!m) continue;
+      var o=safeParse(localStorage.getItem(key));
+      var s=(o&&typeof o.s==='number')?o.s:0;
+      g[+m[1]]=(g[+m[1]]||0)+s;
+    }
+  }catch(e){ return 0; }
+  var vs=Object.keys(g).map(Number);
+  return vs.length ? (g[Math.max.apply(null,vs)]||0) : 0;
+}
+function starsKangaroo(){
+  try{
+    var o=safeParse(localStorage.getItem('alan_l5_prog'));
+    if(!o||typeof o!=='object') return 0;
+    return Object.keys(o).reduce(function(s,k){ var v=o[k]; return s+((v&&typeof v.stars==='number')?v.stars:0); },0);
+  }catch(e){ return 0; }
+}
+
+/* ---- 渲染课程卡 + 合计星 ---- */
+(function(){
+  var box=document.getElementById('studyGames');
+  var grand=0;
+  STUDY.forEach(function(game){
+    var n=0; try{ n=game.stars()|0; }catch(e){ n=0; }
+    grand+=n;
+    var a=document.createElement('a');
+    a.className='game'; a.href=game.file; a.style.setProperty('--c',game.c);
+    var starHTML = n>0 ? ('<span class="stars">⭐ 已得 '+n+' 颗</span>') : '<span class="stars empty">开始收集第一颗 ⭐</span>';
+    a.innerHTML =
+      '<div class="ico">'+game.ico+'</div>'+
+      '<div class="zh">'+game.zh+'</div>'+
+      '<div class="en">'+game.en+'</div>'+
+      '<div class="desc">'+game.desc+'</div>'+
+      '<div class="foot">'+starHTML+'<span class="play">开始 ▶</span></div>';
+    box.appendChild(a);
+  });
+  var t=document.getElementById('total'); if(t) t.textContent='⭐ '+grand;
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!-- 20260701_艾伦游戏页_v1 -->
+<!-- 放仓库根目录,与 index.html 同级 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#7A4FD0">
+<title>游戏 · Games — 艾伦的游戏厅</title>
+<style>
+  :root{
+    --ink:#1B2A4A; --paper:#FFFFFF;
+    --accent:#2563B8; --sun:#FFC233; --go:#4CAF6D; --no:#FF8A7A;
+    --shadow:0 6px 0 rgba(27,42,74,.12); --radius:26px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;color:var(--ink);
+    background:linear-gradient(180deg,#EDE7FB 0%,#F4F0FF 45%,#FFF9EC 100%);
+    min-height:100vh;-webkit-user-select:none;user-select:none;
+  }
+  a{color:inherit;text-decoration:none;}
+
+  /* 顶栏(游戏用紫色主题) */
+  .topbar{display:flex;align-items:center;gap:12px;padding:14px 20px;background:#7A4FD0;color:#fff;font-size:23px;font-weight:800;letter-spacing:.5px;}
+  .topbar .home-btn{color:#fff;background:rgba(255,255,255,.20);border:none;padding:8px 16px;border-radius:14px;font-size:18px;font-weight:800;white-space:nowrap;text-decoration:none;cursor:pointer;}
+  .topbar .home-btn:active{transform:translateY(1px);}
+  .topbar .logo{font-size:26px;line-height:1;}
+  .topbar .room{flex:1;line-height:1.1;}
+  .topbar .room small{display:block;font-size:14px;font-weight:600;opacity:.85;letter-spacing:0;margin-top:2px;}
+  .topbar .total{background:rgba(255,255,255,.18);padding:8px 14px;border-radius:14px;font-size:19px;white-space:nowrap;font-weight:800;}
+
+  .wrap{max-width:980px;margin:0 auto;padding:22px 18px 56px;}
+
+  /* 游戏卡(以后加游戏时用) */
+  .games{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  @media(max-width:760px){.games{grid-template-columns:1fr;}}
+  .game{display:flex;flex-direction:column;gap:8px;background:var(--paper);border:5px solid var(--c);border-radius:var(--radius);padding:24px 24px 20px;box-shadow:var(--shadow);transition:transform .12s;min-height:210px;}
+  .game:hover{transform:translateY(-2px);}
+  .game:active{transform:scale(.97);}
+  .game:focus-visible{outline:4px solid var(--sun);outline-offset:3px;}
+  .game .ico{font-size:60px;line-height:1;}
+  .game .zh{font-size:28px;font-weight:800;}
+  .game .en{font-size:19px;font-weight:700;opacity:.6;margin-top:-2px;}
+  .game .desc{font-size:17px;opacity:.7;line-height:1.5;margin-top:2px;}
+  .game .foot{display:flex;align-items:center;gap:12px;margin-top:auto;padding-top:10px;flex-wrap:wrap;}
+  .game .play{margin-left:auto;font-size:20px;font-weight:800;color:#fff;background:var(--c);border-radius:16px;padding:10px 22px;box-shadow:0 5px 0 rgba(0,0,0,.14);white-space:nowrap;}
+
+  /* 空状态 */
+  .empty{background:#fff;border:4px dashed #7A4FD0;border-radius:26px;padding:52px 24px;text-align:center;box-shadow:var(--shadow);}
+  .empty .big{font-size:74px;line-height:1.1;}
+  .empty h2{margin:16px 0 6px;font-size:28px;}
+  .empty p{margin:0;font-size:18px;opacity:.72;line-height:1.6;}
+
+  .ver{text-align:center;margin-top:20px;font-size:13px;opacity:.4;letter-spacing:.5px;}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  @media(max-width:720px){
+    .topbar{font-size:19px}.topbar .room small{font-size:12px}
+    .game .zh{font-size:24px}.game .ico{font-size:52px}
+  }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <a class="home-btn" href="index.html">← 返回主页</a>
+    <span class="logo">🕹️</span>
+    <span class="room">游戏<small>Games</small></span>
+    <span class="total" id="total">⭐ —</span>
+  </div>
+
+  <div class="wrap">
+    <div class="games" id="gamesList"></div>
+    <div class="empty" id="gamesEmpty">
+      <div class="big">🎮 🕹️ 🎲</div>
+      <h2>游戏马上就来！</h2>
+      <p>这里以后会放好玩的小游戏。<br>Fun games are coming soon!</p>
+    </div>
+    <div class="ver">20260701 · 游戏 v1</div>
+  </div>
+
+<script>
+/* ============================================================
+   配置区 —— 加游戏只改这里
+   往数组里加对象即可,例如:
+     { file:'拼图.html', ico:'🧩', c:'#4CAF6D', zh:'拼图', en:'Puzzle', desc:'拖一拖,拼出图案' }
+   file 可以是本目录文件名,也可以是外部网址(如 'https://example.com/game')
+   数组为空时,页面自动显示“敬请期待”。
+   ============================================================ */
+var GAMES = [
+  // 暂时为空
+];
+
+/* ---- 取星(仅用于顶栏合计,与学习共享)---- */
+function safeParse(raw){ try{ return JSON.parse(raw); }catch(e){ return null; } }
+function starsPrep(){
+  var g={};
+  try{
+    for(var i=0;i<localStorage.length;i++){
+      var key=localStorage.key(i); if(!key) continue;
+      var m=key.match(/^alan_v(\d+)_.+/); if(!m) continue;
+      var o=safeParse(localStorage.getItem(key));
+      var s=(o&&typeof o.s==='number')?o.s:0;
+      g[+m[1]]=(g[+m[1]]||0)+s;
+    }
+  }catch(e){ return 0; }
+  var vs=Object.keys(g).map(Number);
+  return vs.length ? (g[Math.max.apply(null,vs)]||0) : 0;
+}
+function starsKangaroo(){
+  try{
+    var o=safeParse(localStorage.getItem('alan_l5_prog'));
+    if(!o||typeof o!=='object') return 0;
+    return Object.keys(o).reduce(function(s,k){ var v=o[k]; return s+((v&&typeof v.stars==='number')?v.stars:0); },0);
+  }catch(e){ return 0; }
+}
+function studyTotal(){ var t=0; try{t+=starsPrep();}catch(e){} try{t+=starsKangaroo();}catch(e){} return t; }
+
+/* ---- 渲染游戏卡 / 空状态 + 顶栏合计 ---- */
+(function(){
+  var box=document.getElementById('gamesList');
+  var empty=document.getElementById('gamesEmpty');
+  if(box){
+    box.innerHTML='';
+    GAMES.forEach(function(game){
+      var a=document.createElement('a');
+      a.className='game'; a.href=game.file; a.style.setProperty('--c',game.c||'#7A4FD0');
+      a.innerHTML =
+        '<div class="ico">'+game.ico+'</div>'+
+        '<div class="zh">'+game.zh+'</div>'+
+        '<div class="en">'+(game.en||'')+'</div>'+
+        '<div class="desc">'+(game.desc||'')+'</div>'+
+        '<div class="foot"><span class="play">开始 ▶</span></div>';
+      box.appendChild(a);
+    });
+  }
+  if(empty) empty.style.display = GAMES.length ? 'none' : '';
+  var t=document.getElementById('total'); if(t) t.textContent='⭐ '+studyTotal();
+})();
+</script>
+</body>
+</html>
